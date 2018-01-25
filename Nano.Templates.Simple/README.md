@@ -1,7 +1,7 @@
 # Nano Templates Simple
-Simpple teplate service using Nano.  
-The implementation covers the minimum effort to create a very simple application. Its a good initial template, easy to comprehend and adapt.
+Simple template service implementation, using Nano.  
 
+The implementation covers the minimum effort to create a very simple application. Its a good initial template, easy to comprehend and adapt.
 
 #### Solution Structure
 Nano.Templates.Simple
