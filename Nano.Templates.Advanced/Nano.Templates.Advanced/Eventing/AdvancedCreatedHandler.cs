@@ -2,12 +2,12 @@ using System;
 using Microsoft.Extensions.Logging;
 using Nano.Eventing.Interfaces;
 using Nano.Services.Interfaces;
-using Nano.Templates.Simple.Models.Events;
+using Nano.Templates.Advanced.Models.Events;
 
-namespace Nano.Templates.Simple.Eventing
+namespace Nano.Templates.Advanced.Eventing
 {
     /// <inheritdoc />
-    public class SimpleCreatedHandler : IEventingHandler<SimpleCreatedEvent>
+    public class AdvancedCreatedHandler : IEventingHandler<AdvancedCreatedEvent>
     {
         /// <summary>
         /// Logger.
@@ -24,7 +24,7 @@ namespace Nano.Templates.Simple.Eventing
         /// </summary>
         /// <param name="logger">The <see cref="ILogger"/>.</param>
         /// <param name="service">The <see cref="IService"/>.</param>
-        public SimpleCreatedHandler(ILogger logger, IService service)
+        public AdvancedCreatedHandler(ILogger logger, IService service)
         {
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
@@ -37,7 +37,7 @@ namespace Nano.Templates.Simple.Eventing
         }
 
         /// <inheritdoc />
-        public void Callback(SimpleCreatedEvent @event)
+        public void Callback(AdvancedCreatedEvent @event)
         {
             if (@event == null)
                 throw new ArgumentNullException(nameof(@event));

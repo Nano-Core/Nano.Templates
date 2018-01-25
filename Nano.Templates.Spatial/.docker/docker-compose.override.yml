@@ -1,0 +1,6 @@
+version: '3'
+
+services:
+  nano.templates.spatial:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development

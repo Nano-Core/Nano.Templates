@@ -5,20 +5,20 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard2.0\Nano.Templates.Simple.Models.xml</DocumentationFile>
-    <LangVersion>latest</LangVersion>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard2.0\Nano.Templates.Spatial.Models.xml</DocumentationFile>
     <WarningsAsErrors />
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn />
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netstandard2.0\Nano.Templates.Simple.Models.xml</DocumentationFile>
-    <LangVersion>latest</LangVersion>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\Nano.Templates.Spatial.Models.xml</DocumentationFile>
+    <NoWarn />
     <WarningsAsErrors />
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn />
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

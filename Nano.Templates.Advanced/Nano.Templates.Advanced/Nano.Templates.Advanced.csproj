@@ -10,7 +10,7 @@
     <WarningsAsErrors />
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn />
-    <DocumentationFile>bin\Debug\netcoreapp2.0\Nano.Templates.Simple.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netcoreapp2.0\Nano.Templates.Advanced.xml</DocumentationFile>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -19,7 +19,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn />
     <LangVersion>latest</LangVersion>
-    <DocumentationFile>bin\Release\netcoreapp2.0\Nano.Templates.Simple.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\netcoreapp2.0\Nano.Templates.Advanced.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,6 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Nano.Templates.Simple.Models\Nano.Templates.Simple.Models.csproj" />
+    <ProjectReference Include="..\Nano.Templates.Advanced.Models\Nano.Templates.Advanced.Models.csproj" />
   </ItemGroup>
 </Project>

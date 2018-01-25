@@ -4,9 +4,7 @@ using Nano.Models;
 
 namespace Nano.Templates.Simple.Models
 {
-    /// <summary>
-    /// Simple Entity.
-    /// </summary>
+    /// <inheritdoc />
     [Publish]
     [Subscribe]
     public class SimpleEntity : DefaultEntity

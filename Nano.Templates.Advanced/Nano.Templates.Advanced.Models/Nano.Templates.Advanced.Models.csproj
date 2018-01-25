@@ -6,19 +6,19 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard2.0\Nano.Templates.Simple.Models.xml</DocumentationFile>
-    <LangVersion>latest</LangVersion>
+    <NoWarn />
     <WarningsAsErrors />
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn />
+    <DocumentationFile>bin\Release\netstandard2.0\Nano.Templates.Advanced.Models.xml</DocumentationFile>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netstandard2.0\Nano.Templates.Simple.Models.xml</DocumentationFile>
-    <LangVersion>latest</LangVersion>
+    <NoWarn />
     <WarningsAsErrors />
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn />
+    <DocumentationFile>bin\Debug\netstandard2.0\Nano.Templates.Advanced.Models.xml</DocumentationFile>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
