@@ -1,3 +1,2 @@
-# Nano.Templates
-Template applications, covering aspects of Nano features and showing practical examples of implementations.
-
+# Nano Templates
+Template applications, covering various aspects and features, as well as providing practical examples of how to use and apply Nano Library.
