@@ -1,2 +1,2 @@
-# Nano Templates Advanced
-Advanced template service implementation, using Nano.  
+# Nano Templates Spatial
+Spatial template service implementation, using Nano.  
