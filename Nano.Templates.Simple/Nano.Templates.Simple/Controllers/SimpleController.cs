@@ -7,8 +7,8 @@ using Nano.Eventing.Interfaces;
 using Nano.Services.Interfaces;
 using Nano.Templates.Simple.Models;
 using Nano.Templates.Simple.Models.Criterias;
-using Nano.Templates.Simple.Models.Events;
 using Nano.Web.Controllers;
+using Newtonsoft.Json;
 
 namespace Nano.Templates.Simple.Controllers
 {
@@ -25,24 +25,35 @@ namespace Nano.Templates.Simple.Controllers
         /// <inheritdoc />
         public override async Task<IActionResult> Create([FromBody][FromForm][Required]SimpleEntity entity, CancellationToken cancellationToken = new CancellationToken())
         {
-            var task = base.Create(entity, cancellationToken);
+            var result = await this.Service
+                .AddAsync(entity, cancellationToken);
 
-            await task.ContinueWith(x =>
-            {
-                if (x.IsFaulted || x.IsCanceled)
-                    return;
+            var a = JsonConvert.SerializeObject(result);
 
-                var @event = new SimpleCreatedEvent
-                {
-                    Id = entity.Id,
-                    PropertyOne = entity.PropertyOne,
-                    PropertyTwo = entity.PropertyTwo
-                };
+            this.Logger.LogError(a);
 
-                this.Eventing.Publish(@event);
-            }, cancellationToken);
 
-            return await task;
+            return this.Created("Create", result);
+
+
+            //var task = base.Create(entity, cancellationToken);
+
+            //await task.ContinueWith(x =>
+            //{
+            //    if (x.IsFaulted || x.IsCanceled)
+            //        return;
+
+            //    var @event = new SimpleCreatedEvent
+            //    {
+            //        Id = entity.Id,
+            //        PropertyOne = entity.PropertyOne,
+            //        PropertyTwo = entity.PropertyTwo
+            //    };
+
+            //    this.Eventing.Publish(@event);
+            //}, cancellationToken);
+
+            //return await task;
         }
     }
 }

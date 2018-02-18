@@ -37,7 +37,7 @@ namespace Nano.Templates.Simple.Eventing
         }
 
         /// <inheritdoc />
-        public void Callback(SimpleCreatedEvent @event)
+        public void CallbackAsync(SimpleCreatedEvent @event)
         {
             if (@event == null)
                 throw new ArgumentNullException(nameof(@event));
