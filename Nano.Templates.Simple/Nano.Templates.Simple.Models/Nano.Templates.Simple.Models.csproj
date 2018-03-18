@@ -22,7 +22,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NanoCore" Version="0.3.5-alpha" />
+    <PackageReference Include="NanoCore" Version="0.3.55-alpha" />
   </ItemGroup>
 
 </Project>
