@@ -1,6 +1,0 @@
-version: '3'
-
-services:
-  nano.templates.advanced:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development

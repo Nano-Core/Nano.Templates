@@ -19,9 +19,6 @@
     <DockerServiceName>Nano.Templates.Spatial</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="docker-compose.override.yml">
-      <DependentUpon>docker-compose.yml</DependentUpon>
-    </None>
     <None Include="docker-compose.yml" />
   </ItemGroup>
 </Project>

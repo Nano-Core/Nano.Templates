@@ -4,15 +4,13 @@ services:
   nano.templates.simple:
     image: nano.templates.simple
     build:
-      context: ./../Nano.Templates.Simple
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Nano.Templates.Simple/Dockerfile
     ports:
       - 5000:80
     depends_on:
       - mysql
       - rabbitmq
-      - elasticsearch
-      - kibana
 
   mysql:
     image: mysql/mysql-server
@@ -33,11 +31,3 @@ services:
       RABBITMQ_DEFAULT_USER: "myUser"
       RABBITMQ_DEFAULT_PASS: "myPassword"
       RABBITMQ_DEFAULT_VHOST: "/"
-  
-  elasticsearch:
-    image: elasticsearch:alpine
-
-  kibana:
-    image: kibana
-    ports:
-      - 5601:5601

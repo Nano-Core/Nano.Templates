@@ -16,12 +16,9 @@
     <ProjectGuid>05811249-cb4e-44ec-91c1-bdb5664a3377</ProjectGuid>
     <DockerLaunchBrowser>false</DockerLaunchBrowser>
     <DockerServiceUrl>http://localhost:5000/api/home</DockerServiceUrl>
-    <DockerServiceName>Nano.Templates.Simple</DockerServiceName>
+    <DockerServiceName>Nano.Templates.Advanced</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="docker-compose.override.yml">
-      <DependentUpon>docker-compose.yml</DependentUpon>
-    </None>
     <None Include="docker-compose.yml" />
   </ItemGroup>
 </Project>

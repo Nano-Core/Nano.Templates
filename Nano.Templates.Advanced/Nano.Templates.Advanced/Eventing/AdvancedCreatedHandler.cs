@@ -37,7 +37,7 @@ namespace Nano.Templates.Advanced.Eventing
         }
 
         /// <inheritdoc />
-        public void Callback(AdvancedCreatedEvent @event)
+        public void CallbackAsync(AdvancedCreatedEvent @event)
         {
             if (@event == null)
                 throw new ArgumentNullException(nameof(@event));

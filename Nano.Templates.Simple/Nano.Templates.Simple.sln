@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nano.Templates.Simple", "Na
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".dockers", ".dockers", "{8DE3DF8D-7C8E-433A-B325-CECCCE939585}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", ".docker\docker-compose.dcproj", "{05811249-CB4E-44EC-91C1-BDB5664A3377}"
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{05811249-CB4E-44EC-91C1-BDB5664A3377}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".solution", ".solution", "{8B945C94-7BAF-451C-A622-461B91559C7B}"
 	ProjectSection(SolutionItems) = preProject
