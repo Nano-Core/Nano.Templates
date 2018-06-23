@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Nano.Data;
 using Nano.Data.Models.Mappings.Extensions;
-using Nano.Services.Data;
 using Nano.Templates.Simple.Data.Mappings;
 using Nano.Templates.Simple.Models;
 
