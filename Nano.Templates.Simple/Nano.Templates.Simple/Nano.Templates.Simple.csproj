@@ -29,4 +29,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Nano.Templates.Simple.Models\Nano.Templates.Simple.Models.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
 </Project>

@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Hosting;
-using Nano.App;
-using Nano.App.Extensions;
+using Nano.Data.Extensions;
 using Nano.Data.Providers.MySql;
+using Nano.Eventing.Extensions;
 using Nano.Eventing.Providers.EasyNetQ;
+using Nano.Logging.Extensions;
 using Nano.Logging.Providers.Serilog;
 using Nano.Templates.Advanced.Data;
+using Nano.Web;
 
 namespace Nano.Templates.Advanced
 {
@@ -18,12 +20,12 @@ namespace Nano.Templates.Advanced
         /// </summary>
         public static void Main()
         {
-            BaseApplication
-                .ConfigureApp<AdvancedApplication>()
+            WebApplication
+                .ConfigureApp()
                 .ConfigureServices(x =>
                 {
                     x.AddLogging<SerilogProvider>();
-                    x.AddDataContext<MySqlProvider, SimpleDbContext>();
+                    x.AddDataContext<MySqlProvider, AdvancedDbContext>();
                     x.AddEventing<EasyNetQProvider>();
                 })
                 .Build()

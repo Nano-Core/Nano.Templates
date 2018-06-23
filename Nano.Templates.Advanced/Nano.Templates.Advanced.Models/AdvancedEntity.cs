@@ -7,16 +7,6 @@ namespace Nano.Templates.Advanced.Models
     public class AdvancedEntity : DefaultEntity
     {
         /// <summary>
-        /// Angle.
-        /// </summary>
-        public virtual Angle Angle { get; set; }
-
-        /// <summary>
-        /// Authentication Credential.
-        /// </summary>
-        public virtual AuthenticationCredential AuthenticationCredential { get; set; }
-
-        /// <summary>
         /// Duration.
         /// </summary>
         public virtual Duration Duration { get; set; }
@@ -40,11 +30,6 @@ namespace Nano.Templates.Advanced.Models
         /// Percentage.
         /// </summary>
         public virtual Percentage Percentage { get; set; }
-
-        /// <summary>
-        /// Period.
-        /// </summary>
-        public virtual Period Period { get; set; }
 
         /// <summary>
         /// Phone Number.

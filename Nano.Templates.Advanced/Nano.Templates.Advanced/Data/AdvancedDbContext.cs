@@ -2,17 +2,16 @@
 using Microsoft.EntityFrameworkCore;
 using Nano.Data;
 using Nano.Data.Models.Mappings.Extensions;
-using Nano.Services.Data;
 using Nano.Templates.Advanced.Data.Mappings;
 using Nano.Templates.Advanced.Models;
 
 namespace Nano.Templates.Advanced.Data
 {
     /// <inheritdoc />
-    public class SimpleDbContext : DefaultDbContext
+    public class AdvancedDbContext : DefaultDbContext
     {
         /// <inheritdoc />
-        public SimpleDbContext(DbContextOptions contextOptions, DataOptions dataOptions)
+        public AdvancedDbContext(DbContextOptions contextOptions, DataOptions dataOptions)
             : base(contextOptions, dataOptions)
         {
 

@@ -29,4 +29,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Nano.Templates.Advanced.Models\Nano.Templates.Advanced.Models.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
 </Project>

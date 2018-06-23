@@ -19,14 +19,6 @@ namespace Nano.Templates.Advanced.Data.Mappings
 
             builder
                 .OwnsOne(x => x.Nested)
-                .MapType(x => x.Angle);
-
-            builder
-                .OwnsOne(x => x.Nested)
-                .MapType(x => x.AuthenticationCredential);
-
-            builder
-                .OwnsOne(x => x.Nested)
                 .MapType(x => x.Distance);
 
             builder
@@ -44,10 +36,6 @@ namespace Nano.Templates.Advanced.Data.Mappings
             builder
                 .OwnsOne(x => x.Nested)
                 .MapType(x => x.Percentage);
-
-            builder
-                .OwnsOne(x => x.Nested)
-                .MapType(x => x.Period);
 
             builder
                 .OwnsOne(x => x.Nested)

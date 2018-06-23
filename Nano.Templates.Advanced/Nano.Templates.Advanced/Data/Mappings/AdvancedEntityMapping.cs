@@ -18,12 +18,6 @@ namespace Nano.Templates.Advanced.Data.Mappings
             base.Map(builder);
 
             builder
-                .MapType(x => x.Angle);
-
-            builder
-                .MapType(x => x.AuthenticationCredential);
-
-            builder
                 .MapType(x => x.Distance);
 
             builder
@@ -37,9 +31,6 @@ namespace Nano.Templates.Advanced.Data.Mappings
 
             builder
                 .MapType(x => x.Percentage);
-
-            builder
-                .MapType(x => x.Period);
 
             builder
                 .MapType(x => x.PhoneNumber);

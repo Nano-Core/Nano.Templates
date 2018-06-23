@@ -2,32 +2,16 @@ version: '3.4'
 
 services:
   nano.templates.advanced:
-    image: nano.templates.advanced
-    build:
-      context: .
-      dockerfile: Nano.Templates.Advanced/Dockerfile
     ports:
       - 5000:80
-    depends_on:
-      - mysql
-      - rabbitmq
-
   mysql:
-    image: mysql/mysql-server
-    ports:
-      - 3306:3306
     environment:
         MYSQL_USER: "myUser"
         MYSQL_PASSWORD: "myPassword"
         MYSQL_ROOT_PASSWORD: "myPassword"
         MYSQL_DATABASE: "advancedDb"
-
+  
   rabbitmq: 
-    image: rabbitmq:alpine
-    ports:
-      - 5671:5671
-      - 5672:5672
     environment: 
       RABBITMQ_DEFAULT_USER: "myUser"
       RABBITMQ_DEFAULT_PASS: "myPassword"
-      RABBITMQ_DEFAULT_VHOST: "/"

@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectVersion>2.0</ProjectVersion>
+    <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
     <ProjectGuid>05811249-cb4e-44ec-91c1-bdb5664a3377</ProjectGuid>
     <DockerLaunchBrowser>false</DockerLaunchBrowser>
@@ -19,6 +19,12 @@
     <DockerServiceName>Nano.Templates.Simple</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="docker-compose.vs.debug.yml">
+      <DependentUpon>docker-compose.yml</DependentUpon>
+    </None>
+    <None Include="docker-compose.vs.Release.yml">
+      <DependentUpon>docker-compose.yml</DependentUpon>
+    </None>
     <None Include="docker-compose.yml" />
   </ItemGroup>
 </Project>
