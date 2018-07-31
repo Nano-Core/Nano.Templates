@@ -1,0 +1,17 @@
+version: '3.4'
+
+services:
+  nano.basic:
+    ports:
+      - 5000:80
+  mysql:
+    environment:
+        MYSQL_USER: "myUser"
+        MYSQL_PASSWORD: "myPassword"
+        MYSQL_ROOT_PASSWORD: "myPassword"
+        MYSQL_DATABASE: "basicDb"
+  
+  rabbitmq: 
+    environment: 
+      RABBITMQ_DEFAULT_USER: "myUser"
+      RABBITMQ_DEFAULT_PASS: "myPassword"
