@@ -1,0 +1,62 @@
+version: 1.0.0.{build}
+skip_tags: true
+max_jobs: 1
+image: Ubuntu
+configuration: Release
+platform: Any CPU
+force_https_clone: true
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+  assembly_version: '{version}'
+  file_version: '{version}'
+  informational_version: '{version}'
+environment:
+  APP_NAME: nano.templates.web
+  APP_VERSION: $(APPVEYOR_BUILD_VERSION)
+  SERVICE_NAME: service-templates-web
+  ENVIRONMENT: Production
+  DOCKER_REGISTRY: myHost
+  DOCKER_USERNAME: myUsername
+  DOCKER_PASSWORD: myPassword
+  KUBERNETES_NAME: kubernetes-cluster
+  KUBERNETES_NAMESPACE: default
+  KUBERNETES_GROUP: kubernetes
+  KUBERNETES_VERSION: 1.10.6
+  KUBERNETES_REPLICA_COUNT: 1
+  KUBERNETES_REPLICA_HISTORY_COUNT: 1
+services: 
+- docker
+build_script:
+- ps: >-
+    Copy-Item -Path $env:HOME/.nuget/NuGet/NuGet.Config
+
+    docker build -t $env:APP_NAME":latest" ./
+
+    docker login -u="$env:DOCKER_USERNAME" -p="$env:DOCKER_PASSWORD" $env:DOCKER_REGISTRY
+
+    docker tag $env:APP_NAME":latest" $env:DOCKER_REGISTRY"/"$env:APP_NAME":"$env:APP_VERSION 
+
+    docker push $env:DOCKER_REGISTRY"/"$env:APP_NAME":"$env:APP_VERSION
+    
+    Get-Content .deploy/service.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .deploy/service.tmp.yaml
+   
+    Get-Content .deploy/configmap.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .deploy/configmap.tmp.yaml
+    
+    Get-Content .deploy/deployment.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .deploy/deployment.tmp.yaml
+
+    chown -R appveyor:appveyor $env:HOME/.kube
+
+    kubectl apply -f .deploy/service.tmp.yaml
+
+    kubectl apply -f .deploy/configmap.tmp.yaml
+
+    kubectl apply -f .deploy/deployment.tmp.yaml

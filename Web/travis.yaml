@@ -1,0 +1,2 @@
+language: csharp
+dotnet: 2.1.0

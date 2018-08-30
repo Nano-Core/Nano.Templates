@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: %SERVICE_NAME%-config
+  namespace: %KUBERNETES_NAMESPACE%
+data:
+  ASPNETCORE_ENVIRONMENT: %ENVIRONMENT%
+  Security__Jwt__Issuer: %ENVIRONMENT%.%APP_NAME%
+  Security__Jwt__Audience: %ENVIRONMENT%.%APP_NAME%
+  Security__Jwt__SecretKey: %NANO_AUTH_JWT_SECRET_KEY%
+  Security__User__AdminPassword: %NANO_AUTH_ADMIN_PASSWORD%
+  Data__ConnectionString: %DATA_CONNECTIONSTRING%
+  Eventing__Username: %RABBITMQ_USERNAME%
+  Eventing__Password: %RABBITMQ_PASSWORD%
+  App__Version: %APP_VERSION%
