@@ -4,10 +4,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".dockers", ".dockers", "{8DE3DF8D-7C8E-433A-B325-CECCCE939585}"
+	ProjectSection(SolutionItems) = preProject
+		Dockerfile = Dockerfile
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".solution", ".solution", "{8B945C94-7BAF-451C-A622-461B91559C7B}"
 	ProjectSection(SolutionItems) = preProject
 		..\.gitignore = ..\.gitignore
+		appveyor.yaml = appveyor.yml
 		..\LICENSE = ..\LICENSE
 		README.md = README.md
 	EndProjectSection
@@ -28,13 +32,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".tests", ".tests", "{391AA8ED-494A-4649-9F9B-95D7F507C7B3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Nano.Templates.Web", ".tests\Tests.Nano.Templates.Web\Tests.Nano.Templates.Web.csproj", "{A9BD6BFE-7D7F-4CB0-9B95-F496C139073F}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".deploy", ".deploy", "{336FB86E-B3F7-467F-A62E-101AD97CFC5B}"
-	ProjectSection(SolutionItems) = preProject
-		appveyor.yaml = appveyor.yaml
-		Dockerfile = Dockerfile
-		travis.yaml = travis.yaml
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
