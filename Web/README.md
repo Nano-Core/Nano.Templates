@@ -1,5 +1,5 @@
 # Nano Template Web
-
+This template configures a web-api application.  
 
 ***
 
@@ -20,6 +20,5 @@
 * ```RABBITMQ_PASSWORD```
 * ```NANO_AUTH_ADMIN_PASSWORD```
 * ```NANO_AUTH_JWT_SECRET_KEY```
-
 
 ***
