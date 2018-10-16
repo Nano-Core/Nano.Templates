@@ -1,5 +1,5 @@
 # Nano Template Web
-This template configures a web-api application.  
+This template is a web-api application.  
 
 ***
 
