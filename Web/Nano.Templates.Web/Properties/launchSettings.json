@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Nano.empty": {
+    "Nano.Teplates.Web": {
       "commandName": "Project",
       "launchBrowser": false,
       "launchUrl": "api/home",
