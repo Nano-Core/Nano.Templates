@@ -1,0 +1,25 @@
+version: '3.4'
+
+services:
+  Nano.Template:
+    image: Nano.Template
+    build:
+      context: .
+      dockerfile: ../Nano.Template/Dockerfile
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - mysql
+      - rabbitmq
+
+  mysql:
+    image: mysql/mysql-server
+    ports:
+      - 3306:3306
+
+  rabbitmq: 
+    image: rabbitmq:alpine
+    ports:
+      - 5671:5671
+      - 5672:5672

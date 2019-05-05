@@ -1,7 +1,24 @@
-# Nano Templates
-Follow the [Quick Guide](https://github.com/Nano-Core/Nano.Library/wiki/Quick-Guide), and choose one of the available templates, to easily get stareted implementing your micro-service. 
-
-Good luck!
+# Nano Template Web
+This template is a web-api application.  
 
 ***
 
+#### Environmental Variables
+* ```ENVIRONMENT```
+* ```APP_NAME```
+* ```APP_VERSION```
+* ```SERVICE_NAME```
+* ```DOCKER_REGISTRY```
+* ```KUBERNETES_NAME```
+* ```KUBERNETES_GROUP```
+* ```KUBERNETES_VERSION```
+* ```KUBERNETES_NAMESPACE```
+* ```KUBERNETES_REPLICA_COUNT```
+* ```KUBERNETES_REPLICA_HISTORY_COUNT```
+* ```DATA_CONNECTIONSTRING```
+* ```RABBITMQ_USERNAME```
+* ```RABBITMQ_PASSWORD```
+* ```NANO_AUTH_ADMIN_PASSWORD```
+* ```NANO_AUTH_JWT_SECRET_KEY```
+
+***

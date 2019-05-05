@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+  Nano.Template:
+    volumes:
+      - ../:/root/.dotnet/https
+
+  mysql:
+    environment:
+        MYSQL_USER: "myUser"
+        MYSQL_PASSWORD: "myPassword"
+        MYSQL_ROOT_PASSWORD: "myPassword"
+        MYSQL_DATABASE: "webDb"
+  
+  rabbitmq: 
+    environment: 
+      RABBITMQ_DEFAULT_USER: "myUser"
+      RABBITMQ_DEFAULT_PASS: "myPassword"
