@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: %SERVICE_NAME%
+  namespace: %KUBERNETES_NAMESPACE%
+  labels:
+    app: %SERVICE_NAME%
+spec:
+  replicas: %KUBERNETES_REPLICA_COUNT%
+  revisionHistoryLimit: %KUBERNETES_REPLICA_HISTORY_COUNT%
+  selector:
+    matchLabels:
+      app: %SERVICE_NAME%
+  template:
+    metadata:
+      labels:
+        app: %SERVICE_NAME%
+    spec:
+      containers:
+      - name: %SERVICE_NAME%
+        image: %DOCKER_REGISTRY%/%APP_NAME%:%APP_VERSION%
+        ports:
+        - containerPort: 80
+        imagePullPolicy: Always 
+        envFrom:
+        - configMapRef:
+            name: %SERVICE_NAME%-config
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+            scheme: HTTP
+          periodSeconds: 10
+          initialDelaySeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+            scheme: HTTP
+          periodSeconds: 10
+          initialDelaySeconds: 60
+      imagePullSecrets:
+      - name: docker-registry-secret

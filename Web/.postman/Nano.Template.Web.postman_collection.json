@@ -1,0 +1,2632 @@
+{
+	"info": {
+		"_postman_id": "56415864-70b3-4c67-a555-21ad041a4913",
+		"name": "Nano.Template.Web",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Audit",
+			"item": [
+				{
+					"name": "Options",
+					"request": {
+						"method": "OPTIONS",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/audit",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"audit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Index",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/audit/index?Paging.Number=1&Paging.Count=10&Order.By=CreatedAt&Order.Direction=Desc",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"audit",
+								"index"
+							],
+							"query": [
+								{
+									"key": "Paging.Number",
+									"value": "1"
+								},
+								{
+									"key": "Paging.Count",
+									"value": "10"
+								},
+								{
+									"key": "Order.By",
+									"value": "CreatedAt"
+								},
+								{
+									"key": "Order.Direction",
+									"value": "Desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Index",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Paging\": {\r\n\t\t\"Count\": 10,\r\n\t\t\"Number\": 1\r\n\t},\r\n\t\"Order\": {\r\n\t\t\"By\": \"CreatedAt\",\r\n\t\t\"Direction\": \"Desc\"\r\n\t}\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/audit/index",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"audit",
+								"index"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/audit/details/b7ead627-e550-4063-9da5-cffd5fc5278d",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"audit",
+								"details",
+								"b7ead627-e550-4063-9da5-cffd5fc5278d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Details Many",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/audit/details/many?Ids=b7ead627-e550-4063-9da5-cffd5fc5278d&Ids=701f6ca1-fc64-4536-b57f-5a5dc2bf230a",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"audit",
+								"details",
+								"many"
+							],
+							"query": [
+								{
+									"key": "Ids",
+									"value": "b7ead627-e550-4063-9da5-cffd5fc5278d"
+								},
+								{
+									"key": "Ids",
+									"value": "701f6ca1-fc64-4536-b57f-5a5dc2bf230a"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Details Many",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n\t\"b7ead627-e550-4063-9da5-cffd5fc5278d\",\n\t\"701f6ca1-fc64-4536-b57f-5a5dc2bf230a\"\n]"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/audit/details/many",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"audit",
+								"details",
+								"many"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/audit/query?EntityTypeName=sample&Paging.Number=1&Paging.Count=10&Order.By=CreatedAt&Order.Direction=Desc",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"audit",
+								"query"
+							],
+							"query": [
+								{
+									"key": "EntityTypeName",
+									"value": "sample"
+								},
+								{
+									"key": "AfterAt",
+									"value": "2020-07-04T14:08:10",
+									"disabled": true
+								},
+								{
+									"key": "BeforeAt",
+									"value": "2020-07-08T14:08:10",
+									"disabled": true
+								},
+								{
+									"key": "Paging.Number",
+									"value": "1"
+								},
+								{
+									"key": "Paging.Count",
+									"value": "10"
+								},
+								{
+									"key": "Order.By",
+									"value": "CreatedAt"
+								},
+								{
+									"key": "Order.Direction",
+									"value": "Desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Criteria\": {\r\n\t\t\"EntityTypeName\": \"sample\"\r\n\t},\r\n\t\"Paging\": {\r\n\t\t\"Count\": 10,\r\n\t\t\"Number\": 1\r\n\t},\r\n\t\"Order\": {\r\n\t\t\"By\": \"CreatedAt\",\r\n\t\t\"Direction\": \"Desc\"\r\n\t}\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/audit/query",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"audit",
+								"query"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query First",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/audit/query/first?EntityTypeName=sample&Order.By=CreatedAt&Order.Direction=Desc",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"audit",
+								"query",
+								"first"
+							],
+							"query": [
+								{
+									"key": "EntityTypeName",
+									"value": "sample"
+								},
+								{
+									"key": "AfterAt",
+									"value": "2020-07-04T14:08:10",
+									"disabled": true
+								},
+								{
+									"key": "BeforeAt",
+									"value": "2020-07-08T14:08:10",
+									"disabled": true
+								},
+								{
+									"key": "Order.By",
+									"value": "CreatedAt"
+								},
+								{
+									"key": "Order.Direction",
+									"value": "Desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query First",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Criteria\": {\r\n\t\t\"EntityTypeName\": \"sample\"\r\n\t},\r\n\t\"Order\": {\r\n\t\t\"By\": \"CreatedAt\",\r\n\t\t\"Direction\": \"Desc\"\r\n\t}\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/audit/query/first",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"audit",
+								"query",
+								"first"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query Count",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/audit/query/count?Name=sample-name",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"audit",
+								"query",
+								"count"
+							],
+							"query": [
+								{
+									"key": "Name",
+									"value": "sample-name"
+								},
+								{
+									"key": "AfterAt",
+									"value": "2020-07-04T14:08:10",
+									"disabled": true
+								},
+								{
+									"key": "BeforeAt",
+									"value": "2020-07-08T14:08:10",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query Count",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Criteria\": {\r\n\t\t\"Name\": \"sample\"\r\n\t}\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/audit/query/count",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"audit",
+								"query",
+								"count"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "External Schems",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/auth/external/schemes",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"auth",
+								"external",
+								"schemes"
+							]
+						},
+						"description": "      "
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Username\": \"admin\",\r\n\t\"Password\": \"abc12|+d34DadD\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "      "
+					},
+					"response": []
+				},
+				{
+					"name": "Login Refresh",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhNTdkMDRmZi03NTU5LTRkNTMtYjdjYS03MmFmM2ZiZGQ0N2YiLCJzdWIiOiIzMmFmYTA5Ni04ZDYyLTQ0MzgtYmU2Yi1iM2E1MDUxMzQ0YWEiLCJlbWFpbCI6ImFkbWluQGRvbWFpbi5jb20iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjMyYWZhMDk2LThkNjItNDQzOC1iZTZiLWIzYTUwNTEzNDRhYSIsImFwcElkIjoiRGVmYXVsdCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJzZXJ2aWNlIiwiYWRtaW5pc3RyYXRvciJdLCJuYmYiOjE1OTM4MzM3MjUsImV4cCI6MTYwMTYwOTcyNSwiaXNzIjoiZGV2ZWxvcG1lbnQubmFubyIsImF1ZCI6ImRldmVsb3BtZW50Lm5hbm8ifQ.Pn_tBxiQzAN35CM_LSiJDYfkZWibTbrAVifeK4GwUus\",\r\n\t\"RefreshToken\": \"ul4+MPM/G2NPAZe/FUIHef7WS5AwSSDTHAO2nhpbKDs=\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/auth/login/refresh",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"auth",
+								"login",
+								"refresh"
+							]
+						},
+						"description": "      "
+					},
+					"response": []
+				},
+				{
+					"name": "Login External (Facebook)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"LoginProvider\": \"Facebook\",\r\n\t\"ProviderKey\": {{facebook-id}},\r\n\t\"AccessToken\": {{facebook-access-token}}\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/auth/login/external",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"auth",
+								"login",
+								"external"
+							]
+						},
+						"description": "      "
+					},
+					"response": []
+				},
+				{
+					"name": "Login Transient (Facebook)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Roles\": [\r\n\t\t\"service\"\r\n\t],\r\n\t\"Claims\": {\r\n\t},\r\n\t\"LoginProvider\": \"Facebook\",\r\n\t\"ProviderKey\": {{facebook-id}},\r\n\t\"AccessToken\": {{facebook-access-token}}\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/auth/login/external/transient",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"auth",
+								"login",
+								"external",
+								"transient"
+							]
+						},
+						"description": "      "
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/auth/logout",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"auth",
+								"logout"
+							]
+						},
+						"description": "      "
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Home",
+			"item": [
+				{
+					"name": "Ping",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/home/ping",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"home",
+								"ping"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/home/user",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"home",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User (logged in)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/home/user",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"home",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Services",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/home/services",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"home",
+								"services"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Services - Filter",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/home/ping?filter=Nano",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"home",
+								"ping"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "Nano"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Language",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/home/language?code=da-DK",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"home",
+								"language"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "da-DK"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TimeZone",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/home/timezone?name=Europe/Copenhagen",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"home",
+								"timezone"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Europe/Copenhagen"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Samples",
+			"item": [
+				{
+					"name": "Options",
+					"request": {
+						"method": "OPTIONS",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Index",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/index?Paging.Number=1&Paging.Count=10&Order.By=CreatedAt&Order.Direction=Desc",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"index"
+							],
+							"query": [
+								{
+									"key": "Paging.Number",
+									"value": "1"
+								},
+								{
+									"key": "Paging.Count",
+									"value": "10"
+								},
+								{
+									"key": "Order.By",
+									"value": "CreatedAt"
+								},
+								{
+									"key": "Order.Direction",
+									"value": "Desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Index",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Paging\": {\r\n\t\t\"Count\": 10,\r\n\t\t\"Number\": 1\r\n\t},\r\n\t\"Order\": {\r\n\t\t\"By\": \"CreatedAt\",\r\n\t\t\"Direction\": \"Desc\"\r\n\t}\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/audit/index",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"audit",
+								"index"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/details/15e1eaa0-2206-4fd4-8fe5-aaaaf1b8440f",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"details",
+								"15e1eaa0-2206-4fd4-8fe5-aaaaf1b8440f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Details Many",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/details/many?Ids=10cb8aab-a02e-4b40-9608-a763c9efbd7e&Ids=8e90c2ee-831f-4cd4-a5f8-3bc7bb1c4ba6&Ids=b20b9eb8-c6d9-4245-ac30-eb11d49e4c16",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"details",
+								"many"
+							],
+							"query": [
+								{
+									"key": "Ids",
+									"value": "10cb8aab-a02e-4b40-9608-a763c9efbd7e"
+								},
+								{
+									"key": "Ids",
+									"value": "8e90c2ee-831f-4cd4-a5f8-3bc7bb1c4ba6"
+								},
+								{
+									"key": "Ids",
+									"value": "b20b9eb8-c6d9-4245-ac30-eb11d49e4c16"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Details Many",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n\t\"10cb8aab-a02e-4b40-9608-a763c9efbd7e\",\n\t\"8e90c2ee-831f-4cd4-a5f8-3bc7bb1c4ba6\",\n\t\"b20b9eb8-c6d9-4245-ac30-eb11d49e4c16\"\n]"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/details/many",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"details",
+								"many"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/query?Name=sample-name&Paging.Number=1&Paging.Count=10&Order.By=CreatedAt&Order.Direction=Desc",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"query"
+							],
+							"query": [
+								{
+									"key": "Name",
+									"value": "sample-name"
+								},
+								{
+									"key": "AfterAt",
+									"value": "2020-07-04T14:08:10",
+									"disabled": true
+								},
+								{
+									"key": "BeforeAt",
+									"value": "2020-07-08T14:08:10",
+									"disabled": true
+								},
+								{
+									"key": "Paging.Number",
+									"value": "1"
+								},
+								{
+									"key": "Paging.Count",
+									"value": "10"
+								},
+								{
+									"key": "Order.By",
+									"value": "CreatedAt"
+								},
+								{
+									"key": "Order.Direction",
+									"value": "Desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Criteria\": {\r\n\t\t\"Name\": \"sample\"\r\n\t},\r\n\t\"Paging\": {\r\n\t\t\"Count\": 10,\r\n\t\t\"Number\": 1\r\n\t},\r\n\t\"Order\": {\r\n\t\t\"By\": \"CreatedAt\",\r\n\t\t\"Direction\": \"Desc\"\r\n\t}\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/query",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"query"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query First",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/query/first?Name=sample-name&Order.By=CreatedAt&Order.Direction=Desc",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"query",
+								"first"
+							],
+							"query": [
+								{
+									"key": "Name",
+									"value": "sample-name"
+								},
+								{
+									"key": "AfterAt",
+									"value": "2020-07-04T14:08:10",
+									"disabled": true
+								},
+								{
+									"key": "BeforeAt",
+									"value": "2020-07-08T14:08:10",
+									"disabled": true
+								},
+								{
+									"key": "Order.By",
+									"value": "CreatedAt"
+								},
+								{
+									"key": "Order.Direction",
+									"value": "Desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query First",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Criteria\": {\r\n\t\t\"Name\": \"sample\"\r\n\t},\r\n\t\"Order\": {\r\n\t\t\"By\": \"CreatedAt\",\r\n\t\t\"Direction\": \"Desc\"\r\n\t}\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/query/first",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"query",
+								"first"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query Count",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/query/count?Name=sample-name",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"query",
+								"count"
+							],
+							"query": [
+								{
+									"key": "Name",
+									"value": "sample-name"
+								},
+								{
+									"key": "AfterAt",
+									"value": "2020-07-04T14:08:10",
+									"disabled": true
+								},
+								{
+									"key": "BeforeAt",
+									"value": "2020-07-08T14:08:10",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query Count",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Criteria\": {\r\n\t\t\"Name\": \"sample\"\r\n\t}\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/query/count",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"query",
+								"count"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Id\": \"15e1eaa0-2206-4fd4-8fe5-aaaaf1b8440f\",\r\n\t\"Name\": \"sample-name\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/create/",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"create",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Many",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n\t{\n\t\t\"Id\": \"10cb8aab-a02e-4b40-9608-a763c9efbd7e\",\n\t\t\"Name\": \"sample-name-1\"\n\t},\n\t{\n\t\t\"Id\": \"8e90c2ee-831f-4cd4-a5f8-3bc7bb1c4ba6\",\n\t\t\"Name\": \"sample-name-2\"\n\t},\n\t{\n\t\t\"Id\": \"b20b9eb8-c6d9-4245-ac30-eb11d49e4c16\",\n\t\t\"Name\": \"sample-name-3\"\n\t}\n]"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/create/many",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"create",
+								"many"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Name\": \"sample-name-edited\",\n    \"CreatedAt\": \"2020-07-05T14:07:36+00:00\",\n    \"Id\": \"15e1eaa0-2206-4fd4-8fe5-aaaaf1b8440f\"\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/edit/",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"edit",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Name\": \"sample-name-edited\",\n    \"CreatedAt\": \"2020-07-05T14:07:36+00:00\",\n    \"Id\": \"15e1eaa0-2206-4fd4-8fe5-aaaaf1b8440f\"\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/edit/",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"edit",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Many",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"Name\": \"sample-name-1-edited\",\n        \"CreatedAt\": \"2020-07-05T14:08:10+00:00\",\n        \"Id\": \"10cb8aab-a02e-4b40-9608-a763c9efbd7e\"\n    },\n    {\n        \"Name\": \"sample-name-2-edited\",\n        \"CreatedAt\": \"2020-07-05T14:08:10+00:00\",\n        \"Id\": \"8e90c2ee-831f-4cd4-a5f8-3bc7bb1c4ba6\"\n    },\n    {\n        \"Name\": \"sample-name-3-edited\",\n        \"CreatedAt\": \"2020-07-05T14:08:10+00:00\",\n        \"Id\": \"b20b9eb8-c6d9-4245-ac30-eb11d49e4c16\"\n    }\n]"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/edit/many",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"edit",
+								"many"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Many",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"Name\": \"sample-name-1-edited\",\n        \"CreatedAt\": \"2020-07-05T14:08:10+00:00\",\n        \"Id\": \"10cb8aab-a02e-4b40-9608-a763c9efbd7e\"\n    },\n    {\n        \"Name\": \"sample-name-2-edited\",\n        \"CreatedAt\": \"2020-07-05T14:08:10+00:00\",\n        \"Id\": \"8e90c2ee-831f-4cd4-a5f8-3bc7bb1c4ba6\"\n    },\n    {\n        \"Name\": \"sample-name-3-edited\",\n        \"CreatedAt\": \"2020-07-05T14:08:10+00:00\",\n        \"Id\": \"b20b9eb8-c6d9-4245-ac30-eb11d49e4c16\"\n    }\n]"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/edit/many",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"edit",
+								"many"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/delete/15e1eaa0-2206-4fd4-8fe5-aaaaf1b8440f",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"delete",
+								"15e1eaa0-2206-4fd4-8fe5-aaaaf1b8440f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/delete/15e1eaa0-2206-4fd4-8fe5-aaaaf1b8440f",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"delete",
+								"15e1eaa0-2206-4fd4-8fe5-aaaaf1b8440f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Many",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n\t\"10cb8aab-a02e-4b40-9608-a763c9efbd7e\",\r\n\t\"8e90c2ee-831f-4cd4-a5f8-3bc7bb1c4ba6\",\r\n\t\"b20b9eb8-c6d9-4245-ac30-eb11d49e4c16\"\r\n]\t"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/delete/many",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"delete",
+								"many"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Many",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n\t\"10cb8aab-a02e-4b40-9608-a763c9efbd7e\",\r\n\t\"8e90c2ee-831f-4cd4-a5f8-3bc7bb1c4ba6\",\r\n\t\"b20b9eb8-c6d9-4245-ac30-eb11d49e4c16\"\r\n]\t"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/delete/many",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"delete",
+								"many"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Query",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Name\": \"sample-name-1\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/delete/query",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"delete",
+								"query"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Query",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Name\": \"sample-name-1\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/delete/query",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"delete",
+								"query"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Index",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/index",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"index"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SignUp",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"User\": {\r\n\t\t\"Name\": \"John Doe\"\r\n\t},\r\n\t\"EmailAddress\": \"JohnDoe@doamin.com\",\r\n\t\"Username\": \"JohnDoe@doamin.com\",\r\n\t\"Password\": \"aBac%v4(dcAfFT13\",\r\n\t\"ConfirmPassword\": \"aBac%v4(dcAfFT13\"\r\n  }\r\n}\r\n"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/signup",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SignUp External",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"User\": {\r\n\t\t\"Name\": \"John Doe\"\r\n\t},\r\n\t\"EmailAddress\": \"JohnDoe@domain.com\",\r\n\t\"ExternalLogin\": {\r\n\t\t\"LoginProvider\": \"Facebook\",\r\n\t\t\"ProviderKey\": \"xxxxxxxxxxxxxxxxx\",\r\n\t\t\"AccessToken\": \"token\"\r\n\t}\r\n  }\r\n}\r\n"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/signup/external",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"signup",
+								"external"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Email Change Token",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/email/change/token?emailAddress=admin@domain.com&newEmailAddress=admin_changed@domain.com",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"email",
+								"change",
+								"token"
+							],
+							"query": [
+								{
+									"key": "emailAddress",
+									"value": "admin@domain.com"
+								},
+								{
+									"key": "newEmailAddress",
+									"value": "admin_changed@domain.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Confirm Email Token",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/email/confirm/token?emailAddress=admin@domain.com",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"email",
+								"confirm",
+								"token"
+							],
+							"query": [
+								{
+									"key": "emailAddress",
+									"value": "admin@domain.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Email Change",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Token\": \"CfDJ8D19E0kjpHNFqtQcVc2YGD8eI0EXDREk9xIehye4N3jHPmmKprdlPfij4xbwxzumevchjy3Md1Bi7yfSUr0RDZz87VHhRVzSalm1oeoSxI3bcRFqnKDst9VED2jN23cxE1Gry1CmtzYjbpXSi7iUHNaK2RiwHgMWvduBo23FDYAMhIwjrInlmnIt5+HkFTrkpBHTpgKfEJ5s97FaA8DIZASV6+s3a6xC0d9FwwYZZtQgIeUB/UzRUXkw48RX3OhhzA==\",\n    \"UserId\": \"1aaee188-2ded-48aa-96f1-55ee8fd184a0\",\n    \"NewEmailAddress\": \"admin_changed@domain.com\"\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/email/change",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"email",
+								"change"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Email Confirm",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Token\": \"CfDJ8D19E0kjpHNFqtQcVc2YGD8Z++sK8+bE1Mmpbh6Cso28xmFQbN/+CuEVgpbyiDOm/5YgIbFdSyGBFoc/t3d07YrAb/66YHt3787l1uzgawBbn34/BNrf0oCJ7RXW+4oDktfYM4ygFzTljQez6GsDhHC6lKueOw3fosMK6wfRu4OgsiWrok+XuH/E/u9HRSRNGhv/fxdlzvnI11Md/bhrXEnaSNqjV9/t4dJBJip3ZqA/EAVC/txFtV3rdVJGEot+oQ==\",\n    \"EmailAddress\": \"admin@domain.com\"\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/email/confirm",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"email",
+								"confirm"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Password Reset Token",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/password/reset/token?emailAddress=admin@domain.com",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"password",
+								"reset",
+								"token"
+							],
+							"query": [
+								{
+									"key": "emailAddress",
+									"value": "admin@domain.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Password Set",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"UserId\": \"1aaee188-2ded-48aa-96f1-55ee8fd184a0\",\r\n\t\"NewPassword\": \"new-abc12|+d34DadD\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/password/set",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"password",
+								"set"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Username Set",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"UserId\": \"1aaee188-2ded-48aa-96f1-55ee8fd184a0\",\r\n\t\"NewUsername\": \"new-admin\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/username/set",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"username",
+								"set"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Password Change",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"UserId\": \"1aaee188-2ded-48aa-96f1-55ee8fd184a0\",\n\t\"OldPassword\": \"abc12|+d34DadD\",\n\t\"NewPassword\": \"new-abc12|+d34DadD\",\n\t\"ConfirmNewPassword\": \"new-abc12|+d34DadD\"\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/password/change",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"password",
+								"change"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Password Reset",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Token\": \"CfDJ8D19E0kjpHNFqtQcVc2YGD97fT1XowoTOR6wAzP6ibz+bAKiPaOIpypyVsMF+2iEu7+w4gCSte8kmpSh+EDmrJ85YDuWuxXGS4s3cNV3EBIwUSK22VQDEdhsodDn7AdnM3bUV8TyFZVR9tgAA4lKZEOq/USrc87/4XQvSV7ugjEQC5rvLTDrWwYzgdgUiU9wJgIGXrklROnIR/CmV5ZwT4LV1fcFwnYqn0yFyCykyndn\",\r\n\t\"EmailAddress\": \"admin@domain.com\",\r\n\t\"Password\": \"new-abc12|+d34DadD\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/password/reset",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"password",
+								"reset"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "External Login Remove",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/external/login/remove",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"external",
+								"login",
+								"remove"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "805ce7d3-10d5-47ef-9381-cfbb90e97dd1",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "d7a1e2c4-2c8e-45f5-bb85-2894e6e7d585",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhZDkzMTQxNC05ZjUwLTQyNWEtOTMxNC1jOTMwNTBmNzllMjQiLCJzdWIiOiIxYWFlZTE4OC0yZGVkLTQ4YWEtOTZmMS01NWVlOGZkMTg0YTAiLCJlbWFpbCI6ImFkbWluQGRvbWFpbi5jb20iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibmV3LWFkbWluIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiIxYWFlZTE4OC0yZGVkLTQ4YWEtOTZmMS01NWVlOGZkMTg0YTAiLCJhcHBJZCI6IkRlZmF1bHQiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsic2VydmljZSIsImFkbWluaXN0cmF0b3IiXSwibmJmIjoxNTk1ODc0MDk2LCJleHAiOjE2MDM2NTAwOTYsImlzcyI6ImRldmVsb3BtZW50Lm5hbm8iLCJhdWQiOiJkZXZlbG9wbWVudC5uYW5vIn0.n2SU5lB1kf45qek-yJiCISyWaUIJh-AraDQqD_coyjI",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "3f3adfb2-0925-4292-91ff-f5b2b3794454",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "077e0579-a25e-4cf4-a251-7c0884f399a6",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "10028853-bf3d-41ea-9e3c-de95670c6802",
+			"key": "host",
+			"value": "localhost",
+			"type": "string"
+		},
+		{
+			"id": "fc240ace-519c-4d2b-b471-b1d6bcf15f75",
+			"key": "port",
+			"value": "80",
+			"type": "string"
+		}
+	]
+}
