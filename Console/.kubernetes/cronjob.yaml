@@ -1,0 +1,26 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: %SERVICE_NAME%
+spec:
+  schedule: "0 * * * *"
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: %KUBERNETES_REPLICA_HISTORY_COUNT%
+  successfulJobsHistoryLimit: %KUBERNETES_REPLICA_HISTORY_COUNT%
+  jobTemplate:
+    metadata:
+      labels:
+        app: %SERVICE_NAME%
+    spec:
+      template:
+        spec:
+          containers:
+          - name: %SERVICE_NAME%
+            image: %DOCKER_REGISTRY%/%APP_NAME%:%APP_VERSION%
+            imagePullPolicy: Always 
+            envFrom:
+            - configMapRef:
+                name: %SERVICE_NAME%-config
+          restartPolicy: OnFailure
+          imagePullSecrets:
+          - name: docker-registry-secret

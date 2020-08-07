@@ -1,0 +1,114 @@
+version: 1.0.0.{build}
+skip_tags: true
+max_jobs: 1
+image: Ubuntu
+configuration: Release
+platform: Any CPU
+force_https_clone: true
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+  assembly_version: '{version}'
+  file_version: '{version}'
+  informational_version: '{version}'
+environment:
+  APP_NAME: nano.template.console
+  APP_VERSION: $(APPVEYOR_BUILD_VERSION)
+  SERVICE_NAME: nano-template-console
+  NUGET_HOST: https://www.nuget.org
+  NUGET_APIKEY: 
+    secure: xxxxxxxxxx
+  AZURE_USERNAME: xxxxxxxxxx
+  AZURE_PASSWORD: 
+    secure: xxxxxxxxxx
+for:
+  - branches:
+      only:
+        - master
+    environment:
+      ENVIRONMENT: Production
+      AZURE_SUBSCRIPTION: xxxxxxxxxx
+      DOCKER_REGISTRY: xxxxxxxxxx
+      DOCKER_USERNAME: xxxxxxxxxx
+      DOCKER_PASSWORD:
+        secure: xxxxxxxxxx
+      KUBERNETES_NAME: production-cluster
+      KUBERNETES_NAMESPACE: default
+      KUBERNETES_GROUP: kubernetes
+      KUBERNETES_REPLICA_COUNT: 1
+      KUBERNETES_REPLICA_HISTORY_COUNT: 4
+      NANO_AUTH_ADMIN_PASSWORD: 
+        secure: xxxxxxxxxx
+      NANO_AUTH_JWT_SECRET_KEY: 
+        secure: xxxxxxxxxx
+      DATA_CONNECTIONSTRING: 
+        secure: xxxxxxxxxx
+      EVENTING_USERNAME: rabbitmq_user
+      EVENTING_PASSWORD:
+        secure: xxxxxxxxxx
+  - branches:
+      except:
+        - master
+    environment:
+      ENVIRONMENT: Staging
+      AZURE_SUBSCRIPTION: xxxxxxxxxx
+      DOCKER_REGISTRY: xxxxxxxxxx
+      DOCKER_USERNAME: xxxxxxxxxx
+      DOCKER_PASSWORD:
+        secure: xxxxxxxxxx
+      KUBERNETES_NAME: production-cluster
+      KUBERNETES_NAMESPACE: default
+      KUBERNETES_GROUP: kubernetes
+      KUBERNETES_REPLICA_COUNT: 1
+      KUBERNETES_REPLICA_HISTORY_COUNT: 4
+      NANO_AUTH_ADMIN_PASSWORD: 
+        secure: xxxxxxxxxx
+      NANO_AUTH_JWT_SECRET_KEY: 
+        secure: xxxxxxxxxx
+      DATA_CONNECTIONSTRING: 
+        secure: xxxxxxxxxx
+      EVENTING_USERNAME: rabbitmq_user
+      EVENTING_PASSWORD:
+        secure: xxxxxxxxxx
+nuget:
+  account_feed: false
+  project_feed: false
+services:
+  - docker
+build_script: 
+- ps: >-
+    # Build and push docker container.
+    docker build -t $env:APP_NAME":latest" --build-arg NUGET_HOST=$env:NUGET_HOST --build-arg NUGET_APIKEY=$env:NUGET_APIKEY ./;
+    docker login -u="$env:DOCKER_USERNAME" -p="$env:DOCKER_PASSWORD" $env:DOCKER_REGISTRY;
+    docker tag $env:APP_NAME":latest" $env:DOCKER_REGISTRY"/"$env:APP_NAME":"$env:APP_VERSION;
+    docker push $env:DOCKER_REGISTRY"/"$env:APP_NAME":"$env:APP_VERSION;
+
+    # Azure AKS authentication and client installation. 
+    sudo az login -u $env:AZURE_USERNAME -p $env:AZURE_PASSWORD;
+    sudo az account set -s $env:AZURE_SUBSCRIPTION;
+    sudo az aks get-credentials -g $env:KUBERNETES_GROUP -n $env:KUBERNETES_NAME;
+    sudo az aks install-cli;
+
+    # Replace environment variables in kubernetes templates, and apply changes to the cluster. 
+    Get-Content .kubernetes/configmap.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/configmap.tmp.yaml;
+    Get-Content .kubernetes/cronjob.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/cronjob.tmp.yaml;
+
+    sudo chown -R appveyor:appveyor $env:HOME/.kube;
+
+    kubectl apply -f .kubernetes/configmap.tmp.yaml;
+    kubectl apply -f .kubernetes/cronjob.tmp.yaml;
+deploy:
+- provider: GitHub
+  tag: $(APP_VERSION)
+  auth_token:
+    secure: xxxxxxxxxx
+  on:
+    branch: master
