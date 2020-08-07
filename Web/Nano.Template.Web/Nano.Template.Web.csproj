@@ -9,7 +9,7 @@
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <WarningsAsErrors />
     <NoWarn />  
-    <WarningsAsErrors />
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -18,12 +18,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>bin\Debug\netcoreapp3.1\Nano.Template.Web.xml</DocumentationFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="healthchecksdb" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Nano.Template.Web.Models\Nano.Template.Web.Models.csproj" />
