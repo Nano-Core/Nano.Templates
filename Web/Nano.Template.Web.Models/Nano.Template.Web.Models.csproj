@@ -5,8 +5,8 @@
     <Authors>Michael Vivet</Authors>
     <Product>Nano.Template.Web.Models</Product>
     <Description>Models for Nano web template.</Description>
-    <PackageProjectUrl>https://github.com/vivet/Nano.Template</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/vivet/Nano.Template.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/vivet/Nano.Templates</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/vivet/Nano.Templates.git</RepositoryUrl>
     <PackageTags></PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Nano.Template.Web.Models</PackageId>
