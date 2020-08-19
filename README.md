@@ -17,6 +17,10 @@ When looking outside the applications themselves, and at the infrastructure, all
 
 The picture below shows all the components in the cloud infrastructure required to set up. That includes **database** and **eventing** provider, used by the Nano applications themselves. Additionally, other optional components are shown to complete the setup. 
 
-![Architecture](https://raw.githubusercontent.com/wiki/Nano-Core/Nano.Templates/Images/Nano.Templates.Architecture.png)
+***
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/wiki/Nano-Core/Nano.Templates/Images/Nano.Templates.Architecture.png">
+</p>
 
 ***
