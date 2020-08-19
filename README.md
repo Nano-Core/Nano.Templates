@@ -13,9 +13,9 @@ The **Web-Service** template, is basically a web-service. I can be an private mi
 *** 
 
 ### Infrastructure:
-When looking outside the applications themselves, and at the infrastrcuture, all the templates uses **Docker** for local orchestration. In cloud, **Kubernetes** are the preferred choice, and each template contains **Kubernetes** specs for cloud deployment. The continious-integration and -deployment is done using **AppVeyor** and the Cloud provider is **Azure**. The latter can easily be changed, by supplying your own build and deployment provider (e.g. Travis).  
+When looking outside the applications themselves, and at the infrastructure, all the templates uses **Docker** for local orchestration. In cloud, **Kubernetes** are the preferred choice, and each template contains **Kubernetes** specs for cloud deployment. The continuous-integration and -deployment is done using **AppVeyor** and the Cloud provider is **Azure**. The latter can easily be changed, by supplying your own build and deployment provider (e.g. Travis).  
 
-The picture below shows all the components in the cloud infrastructure required to setup. That includes **database** and **eventing** provider, used by the Nano applications themselves. Additionally, other optional components are shown to complete the setup. 
+The picture below shows all the components in the cloud infrastructure required to set up. That includes **database** and **eventing** provider, used by the Nano applications themselves. Additionally, other optional components are shown to complete the setup. 
 
 ![Architecture](https://raw.githubusercontent.com/wiki/Nano-Core/Nano.Templates/Images/Nano.Templates.Architecture.png)
 
