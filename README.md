@@ -3,7 +3,7 @@ This repository contains sample Nano application templates.
  
 If you haven't familiarized yourself with Nano yet, [read here](https://github.com/Nano-Core/Nano.Library/blob/master/README.md).  
 
-Next, it's recommended to begin your journey here, by inspecting the relevant template, and getting it up and running, locally on your machine. This should be straight forward, and a step-by-step guide is provided for each of the included application templates: 
+Next, it's recommended to begin your journey here, by inspecting the relevant template, and getting it up and running, locally on your machine. This should be straight forward, and a step-by-step guide is provided for each of the included application templates.
 
 *** 
 
