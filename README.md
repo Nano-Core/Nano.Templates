@@ -12,7 +12,7 @@ Next, it's recommended to begin your journey here, by inspecting the relevant te
 *** 
 
 ### Applications:
-The **Web-Service** template, is basically a web-service. I can be an private micro-service, that is not exposed to any public consumers, but consumed by an Api, which in turn is exposed to publicly.  
+The **Web-Service** template, is basically a web-service. I can be a private micro-service, that is not exposed to any public consumers, but consumed by an Api, which in turn is exposed to publicly.  
 
 The **Api** doesn't have any dependencies, such as database or eventing, but consumes private services, to expose generic service functionality to specific api requirements. In reality there is no difference between these two templates, only the way the Nano Library is used, differs. The Api can be omitted for simpler infrastructures.  
 
