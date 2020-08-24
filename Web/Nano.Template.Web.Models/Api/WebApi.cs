@@ -3,7 +3,7 @@
 namespace Nano.Template.Web.Models.Api
 {
     /// <inheritdoc />
-    public class WebApi : DefaultApi
+    public class WebApi : DefaultIdentityApi<User>
     {
         /// <inheritdoc />
         public WebApi(ApiOptions options)
