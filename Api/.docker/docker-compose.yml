@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  nano.template.api:
+    image: nano.template.api
+    build:
+      context: .
+      dockerfile: ../Nano.Template.Api/Dockerfile
+    ports:
+      - 8080:8080
+      - 8443:8443
+    networks:
+      - network
+
+networks:
+  network:
+    external: true

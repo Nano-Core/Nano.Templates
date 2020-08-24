@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <WarningsAsErrors />
+    <NoWarn></NoWarn>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <LangVersion>8.0</LangVersion>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
+    <PackageReference Include="Moq" Version="4.14.5" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Nano.Template.Api\Nano.Template.Api.csproj" />
+    <ProjectReference Include="..\..\Nano.Template.Api.Models\Nano.Template.Api.Models.csproj" />
+  </ItemGroup>
+
+</Project>

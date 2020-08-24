@@ -1,0 +1,279 @@
+{
+	"info": {
+		"_postman_id": "233585a0-ef32-4f29-b0df-13adf7d0b146",
+		"name": "Nano.Template.Api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Samples",
+			"item": [
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/15e1eaa0-2206-4fd4-8fe5-aaaaf1b8440f",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"15e1eaa0-2206-4fd4-8fe5-aaaaf1b8440f"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Name\": \"sample\",\r\n\t\"Order\": {\r\n\t\t\"By\": \"CreatedAt\",\r\n\t\t\"Direction\": \"Desc\"\r\n\t},\r\n\t\"Paging\": {\r\n\t\t\"Number\": 1,\r\n\t\t\"Count\": 25\r\n\t}\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/query",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"query"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Name\": \"sample-name\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/samples/create/",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"samples",
+								"create",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Me",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/me",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Username\": \"johndoe@domain.com\",\r\n\t\"Password\": \"cV&kY(7_T3VNbAd!\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/login",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SignUp",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"Name\": \"John Doe\",\n\t\"Nickname\": \"The Doe\",\n\t\"EmailAddress\": {\n\t\t\"Email\": \"johndoe@domain.com\"\n\t},\n\t\"Password\": \"cV&kY(7_T3VNbAd!\"\n  }\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/signup",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkNDFhODQxNS03N2RiLTQ3ODAtODgwOS0xYTNkNzM4ZDNhZmQiLCJzdWIiOiI0NzY3MjVjNi0wMDg0LTRiYWQtOWUwZS1jYzJiNTJlNWFkZTkiLCJlbWFpbCI6ImpvaG5kb2VAZG9tYWluLmNvbSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJqb2huZG9lQGRvbWFpbi5jb20iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjQ3NjcyNWM2LTAwODQtNGJhZC05ZTBlLWNjMmI1MmU1YWRlOSIsImFwcElkIjoiRGVmYXVsdCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJ3cml0ZXIiLCJzZXJ2aWNlIiwicmVhZGVyIl0sIm5iZiI6MTU5ODI1Njc4NiwiZXhwIjoxNjA2MDMyNzg2LCJpc3MiOiJkZXZlbG9wbWVudC5uYW5vIiwiYXVkIjoiZGV2ZWxvcG1lbnQubmFubyJ9.mA-6uWcm2irUfeYB9uAd4DlIbGHvd7oPqCmFTkuF750",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "ed007310-c063-4609-9d14-79cba6b84d12",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "3ea019bc-5fbb-4ef7-9466-5f61ecb6c549",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "29d2cef3-3fa5-4ee1-ba23-8bf5c54132c6",
+			"key": "host",
+			"value": "localhost",
+			"type": "string"
+		},
+		{
+			"id": "86b26a9c-51a4-409f-bace-68e9c633a6ce",
+			"key": "port",
+			"value": "8080",
+			"type": "string"
+		}
+	]
+}

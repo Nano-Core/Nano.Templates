@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Version>1.0.0.0</Version>
+    <Authors>Michael Vivet</Authors>
+    <Product>Nano Template Api Models</Product>
+    <Description>Models for Nano api template.</Description>
+    <PackageProjectUrl>https://github.com/vivet/Nano.Templates</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/vivet/Nano.Templates.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <LangVersion>8.0</LangVersion>
+    <WarningsAsErrors />
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netcoreapp3.1\Nano.Template.Api.Models.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netcoreapp3.1\Nano.Template.Api.Models.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NanoCore" Version="3.1.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Web\Nano.Template.Web.Models\Nano.Template.Web.Models.csproj" />
+  </ItemGroup>
+
+</Project>

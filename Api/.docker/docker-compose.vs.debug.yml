@@ -1,0 +1,6 @@
+version: '3.7'
+
+services:
+  nano.template.api:
+    volumes:
+      - ../:/root/.dotnet/https

@@ -1,0 +1,100 @@
+version: 1.0.0.{build}
+skip_tags: true
+max_jobs: 1
+image: Ubuntu
+configuration: Release
+platform: Any CPU
+force_https_clone: true
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+  assembly_version: '{version}'
+  file_version: '{version}'
+  informational_version: '{version}'
+environment:
+  APP_NAME: nano.template.api
+  APP_VERSION: $(APPVEYOR_BUILD_VERSION)
+  SERVICE_NAME: nano-template-api
+  NUGET_HOST: https://www.nuget.org
+  NUGET_APIKEY: 
+    secure: xxxxxxxxxx
+  AZURE_USERNAME: xxxxxxxxxx
+  AZURE_PASSWORD: 
+    secure: xxxxxxxxxx
+for:
+  - branches:
+      only:
+        - master
+    environment:
+      ENVIRONMENT: Production
+      AZURE_SUBSCRIPTION: xxxxxxxxxx
+      DOCKER_REGISTRY: xxxxxxxxxx
+      DOCKER_USERNAME: xxxxxxxxxx
+      DOCKER_PASSWORD:
+        secure: xxxxxxxxxx
+      KUBERNETES_NAME: production-cluster
+      KUBERNETES_NAMESPACE: default
+      KUBERNETES_GROUP: kubernetes
+      KUBERNETES_REPLICA_COUNT: 3
+      KUBERNETES_REPLICA_HISTORY_COUNT: 4
+      NANO_AUTH_JWT_SECRET_KEY: 
+        secure: xxxxxxxxxx
+  - branches:
+      except:
+        - master
+    environment:
+      ENVIRONMENT: Staging
+      AZURE_SUBSCRIPTION: xxxxxxxxxx
+      DOCKER_REGISTRY: containersstaging.azurecr.io
+      DOCKER_USERNAME: containersstaging
+      DOCKER_PASSWORD:
+        secure: xxxxxxxxxx
+      KUBERNETES_NAME: staging-cluster
+      KUBERNETES_NAMESPACE: default
+      KUBERNETES_GROUP: kubernetes
+      KUBERNETES_REPLICA_COUNT: 2
+      KUBERNETES_REPLICA_HISTORY_COUNT: 4
+      NANO_AUTH_JWT_SECRET_KEY: 
+        secure: xxxxxxxxxx
+nuget:
+  account_feed: false
+  project_feed: false
+services:
+  - docker
+build_script:
+- ps: >-
+    docker build -t $env:APP_NAME":latest" --build-arg VERSION=$env:APP_VERSION --build-arg NUGET_HOST=$env:NUGET_HOST --build-arg NUGET_APIKEY=$env:NUGET_APIKEY ./;
+    docker login -u="$env:DOCKER_USERNAME" -p="$env:DOCKER_PASSWORD" $env:DOCKER_REGISTRY;
+    docker tag $env:APP_NAME":latest" $env:DOCKER_REGISTRY"/"$env:APP_NAME":"$env:APP_VERSION;
+    docker push $env:DOCKER_REGISTRY"/"$env:APP_NAME":"$env:APP_VERSION;
+
+    sudo az login -u $env:AZURE_USERNAME -p $env:AZURE_PASSWORD;
+    sudo az account set -s $env:AZURE_SUBSCRIPTION;
+    sudo az aks get-credentials -g $env:KUBERNETES_GROUP -n $env:KUBERNETES_NAME;
+    sudo az aks install-cli;
+
+    Get-Content .kubernetes/service.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/service.tmp.yaml;
+    Get-Content .kubernetes/configmap.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/configmap.tmp.yaml;
+    Get-Content .kubernetes/deployment.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/deployment.tmp.yaml;
+
+    sudo chown -R appveyor:appveyor $env:HOME/.kube;
+
+    kubectl apply -f .kubernetes/service.tmp.yaml;
+    kubectl apply -f .kubernetes/configmap.tmp.yaml;
+    kubectl apply -f .kubernetes/deployment.tmp.yaml;
+deploy:
+- provider: GitHub
+  tag: $(APPVEYOR_BUILD_VERSION)
+  auth_token:
+    secure: xxxxxxxxxx
+  on:
+    branch: master
+
