@@ -3,12 +3,12 @@ This repository contains sample Nano application templates.
  
 If you haven't familiarized yourself with Nano yet, [read here](https://github.com/Nano-Core/Nano.Library/blob/master/README.md).  
 
-Next, it's recommended to begin your journey here, by inspecting the relevant template, and getting it up and running, locally on your machine. This should be straight forward, and a step-by-step guide is provided for each of the included application templates.
+Next, it's recommended to begin your journey by inspecting the relevant template, and getting it up and running, locally on your machine. This should be straight forward, and a step-by-step guide is provided for each of the included application templates.
 
 *** 
 
 ### Templates:
-The **[Web-Service](https://github.com/Nano-Core/Nano.Templates/tree/master/Web/README.md)** template, is basically a web-service. I can be a private micro-service, that is not exposed to any public consumers, but consumed by an Api, which in turn is exposed to publicly.  
+The **[Web-Service](https://github.com/Nano-Core/Nano.Templates/tree/master/Web/README.md)** template, is basically a web-service. I can be a private micro-service, that is not exposed to any public consumers, but consumed by an Api, which in turn is exposed publicly.  
 
 The **[Api](https://github.com/Nano-Core/Nano.Templates/tree/master/Api/README.md)** doesn't have any dependencies, such as database or eventing, but consumes private services, to expose generic service functionality to specific api requirements. In reality there is no difference between these two templates, only the way the Nano Library is used, differs. The Api can be omitted for simpler infrastructures.  
 
