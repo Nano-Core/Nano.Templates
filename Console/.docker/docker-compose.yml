@@ -7,3 +7,9 @@ services:
     build:
       context: .
       dockerfile: ../Nano.Template.Console/Dockerfile
+    networks:
+      - network
+
+networks:
+  network:
+    external: true
