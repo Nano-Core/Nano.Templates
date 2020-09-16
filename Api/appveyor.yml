@@ -53,8 +53,8 @@ for:
     environment:
       ENVIRONMENT: Staging
       AZURE_SUBSCRIPTION: xxxxxxxxxx
-      DOCKER_REGISTRY: containersstaging.azurecr.io
-      DOCKER_USERNAME: containersstaging
+      DOCKER_REGISTRY: xxxxxxxxxx
+      DOCKER_USERNAME: xxxxxxxxxx
       DOCKER_PASSWORD:
         secure: xxxxxxxxxx
       KUBERNETES_NAME: staging-cluster

@@ -5,7 +5,10 @@ metadata:
   namespace: %KUBERNETES_NAMESPACE%
 spec:
   ports:  
-  - port: 80
+  - name: http
+    port: 80
+  - name: https
+    port: 443
   selector:
     app: %SERVICE_NAME%
   type: ClusterIP
