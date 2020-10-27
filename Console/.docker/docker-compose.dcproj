@@ -5,7 +5,7 @@
     <DockerTargetOS>Linux</DockerTargetOS>
     <ProjectGuid>557a0c48-da6a-4d7c-8668-94f08a390f4b</ProjectGuid>
     <DockerLaunchBrowser>false</DockerLaunchBrowser>
-    <DockerServiceUrl>http://localhost:{ServicePort}/api/docs</DockerServiceUrl>
+    <DockerServiceUrl></DockerServiceUrl>
     <DockerServiceName>Nano.Template.Console</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>

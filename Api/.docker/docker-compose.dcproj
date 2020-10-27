@@ -5,7 +5,7 @@
     <DockerTargetOS>Linux</DockerTargetOS>
     <ProjectGuid>05811249-cb4e-44ec-91c1-bdb5664a3377</ProjectGuid>
     <DockerLaunchBrowser>false</DockerLaunchBrowser>
-    <DockerServiceUrl>http://localhost:{ServicePort}/api/docs</DockerServiceUrl>
+    <DockerServiceUrl>http://localhost:{ServicePort}/docs</DockerServiceUrl>
     <DockerServiceName>nano.template.api</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
