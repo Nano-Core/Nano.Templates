@@ -28,7 +28,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NanoCore" Version="3.1.13" />
+    <PackageReference Include="NanoCore" Version="3.1.14" />
   </ItemGroup>
 
   <ItemGroup>
