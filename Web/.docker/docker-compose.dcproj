@@ -8,6 +8,9 @@
     <DockerServiceUrl>http://localhost:{ServicePort}/docs</DockerServiceUrl>
     <DockerServiceName>Nano.Template.Web</DockerServiceName>
   </PropertyGroup>
+  <PropertyGroup>
+    <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
+  </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.vs.debug.yml">
       <DependentUpon>docker-compose.yml</DependentUpon>

@@ -27,6 +27,8 @@ namespace Nano.Template.Console
 
             Thread.Sleep(2000);
 
+            this.Logger.LogInformation("Cmd::Completed...");
+
             await this.StopAsync(cancellationToken);
         }
     }

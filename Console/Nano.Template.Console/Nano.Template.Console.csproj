@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <ApplicationIcon />
     <OutputType>Exe</OutputType>
@@ -10,7 +10,8 @@
     <WarningsAsErrors />
     <NoWarn />  
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>latest</LangVersion>
+    <UserSecretsId>b8430688-5157-48e6-9cd7-010de3064889</UserSecretsId>
 </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

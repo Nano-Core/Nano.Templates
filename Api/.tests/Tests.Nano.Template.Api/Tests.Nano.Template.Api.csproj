@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <WarningsAsErrors />
     <NoWarn></NoWarn>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>latest</LangVersion>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 

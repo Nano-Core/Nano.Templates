@@ -64,7 +64,7 @@ for:
       DOCKER_USERNAME: xxxxxxxxxx
       DOCKER_PASSWORD:
         secure: xxxxxxxxxx
-      KUBERNETES_NAME: production-cluster
+      KUBERNETES_NAME: staging-cluster
       KUBERNETES_NAMESPACE: default
       KUBERNETES_GROUP: kubernetes
       KUBERNETES_REPLICA_COUNT: 1

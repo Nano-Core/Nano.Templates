@@ -14,5 +14,4 @@ services:
 
 networks:
   network:
-    external: 
-      name: network
+    name: network

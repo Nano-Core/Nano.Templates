@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <ApplicationIcon />
     <OutputType>Exe</OutputType>
@@ -9,15 +9,16 @@
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <WarningsAsErrors />
     <NoWarn />  
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>  
+    <UserSecretsId>ea7b387b-00d6-4018-a791-705c74d450ad</UserSecretsId>
 </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netcoreapp3.1\Nano.Template.Web.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\net50\Nano.Template.Web.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netcoreapp3.1\Nano.Template.Web.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\net50\Nano.Template.Web.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

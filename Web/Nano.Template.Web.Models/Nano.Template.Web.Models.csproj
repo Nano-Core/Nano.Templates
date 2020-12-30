@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <Authors>Michael Vivet</Authors>
     <Product>Nano.Template.Web.Models</Product>
     <Description>Models for Nano web template.</Description>
@@ -20,15 +20,15 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netcoreapp3.1\Nano.Template.Web.Models.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\net50\Nano.Template.Web.Models.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netcoreapp3.1\Nano.Template.Web.Models.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\net50\Nano.Template.Web.Models.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NanoCore" Version="3.1.14" />
+    <PackageReference Include="NanoCore" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
