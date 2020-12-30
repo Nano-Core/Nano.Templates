@@ -4,7 +4,6 @@ ARG NUGET_APIKEY
 
 FROM mcr.microsoft.com/dotnet/aspnet:5.0.1-buster-slim AS base
 WORKDIR /app
-EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster AS build
 ARG VERSION

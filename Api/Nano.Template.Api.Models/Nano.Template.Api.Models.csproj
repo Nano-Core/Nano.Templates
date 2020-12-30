@@ -11,18 +11,18 @@
     <PackageProjectUrl>https://github.com/vivet/Nano.Templates</PackageProjectUrl>
     <RepositoryUrl>https://github.com/vivet/Nano.Templates.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-	  <LangVersion>latest</LangVersion>
+	<LangVersion>latest</LangVersion>
     <WarningsAsErrors />
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn />
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netcoreapp3.1\Nano.Template.Api.Models.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\net5.0\Nano.Template.Api.Models.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netcoreapp3.1\Nano.Template.Api.Models.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\net5.0\Nano.Template.Api.Models.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
