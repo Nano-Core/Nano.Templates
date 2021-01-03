@@ -21,6 +21,7 @@ spec:
         image: %DOCKER_REGISTRY%/%APP_NAME%:%APP_VERSION%
         ports:
         - containerPort: 80
+        - containerPort: 443
         imagePullPolicy: Always 
         envFrom:
         - configMapRef:
