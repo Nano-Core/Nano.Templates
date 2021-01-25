@@ -33,5 +33,12 @@ spec:
             scheme: HTTP
           periodSeconds: 20
           initialDelaySeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+            scheme: HTTP
+          periodSeconds: 5
+          initialDelaySeconds: 10
       imagePullSecrets:
       - name: docker-registry-secret
