@@ -1,11 +1,11 @@
 ARG NUGET_HOST
 ARG NUGET_APIKEY
 
-FROM mcr.microsoft.com/dotnet/aspnet:5.0.1-buster-slim AS base
+FROM mcr.microsoft.com/dotnet/aspnet:5.0.2-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0-buster AS build
+FROM mcr.microsoft.com/dotnet/sdk:5.0.102-1-focal AS build
 ARG NUGET_HOST
 ARG NUGET_APIKEY
 
