@@ -23,7 +23,7 @@ RUN dotnet restore -s https://api.nuget.org/v3/index.json -s $NUGET_HOST/auth/$N
 RUN dotnet build -c Release -o /app --no-restore
 RUN dotnet test /src/.tests/Tests.Nano.Template.Web/Tests.Nano.Template.Web.csproj --list-tests
 RUN dotnet new tool-manifest
-RUN dotnet tool install --local dotnet-ef --version 3.1.6
+RUN dotnet tool install --local dotnet-ef --version 5.0.2
 RUN dotnet dotnet-ef database update
 RUN dotnet nuget push /app/Nano.Template.Web.Models.$VERSION.nupkg -s $NUGET_HOST -k $NUGET_APIKEY
 

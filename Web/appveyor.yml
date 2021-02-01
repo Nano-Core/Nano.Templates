@@ -90,7 +90,7 @@ services:
 build_script: 
 - ps: >-
     # Build and push docker container.
-    docker build -t $env:APP_NAME":latest" --build-arg VERSION=$env:APP_VERSION --build-arg NUGET_HOST=$env:NUGET_HOST --build-arg NUGET_APIKEY=$env:NUGET_APIKEY ./ --build-arg CONNECTIONSTRING=$env:DATA_CONNECTIONSTRING_MIGRATION;
+    docker build -t $env:APP_NAME":latest" --build-arg VERSION=$env:APP_VERSION --build-arg NUGET_HOST=$env:NUGET_HOST --build-arg NUGET_APIKEY=$env:NUGET_APIKEY --build-arg CONNECTIONSTRING=$env:DATA_CONNECTIONSTRING_MIGRATION ./ ;
     docker login -u="$env:DOCKER_USERNAME" -p="$env:DOCKER_PASSWORD" $env:DOCKER_REGISTRY;
     docker tag $env:APP_NAME":latest" $env:DOCKER_REGISTRY"/"$env:APP_NAME":"$env:APP_VERSION;
     docker push $env:DOCKER_REGISTRY"/"$env:APP_NAME":"$env:APP_VERSION;

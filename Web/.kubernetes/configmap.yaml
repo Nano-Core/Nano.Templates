@@ -5,6 +5,7 @@ metadata:
   namespace: %KUBERNETES_NAMESPACE%
 data:
   ASPNETCORE_ENVIRONMENT: %ENVIRONMENT%
+  App__Version: %APP_VERSION%
   Security__Jwt__Issuer: %ENVIRONMENT%.nano
   Security__Jwt__Audience: %ENVIRONMENT%.nano
   Security__Jwt__SecretKey: %NANO_AUTH_JWT_SECRET_KEY%
@@ -12,4 +13,3 @@ data:
   Data__ConnectionString: %DATA_CONNECTIONSTRING%
   Eventing__Username: %EVENTING_USERNAME%
   Eventing__Password: %EVENTING_PASSWORD%
-  App__Version: %APP_VERSION%
