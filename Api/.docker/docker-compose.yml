@@ -11,6 +11,8 @@ services:
       - 8443:8443
     networks:
       - network
+    volumes:
+      - ../:/root/.dotnet/https
 
 networks:
   network:
