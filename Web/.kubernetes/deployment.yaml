@@ -26,6 +26,13 @@ spec:
         envFrom:
         - configMapRef:
             name: %SERVICE_NAME%-config
+        resources:
+          requests:
+            memory: %KUBERNETES_MEMORY_REQUEST%
+            cpu: %KUBERNETES_CPU_REQUEST%
+          limits:
+            memory: %KUBERNETES_MEMORY_LIMIT%
+            cpu: %KUBERNETES_CPU_LIMIT%
         livenessProbe:
           httpGet:
             path: /healthz
