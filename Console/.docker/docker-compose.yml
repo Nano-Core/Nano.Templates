@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   nano.template.console:
     image: nano.template.console
