@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NanoCore" Version="5.1.1" />
+    <PackageReference Include="NanoCore" Version="5.1.2" />
   </ItemGroup>
 
   <ItemGroup>
