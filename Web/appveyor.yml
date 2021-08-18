@@ -23,12 +23,18 @@ environment:
   APP_NAME: nano.template.web
   APP_VERSION: $(APPVEYOR_BUILD_VERSION)
   SERVICE_NAME: nano-template-web
-  NUGET_HOST: https://www.nuget.org
-  NUGET_APIKEY: 
-    secure: xxxxxxxxxx
   AZURE_USERNAME: xxxxxxxxxx
   AZURE_PASSWORD: 
     secure: xxxxxxxxxx
+  AZURE_GROUP: kubernetes
+  NUGET_HOST: https://www.nuget.org
+  NUGET_APIKEY: 
+    secure: xxxxxxxxxx
+  NUGET_USERNAME: xxxxxxxxxx
+  NUGET_PASSWORD: 
+    secure: xxxxxxxxxx
+  DOTNET_SDK_VERSION: 5.0.400-focal
+  DOTNET_ASPNET_VERSION: 5.0.9-focal
 for:
   - branches:
       only:
@@ -42,7 +48,6 @@ for:
         secure: xxxxxxxxxx
       KUBERNETES_NAME: production-cluster
       KUBERNETES_NAMESPACE: default
-      KUBERNETES_GROUP: kubernetes
       KUBERNETES_REPLICA_COUNT: 1
       KUBERNETES_REPLICA_HISTORY_COUNT: 4
       KUBERNETES_CPU_REQUEST: 100m
@@ -70,9 +75,8 @@ for:
       DOCKER_USERNAME: xxxxxxxxxx
       DOCKER_PASSWORD:
         secure: xxxxxxxxxx
-      KUBERNETES_NAME: production-cluster
+      KUBERNETES_NAME: staging-cluster
       KUBERNETES_NAMESPACE: default
-      KUBERNETES_GROUP: kubernetes
       KUBERNETES_REPLICA_COUNT: 1
       KUBERNETES_REPLICA_HISTORY_COUNT: 4
       KUBERNETES_CPU_REQUEST: 100m
@@ -98,7 +102,11 @@ services:
 build_script: 
 - ps: >-
     # Build and push docker container.
-    docker build -t $env:APP_NAME":latest" --build-arg VERSION=$env:APP_VERSION --build-arg NUGET_HOST=$env:NUGET_HOST --build-arg NUGET_APIKEY=$env:NUGET_APIKEY --build-arg CONNECTIONSTRING=$env:DATA_CONNECTIONSTRING_MIGRATION ./ ;
+    docker build -t $env:DOCKER_REGISTRY"/"$env:APP_NAME":latest" -t $env:DOCKER_REGISTRY"/"$env:APP_NAME":"$env:APP_VERSION --build-arg VERSION=$env:APP_VERSION --build-arg DOTNET_SDK_VERSION=$env:DOTNET_SDK_VERSION --build-arg DOTNET_ASPNET_VERSION=$env:DOTNET_ASPNET_VERSION --build-arg NUGET_HOST=$env:NUGET_HOST --build-arg NUGET_APIKEY=$env:NUGET_APIKEY --build-arg NUGET_USERNAME=$env:NUGET_USERNAME --build-arg NUGET_PASSWORD=$env:NUGET_PASSWORD --build-arg CONNECTIONSTRING=$env:DATA_CONNECTIONSTRING_MIGRATION ./ ;
+    if ($LastExitCode -ne 0) 
+    { 
+        return $LastExitCode;
+    };
     docker login -u="$env:DOCKER_USERNAME" -p="$env:DOCKER_PASSWORD" $env:DOCKER_REGISTRY;
     docker tag $env:APP_NAME":latest" $env:DOCKER_REGISTRY"/"$env:APP_NAME":"$env:APP_VERSION;
     docker push $env:DOCKER_REGISTRY"/"$env:APP_NAME":"$env:APP_VERSION;
@@ -106,7 +114,7 @@ build_script:
     # Azure AKS authentication and client installation. 
     sudo az login -u $env:AZURE_USERNAME -p $env:AZURE_PASSWORD;
     sudo az account set -s $env:AZURE_SUBSCRIPTION;
-    sudo az aks get-credentials -g $env:KUBERNETES_GROUP -n $env:KUBERNETES_NAME;
+    sudo az aks get-credentials -g $env:AZURE_GROUP -n $env:KUBERNETES_NAME;
     sudo az aks install-cli;
 
     # Replace environment variables in kubernetes templates, and apply changes to the cluster. 

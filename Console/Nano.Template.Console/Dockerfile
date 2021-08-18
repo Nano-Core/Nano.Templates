@@ -1,3 +1,5 @@
-FROM mcr.microsoft.com/dotnet/aspnet:5.0.2-buster-slim AS base
+ARG DOTNET_ASPNET_VERSION="5.0.9-focal"
+
+FROM mcr.microsoft.com/dotnet/aspnet:$DOTNET_ASPNET_VERSION AS base
 
 ENTRYPOINT ["dotnet", "Nano.Template.Console.dll"]
