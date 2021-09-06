@@ -27,6 +27,8 @@ namespace Nano.Template.Web.Data
 
             modelBuilder
                 .AddMapping<Sample, SampleMapping>()
+                .AddMapping<DerivedSample1, DerivedSample1Mapping>()
+                .AddMapping<DerivedSample2, DerivedSample2Mapping>()
                 .AddMapping<User, UserMapping>();
         }
     }

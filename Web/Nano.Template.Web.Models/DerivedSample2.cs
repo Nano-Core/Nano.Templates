@@ -1,18 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Nano.Models;
 
 namespace Nano.Template.Web.Models
 {
     /// <summary>
-    /// Sample.
+    /// Derived Sample 2.
     /// </summary>
-    public abstract class Sample : DefaultEntity
+    public class DerivedSample2 : Sample
     {
         /// <summary>
-        /// Name.
+        /// Summary.
         /// </summary>
         [Required]
         [MaxLength(256)]
-        public virtual string Name { get; set; }
+        public virtual string Summary { get; set; }
     }
 }
