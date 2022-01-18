@@ -3,17 +3,17 @@ services:
     volumes:
       - ../:/root/.dotnet/https
 
+  #database:
+  #  environment:
+  #    SA_PASSWORD: "myPassword_123"
+  #    ACCEPT_EULA: "Y"  
+
   database:
     environment:
-      SA_PASSWORD: "myPassword_123"
-      ACCEPT_EULA: "Y"  
-
-#  database:
-#    environment:
-#      MYSQL_USER: "sa"
-#      MYSQL_PASSWORD: "myPassword_123"
-#      MYSQL_ROOT_PASSWORD: "myPassword_123"
-#      MYSQL_DATABASE: "webDb"
+      MYSQL_USER: "sa"
+      MYSQL_PASSWORD: "myPassword_123"
+      MYSQL_ROOT_PASSWORD: "myPassword_123"
+      MYSQL_DATABASE: "webDb"
   
   eventing: 
     environment: 

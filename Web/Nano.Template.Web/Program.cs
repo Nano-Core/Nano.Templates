@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Nano.Data.Extensions;
-//using Nano.Data.Providers.MySql;
-using Nano.Data.Providers.SqlServer;
+using Nano.Data.Providers.MySql;
+//using Nano.Data.Providers.SqlServer;
 using Nano.Eventing.Extensions;
 using Nano.Eventing.Providers.EasyNetQ;
 using Nano.Logging.Extensions;
@@ -26,7 +26,7 @@ namespace Nano.Template.Web
                 .ConfigureServices(x =>
                 {
                     x.AddLogging<SerilogProvider>();
-                    x.AddDataContext<SqlServerProvider /*MySqlProvider*/, WebDbContext>();
+                    x.AddDataContext</*SqlServerProvider*/MySqlProvider, WebDbContext>();
                     x.AddEventing<EasyNetQProvider>();
                 })
                 .Build()

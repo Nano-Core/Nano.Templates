@@ -14,19 +14,19 @@ services:
     networks:
       - network
 
+  #database:
+  #  image: "mcr.microsoft.com/mssql/server"
+  #  ports:
+  #    - 1433:1433
+  #  networks:
+  #    - network
+
   database:
-    image: "mcr.microsoft.com/mssql/server"
+    image: mysql/mysql-server:8.0
     ports:
-      - 1433:1433
+      - 3306:3306
     networks:
       - network
-
-#  database:
-#    image: mysql/mysql-server:8.0
-#    ports:
-#      - 3306:3306
-#    networks:
-#      - network
 
   eventing: 
     image: rabbitmq:3.7.5

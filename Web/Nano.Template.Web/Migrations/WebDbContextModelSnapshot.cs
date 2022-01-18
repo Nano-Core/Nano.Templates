@@ -327,10 +327,6 @@ namespace Nano.Template.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<long>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
@@ -340,6 +336,10 @@ namespace Nano.Template.Web.Migrations
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
+
+                    b.Property<string>("type")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -351,7 +351,7 @@ namespace Nano.Template.Web.Migrations
 
                     b.ToTable("Sample");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Sample");
+                    b.HasDiscriminator<string>("type").HasValue("Sample");
                 });
 
             modelBuilder.Entity("Nano.Template.Web.Models.User", b =>
