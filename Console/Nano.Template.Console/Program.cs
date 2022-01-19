@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Nano.Console;
-using Nano.Data.Extensions;
-using Nano.Data.Providers.SqlServer;
 using Nano.Eventing.Extensions;
 using Nano.Eventing.Providers.EasyNetQ;
 using Nano.Logging.Extensions;
 using Nano.Logging.Providers.Serilog;
-using Nano.Template.Console.Data;
+using Nano.Template.Console.Services;
+using Nano.Template.Console.Services.Interfaces;
 
 namespace Nano.Template.Console
 {
@@ -26,8 +26,10 @@ namespace Nano.Template.Console
                 .ConfigureServices(x =>
                 {
                     x.AddLogging<SerilogProvider>();
-                    x.AddDataContext<SqlServerProvider, ConsoleDbContext>();
+                    //x.AddDataContext<SqlServerProvider, ConsoleDbContext>();
                     x.AddEventing<EasyNetQProvider>();
+
+                    x.AddSingleton<ISampleService, SampleService>();
                 })
                 .Build()
                 .RunAsync()
