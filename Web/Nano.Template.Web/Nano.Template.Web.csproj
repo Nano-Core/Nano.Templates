@@ -1,47 +1,40 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
-    <ApplicationIcon />
-    <OutputType>Exe</OutputType>
-    <Version>1.0.0.0</Version>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <WarningsAsErrors />
-    <NoWarn />  
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>  
-    <UserSecretsId>ea7b387b-00d6-4018-a791-705c74d450ad</UserSecretsId>
-</PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+		<ApplicationIcon />
+		<OutputType>Exe</OutputType>
+		<Version>1.0.0.0</Version>
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<WarningsAsErrors />
+		<NoWarn />
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<UserSecretsId>ea7b387b-00d6-4018-a791-705c74d450ad</UserSecretsId>
+		<DocumentationFile>$(MSBuildThisFileDirectory)\bin\$(Configuration)\Nano.Template.Web.xml</DocumentationFile>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\net5.0\Nano.Template.Web.xml</DocumentationFile>
-  </PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Nano.Template.Web.Models\Nano.Template.Web.Models.csproj" />
+	</ItemGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\net5.0\Nano.Template.Web.xml</DocumentationFile>
-  </PropertyGroup>
+	<ItemGroup>
+		<Compile Update="Translation\Resources\Exceptions\Exceptions.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Exceptions.resx</DependentUpon>
+		</Compile>
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Nano.Template.Web.Models\Nano.Template.Web.Models.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Update="Translation\Resources\Exceptions\Exceptions.resx">
+			<Generator>PublicResXFileCodeGenerator</Generator>
+			<LastGenOutput>Exceptions.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Translation\Resources\Exceptions\Exceptions.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Exceptions.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Translation\Resources\Exceptions\Exceptions.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Exceptions.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Migrations\" />
+	</ItemGroup>
 
 </Project>

@@ -6,7 +6,7 @@ namespace Nano.Template.Web.Models
     /// <summary>
     /// Sample.
     /// </summary>
-    public abstract class Sample : DefaultEntity
+    public class Sample : DefaultEntity
     {
         /// <summary>
         /// Name.

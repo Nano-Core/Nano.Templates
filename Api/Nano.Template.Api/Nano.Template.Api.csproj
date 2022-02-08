@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-	  <TargetFramework>net5.0</TargetFramework>
+	  <TargetFramework>net6.0</TargetFramework>
     <Configurations>Debug;Release</Configurations>
     <AssemblyName>Nano.Template.Api</AssemblyName>
     <WarningsAsErrors />
@@ -11,14 +11,7 @@
     <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
     <UserSecretsId>e0c0c945-6d47-442f-9e53-dd657ca6c79f</UserSecretsId>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\net5.0\Nano.Template.Api.xml</DocumentationFile>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\net5.0\Nano.Template.Api.xml</DocumentationFile>
+    <DocumentationFile>$(MSBuildThisFileDirectory)\bin\$(Configuration)\Nano.Template.Api.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

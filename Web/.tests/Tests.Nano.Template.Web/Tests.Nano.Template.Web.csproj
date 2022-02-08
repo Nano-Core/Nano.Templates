@@ -1,23 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <IsPackable>false</IsPackable>
-    <LangVersion>latest</LangVersion>
-    <NoWarn />
-    <WarningsAsErrors />
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<IsPackable>false</IsPackable>
+		<LangVersion>latest</LangVersion>
+		<NoWarn />
+		<WarningsAsErrors />
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="2.0.0" />
-    <PackageReference Include="MSTest.TestFramework" Version="2.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+		<PackageReference Include="MSTest.TestAdapter" Version="2.2.8" />
+		<PackageReference Include="MSTest.TestFramework" Version="2.2.8" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Nano.Template.Web\Nano.Template.Web.csproj" />
-    <ProjectReference Include="..\..\Nano.Template.Web.Models\Nano.Template.Web.Models.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\Nano.Template.Web\Nano.Template.Web.csproj" />
+		<ProjectReference Include="..\..\Nano.Template.Web.Models\Nano.Template.Web.Models.csproj" />
+	</ItemGroup>
 
 </Project>

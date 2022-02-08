@@ -1,49 +1,42 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <Authors>Michael Vivet</Authors>
-    <Product>Nano.Template.Web.Models</Product>
-    <Description>Models for Nano web template.</Description>
-    <PackageProjectUrl>https://github.com/vivet/Nano.Templates</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/vivet/Nano.Templates.git</RepositoryUrl>
-    <PackageTags></PackageTags>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageId>Nano.Template.Web.Models</PackageId>
-    <Version>1.0.0.0</Version>
-    <RepositoryType>git</RepositoryType>
-    <NeutralLanguage>en-US</NeutralLanguage>
-    <LangVersion>latest</LangVersion>
-    <WarningsAsErrors />
-    <NoWarn />
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Authors>Michael Vivet</Authors>
+		<Product>Nano.Template.Web.Models</Product>
+		<Description>Models for Nano web template.</Description>
+		<PackageProjectUrl>https://github.com/vivet/Nano.Templates</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/vivet/Nano.Templates.git</RepositoryUrl>
+		<PackageTags></PackageTags>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageId>Nano.Template.Web.Models</PackageId>
+		<Version>1.0.0.0</Version>
+		<RepositoryType>git</RepositoryType>
+		<NeutralLanguage>en-US</NeutralLanguage>
+		<LangVersion>latest</LangVersion>
+		<WarningsAsErrors />
+		<NoWarn />
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<DocumentationFile>$(MSBuildThisFileDirectory)\bin\$(Configuration)\Nano.Template.Web.Models.xml</DocumentationFile>
+  	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\net5.0\Nano.Template.Web.Models.xml</DocumentationFile>
-  </PropertyGroup>
+	<ItemGroup>
+		<Folder Include="Types\" />
+		<Folder Include="Extensions\" />
+		<Folder Include="Enums\" />
+	</ItemGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\net5.0\Nano.Template.Web.Models.xml</DocumentationFile>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Folder Include="Types\" />
-    <Folder Include="Extensions\" />
-    <Folder Include="Enums\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Nano.Library\Nano.App\Nano.App.csproj" />
-    <ProjectReference Include="..\..\..\Nano.Library\Nano.Config\Nano.Config.csproj" />
-    <ProjectReference Include="..\..\..\Nano.Library\Nano.Console\Nano.Console.csproj" />
-    <ProjectReference Include="..\..\..\Nano.Library\Nano.Data\Nano.Data.csproj" />
-    <ProjectReference Include="..\..\..\Nano.Library\Nano.Eventing\Nano.Eventing.csproj" />
-    <ProjectReference Include="..\..\..\Nano.Library\Nano.Logging\Nano.Logging.csproj" />
-    <ProjectReference Include="..\..\..\Nano.Library\Nano.Models\Nano.Models.csproj" />
-    <ProjectReference Include="..\..\..\Nano.Library\Nano.Repository\Nano.Repository.csproj" />
-    <ProjectReference Include="..\..\..\Nano.Library\Nano.Security\Nano.Security.csproj" />
-    <ProjectReference Include="..\..\..\Nano.Library\Nano.Web\Nano.Web.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\Nano.Library\Nano.App\Nano.App.csproj" />
+		<ProjectReference Include="..\..\..\Nano.Library\Nano.Config\Nano.Config.csproj" />
+		<ProjectReference Include="..\..\..\Nano.Library\Nano.Console\Nano.Console.csproj" />
+		<ProjectReference Include="..\..\..\Nano.Library\Nano.Data\Nano.Data.csproj" />
+		<ProjectReference Include="..\..\..\Nano.Library\Nano.Eventing\Nano.Eventing.csproj" />
+		<ProjectReference Include="..\..\..\Nano.Library\Nano.Logging\Nano.Logging.csproj" />
+		<ProjectReference Include="..\..\..\Nano.Library\Nano.Models\Nano.Models.csproj" />
+		<ProjectReference Include="..\..\..\Nano.Library\Nano.Repository\Nano.Repository.csproj" />
+		<ProjectReference Include="..\..\..\Nano.Library\Nano.Security\Nano.Security.csproj" />
+		<ProjectReference Include="..\..\..\Nano.Library\Nano.Web\Nano.Web.csproj" />
+	</ItemGroup>
 
 </Project>
