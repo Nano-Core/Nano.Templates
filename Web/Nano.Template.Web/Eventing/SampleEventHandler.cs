@@ -34,7 +34,7 @@ namespace Nano.Template.Web.Eventing
         }
 
         /// <inheritdoc />
-        public virtual async Task CallbackAsync(SampleEvent @event)
+        public virtual async Task CallbackAsync(SampleEvent @event, bool isRetrying)
         {
             if (@event == null)
                 throw new ArgumentNullException(nameof(@event));
