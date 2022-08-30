@@ -2,7 +2,6 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
 		<ApplicationIcon />
 		<OutputType>Exe</OutputType>
 		<Version>1.0.0.0</Version>

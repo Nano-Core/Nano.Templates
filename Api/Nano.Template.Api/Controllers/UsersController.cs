@@ -91,7 +91,7 @@ namespace Nano.Template.Api.Controllers
             var accessToken = await this.WebApi
                 .LogInAsync(new LogInRequest
                 {
-                    Login = new Login
+                    LogIn = new LogIn
                     {
                         AppId = request.AppId,
                         Username = request.Username,
