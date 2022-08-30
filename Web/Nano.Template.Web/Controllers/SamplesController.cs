@@ -11,41 +11,40 @@ using Nano.Template.Web.Models.Events;
 using Nano.Web.Controllers;
 using Nano.Web.Models;
 
-namespace Nano.Template.Web.Controllers
+namespace Nano.Template.Web.Controllers;
+
+/// <inheritdoc />
+public class SamplesController : DefaultController<Sample, SampleQueryCriteria>
 {
     /// <inheritdoc />
-    public class SamplesController : DefaultController<Sample, SampleQueryCriteria>
+    public SamplesController(ILogger logger, IRepository repository, IEventing eventing)
+        : base(logger, repository, eventing)
     {
-        /// <inheritdoc />
-        public SamplesController(ILogger logger, IRepository repository, IEventing eventing)
-            : base(logger, repository, eventing)
-        {
 
-        }
+    }
 
-        /// <summary>
-        /// Custom.
-        /// </summary>
-        /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
-        /// <returns>Task (Void).</returns>
-        /// <response code="201">Created.</response>
-        /// <response code="404">Not Found.</response>
-        /// <response code="400">Bad Request.</response>
-        /// <response code="401">Unauthorized.</response>
-        /// <response code="500">Error occured.</response>
-        [HttpPost]
-        [Route("custom")]
-        [ProducesResponseType((int)HttpStatusCode.Accepted)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
-        public virtual async Task<IActionResult> CustomAsync(CancellationToken cancellationToken = default)
-        {
-            await this.Eventing
-                .PublishAsync(new SampleEvent());
+    /// <summary>
+    /// Custom.
+    /// </summary>
+    /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
+    /// <returns>Task (Void).</returns>
+    /// <response code="201">Created.</response>
+    /// <response code="404">Not Found.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="401">Unauthorized.</response>
+    /// <response code="500">Error occured.</response>
+    [HttpPost]
+    [Route("custom")]
+    [ProducesResponseType((int)HttpStatusCode.Accepted)]
+    [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
+    public virtual async Task<IActionResult> CustomAsync(CancellationToken cancellationToken = default)
+    {
+        await this.Eventing
+            .PublishAsync(new SampleEvent(), cancellationToken: cancellationToken);
 
-            return this.Accepted();
-        }
+        return this.Accepted();
     }
 }

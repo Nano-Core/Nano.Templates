@@ -1,27 +1,25 @@
 ﻿using DynamicExpression.Entities;
 using DynamicExpression.Interfaces;
-using Z.BulkOperations;
 
-namespace Nano.Template.Api.Models.Requests.Samples
+namespace Nano.Template.Api.Models.Requests.Samples;
+
+/// <summary>
+/// Query Sample Request.
+/// </summary>
+public class QuerySampleRequest
 {
     /// <summary>
-    /// Query Sample Request.
+    /// Name.
     /// </summary>
-    public class QuerySampleRequest
-    {
-        /// <summary>
-        /// Name.
-        /// </summary>
-        public virtual string Name { get; set; }
+    public virtual string Name { get; set; }
 
-        /// <summary>
-        /// Order.
-        /// </summary>
-        public virtual IOrdering Order { get; set; } = new Ordering();
+    /// <summary>
+    /// Order.
+    /// </summary>
+    public virtual IOrdering Order { get; set; } = new Ordering();
 
-        /// <summary>
-        /// Pagination.
-        /// </summary>
-        public virtual IPagination Paging { get; set; } = new Pagination();
-    }
+    /// <summary>
+    /// Pagination.
+    /// </summary>
+    public virtual IPagination Paging { get; set; } = new Pagination();
 }

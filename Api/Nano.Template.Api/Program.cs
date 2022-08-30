@@ -3,26 +3,25 @@ using Nano.Logging.Extensions;
 using Nano.Logging.Providers.Serilog;
 using Nano.Web;
 
-namespace Nano.Template.Api
+namespace Nano.Template.Api;
+
+/// <summary>
+/// Program.
+/// </summary>
+public class Program
 {
     /// <summary>
-    /// Program.
+    /// Main.
     /// </summary>
-    public class Program
+    public static void Main()
     {
-        /// <summary>
-        /// Main.
-        /// </summary>
-        public static void Main()
-        {
-            WebApplication
-                .ConfigureApp()
-                .ConfigureServices(x =>
-                {
-                    x.AddLogging<SerilogProvider>();
-                })
-                .Build()
-                .Run();
-        }
+        WebApplication
+            .ConfigureApp()
+            .ConfigureServices(x =>
+            {
+                x.AddLogging<SerilogProvider>();
+            })
+            .Build()
+            .Run();
     }
 }

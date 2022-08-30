@@ -6,16 +6,15 @@ using Nano.Template.Web.Models;
 using Nano.Template.Web.Models.Criterias;
 using Nano.Web.Controllers;
 
-namespace Nano.Template.Web.Controllers
+namespace Nano.Template.Web.Controllers;
+
+/// <inheritdoc />
+public class UsersController : DefaultIdentityController<User, UserQueryCriteria>
 {
     /// <inheritdoc />
-    public class UsersController : DefaultIdentityController<User, UserQueryCriteria>
+    public UsersController(ILogger logger, IRepository repository, IEventing eventing, DefaultIdentityManager identityManager)
+        : base(logger, repository, eventing, identityManager)
     {
-        /// <inheritdoc />
-        public UsersController(ILogger logger, IRepository repository, IEventing eventing, DefaultIdentityManager identityManager)
-            : base(logger, repository, eventing, identityManager)
-        {
 
-        }
     }
 }

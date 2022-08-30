@@ -1,15 +1,14 @@
 ﻿using Nano.Web.Api;
 
-namespace Nano.Template.Web.Models.Api
+namespace Nano.Template.Web.Models.Api;
+
+/// <inheritdoc />
+public class WebApi : DefaultIdentityApi<User>
 {
     /// <inheritdoc />
-    public class WebApi : DefaultIdentityApi<User>
+    public WebApi(ApiOptions options)
+        : base(options)
     {
-        /// <inheritdoc />
-        public WebApi(ApiOptions options)
-            : base(options)
-        {
 
-        }
     }
 }

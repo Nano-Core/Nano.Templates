@@ -1,13 +1,12 @@
-﻿namespace Nano.Template.Web.Translation.Enums
+﻿namespace Nano.Template.Web.Translation.Enums;
+
+/// <summary>
+/// Translation Code.
+/// </summary>
+public enum TranslationCode
 {
     /// <summary>
-    /// Translation Code.
+    /// Undefined.
     /// </summary>
-    public enum TranslationCode
-    {
-        /// <summary>
-        /// Undefined.
-        /// </summary>
-        Undefined = 0
-    }
+    Undefined = 0
 }

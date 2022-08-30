@@ -8,32 +8,31 @@ using Nano.Logging.Providers.Serilog;
 using Nano.Template.Console.Services;
 using Nano.Template.Console.Services.Interfaces;
 
-namespace Nano.Template.Console
+namespace Nano.Template.Console;
+
+/// <summary>
+/// Program.
+/// </summary>
+public class Program
 {
     /// <summary>
-    /// Program.
+    /// Main.
     /// </summary>
-    public class Program
+    /// <param name="args"></param>
+    public static void Main(string[] args)
     {
-        /// <summary>
-        /// Main.
-        /// </summary>
-        /// <param name="args"></param>
-        public static void Main(string[] args)
-        {
-            ConsoleApplication
-                .ConfigureApp(args)
-                .ConfigureServices(x =>
-                {
-                    x.AddLogging<SerilogProvider>();
-                    //x.AddDataContext<SqlServerProvider, ConsoleDbContext>();
-                    x.AddEventing<EasyNetQProvider>();
+        ConsoleApplication
+            .ConfigureApp(args)
+            .ConfigureServices(x =>
+            {
+                x.AddLogging<SerilogProvider>();
+                //x.AddDataContext<SqlServerProvider, ConsoleDbContext>();
+                x.AddEventing<EasyNetQProvider>();
 
-                    x.AddSingleton<ISampleService, SampleService>();
-                })
-                .Build()
-                .RunAsync()
-                .ConfigureAwait(false);
-        }
+                x.AddSingleton<ISampleService, SampleService>();
+            })
+            .Build()
+            .RunAsync()
+            .ConfigureAwait(false);
     }
 }

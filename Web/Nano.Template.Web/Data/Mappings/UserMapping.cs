@@ -3,26 +3,25 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Nano.Data.Models.Mappings;
 using Nano.Template.Web.Models;
 
-namespace Nano.Template.Web.Data.Mappings
+namespace Nano.Template.Web.Data.Mappings;
+
+/// <inheritdoc />
+public class UserMapping : DefaultEntityUserMapping<User>
 {
     /// <inheritdoc />
-    public class UserMapping : DefaultEntityUserMapping<User>
+    public override void Map(EntityTypeBuilder<User> builder)
     {
-        /// <inheritdoc />
-        public override void Map(EntityTypeBuilder<User> builder)
-        {
-            if (builder == null)
-                throw new ArgumentNullException(nameof(builder));
+        if (builder == null)
+            throw new ArgumentNullException(nameof(builder));
 
-            base.Map(builder);
+        base.Map(builder);
 
-            builder
-                .Property(x => x.Name)
-                .HasMaxLength(128)
-                .IsRequired();
+        builder
+            .Property(x => x.Name)
+            .HasMaxLength(128)
+            .IsRequired();
 
-            builder
-                .HasIndex(x => x.Name);
-        }
+        builder
+            .HasIndex(x => x.Name);
     }
 }
