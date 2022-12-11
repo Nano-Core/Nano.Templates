@@ -33,8 +33,8 @@ environment:
   NUGET_USERNAME: xxxxxxxxxx
   NUGET_PASSWORD: 
     secure: xxxxxxxxxx
-  DOTNET_SDK_VERSION: 7.0.100
-  DOTNET_ASPNET_VERSION: 7.0.0
+  DOTNET_SDK_VERSION: 7.0.100-jammy
+  DOTNET_ASPNET_VERSION: 7.0.0-jammy
 for:
   - branches:
       only:

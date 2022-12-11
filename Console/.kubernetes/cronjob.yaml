@@ -14,6 +14,9 @@ spec:
     spec:
       template:
         spec:
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 2000 
           containers:
           - name: %SERVICE_NAME%
             image: %DOCKER_REGISTRY%/%APP_NAME%:%APP_VERSION%
@@ -28,6 +31,24 @@ spec:
               limits:
                 memory: %KUBERNETES_MEMORY_LIMIT%
                 cpu: %KUBERNETES_CPU_LIMIT%
+            securityContext:
+              privileged: false
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              runAsNonRoot: true
+              runAsUser: 1000
+              runAsGroup: 2000
+              capabilities:
+                drop:
+                - ALL
+            volumeMounts:
+            - name: tmp
+              mountPath: /tmp
           restartPolicy: OnFailure
+          volumes:
+          - name: tmp
+            emptyDir: {}
           imagePullSecrets:
           - name: docker-registry-secret
+
+
