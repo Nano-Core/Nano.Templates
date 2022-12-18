@@ -1,5 +1,4 @@
 ﻿using DynamicExpression.Entities;
-using DynamicExpression.Interfaces;
 
 namespace Nano.Template.Api.Models.Requests.Samples;
 
@@ -16,10 +15,10 @@ public class QuerySampleRequest
     /// <summary>
     /// Order.
     /// </summary>
-    public virtual IOrdering Order { get; set; } = new Ordering();
+    public virtual Ordering Order { get; set; } = new();
 
     /// <summary>
     /// Pagination.
     /// </summary>
-    public virtual IPagination Paging { get; set; } = new Pagination();
+    public virtual Pagination Paging { get; set; } = new();
 }
