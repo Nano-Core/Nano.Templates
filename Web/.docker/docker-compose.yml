@@ -29,7 +29,7 @@ services:
       - network
 
   eventing: 
-    image: rabbitmq:3.7.5
+    image: rabbitmq:3.10.2
     ports:
       - 5671:5671
       - 5672:5672
