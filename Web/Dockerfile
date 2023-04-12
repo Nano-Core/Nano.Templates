@@ -28,7 +28,7 @@ RUN dotnet restore -s https://api.nuget.org/v3/index.json -s $NUGET_HOST
 RUN dotnet build -c Release -o /app --no-restore
 RUN dotnet test /src/.tests/Tests.Nano.Template.Web/Tests.Nano.Template.Web.csproj --list-tests
 RUN dotnet new tool-manifest
-RUN dotnet tool install --local dotnet-ef --version 5.0.5
+RUN dotnet tool install --local dotnet-ef --version 7.0.5
 RUN dotnet dotnet-ef database update --no-build --startup-project Nano.Template.Web
 RUN dotnet nuget push /app/Nano.Template.Web.Models.$VERSION.nupkg -s $NUGET_HOST -k $NUGET_APIKEY
 

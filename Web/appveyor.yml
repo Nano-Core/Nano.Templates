@@ -33,8 +33,8 @@ environment:
   NUGET_USERNAME: xxxxxxxxxx
   NUGET_PASSWORD: 
     secure: xxxxxxxxxx
-  DOTNET_SDK_VERSION: 7.0.100-jammy
-  DOTNET_ASPNET_VERSION: 7.0.2-jammy
+  DOTNET_SDK_VERSION: 7.0.203-jammy
+  DOTNET_ASPNET_VERSION: 7.0.5-jammy
 for:
   - branches:
       only:
@@ -102,7 +102,7 @@ services:
 build_script: 
 - ps: >-
     # Build and push docker container.
-    docker build -t $env:DOCKER_REGISTRY"/"$env:APP_NAME":latest" -t $env:DOCKER_REGISTRY"/"$env:APP_NAME":"$env:APP_VERSION --build-arg VERSION=$env:APP_VERSION --build-arg DOTNET_SDK_VERSION=$env:DOTNET_SDK_VERSION --build-arg DOTNET_ASPNET_VERSION=$env:DOTNET_ASPNET_VERSION --build-arg NUGET_HOST=$env:NUGET_HOST --build-arg NUGET_APIKEY=$env:NUGET_APIKEY --build-arg NUGET_USERNAME=$env:NUGET_USERNAME --build-arg NUGET_PASSWORD=$env:NUGET_PASSWORD --build-arg CONNECTIONSTRING=$env:DATA_CONNECTIONSTRING_MIGRATION ./ ;
+    docker build -t $env:DOCKER_REGISTRY"/"$env:APP_NAME":latest" -t $env:DOCKER_REGISTRY"/"$env:APP_NAME":"$env:APP_VERSION --quiet --build-arg VERSION=$env:APP_VERSION --build-arg DOTNET_SDK_VERSION=$env:DOTNET_SDK_VERSION --build-arg DOTNET_ASPNET_VERSION=$env:DOTNET_ASPNET_VERSION --build-arg NUGET_HOST=$env:NUGET_HOST --build-arg NUGET_APIKEY=$env:NUGET_APIKEY --build-arg NUGET_USERNAME=$env:NUGET_USERNAME --build-arg NUGET_PASSWORD=$env:NUGET_PASSWORD --build-arg CONNECTIONSTRING=$env:DATA_CONNECTIONSTRING_MIGRATION ./ ;
     if ($LastExitCode -ne 0) 
     { 
         return $LastExitCode;

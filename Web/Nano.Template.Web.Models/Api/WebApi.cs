@@ -1,5 +1,4 @@
-﻿using System.Net.Http;
-using Nano.Web.Api;
+﻿using Nano.Web.Api;
 
 namespace Nano.Template.Web.Models.Api;
 
@@ -7,8 +6,8 @@ namespace Nano.Template.Web.Models.Api;
 public class WebApi : DefaultIdentityApi<User>
 {
     /// <inheritdoc />
-    public WebApi(HttpClient httpClient, ApiOptions options)
-        : base(httpClient, options)
+    public WebApi(ApiOptions options)
+        : base(options)
     {
 
     }
