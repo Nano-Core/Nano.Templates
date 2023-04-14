@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nano.Template.Web.Data;
 
+#nullable disable
+
 namespace Nano.Template.Web.Migrations
 {
     [DbContext(typeof(WebDbContext))]
@@ -14,8 +16,25 @@ namespace Nano.Template.Web.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 64)
-                .HasAnnotation("ProductVersion", "5.0.5");
+                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("Microsoft.AspNetCore.DataProtection.EntityFrameworkCore.DataProtectionKey", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("FriendlyName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Xml")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("__EFDataProtectionKeys", (string)null);
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
                 {
@@ -41,7 +60,7 @@ namespace Nano.Template.Web.Migrations
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("__EFAuthRole");
+                    b.ToTable("__EFAuthRole", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -63,7 +82,7 @@ namespace Nano.Template.Web.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("__EFAuthRoleClaim");
+                    b.ToTable("__EFAuthRoleClaim", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", b =>
@@ -134,7 +153,7 @@ namespace Nano.Template.Web.Migrations
                     b.HasIndex("PhoneNumber")
                         .IsUnique();
 
-                    b.ToTable("__EFAuthUser");
+                    b.ToTable("__EFAuthUser", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
@@ -156,7 +175,7 @@ namespace Nano.Template.Web.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("__EFAuthUserClaim");
+                    b.ToTable("__EFAuthUserClaim", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
@@ -177,7 +196,7 @@ namespace Nano.Template.Web.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("__EFAuthUserLogin");
+                    b.ToTable("__EFAuthUserLogin", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
@@ -192,7 +211,7 @@ namespace Nano.Template.Web.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("__EFAuthUserRole");
+                    b.ToTable("__EFAuthUserRole", (string)null);
                 });
 
             modelBuilder.Entity("Nano.Data.Models.DefaultAuditEntry", b =>
@@ -247,7 +266,7 @@ namespace Nano.Template.Web.Migrations
 
                     b.HasIndex("State");
 
-                    b.ToTable("__EFAudit");
+                    b.ToTable("__EFAudit", (string)null);
                 });
 
             modelBuilder.Entity("Nano.Data.Models.DefaultAuditEntryProperty", b =>
@@ -292,7 +311,7 @@ namespace Nano.Template.Web.Migrations
 
                     b.HasIndex("PropertyName");
 
-                    b.ToTable("__EFAuditProperties");
+                    b.ToTable("__EFAuditProperties", (string)null);
                 });
 
             modelBuilder.Entity("Nano.Security.Data.Models.IdentityUserTokenExpiry<System.Guid>", b =>
@@ -314,7 +333,7 @@ namespace Nano.Template.Web.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("__EFAuthUserToken");
+                    b.ToTable("__EFAuthUserToken", (string)null);
                 });
 
             modelBuilder.Entity("Nano.Template.Web.Models.Sample", b =>
@@ -352,6 +371,8 @@ namespace Nano.Template.Web.Migrations
                     b.ToTable("Sample");
 
                     b.HasDiscriminator<string>("type").HasValue("Sample");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Nano.Template.Web.Models.User", b =>

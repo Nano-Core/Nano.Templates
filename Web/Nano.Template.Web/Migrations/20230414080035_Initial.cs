@@ -2,17 +2,14 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
+#nullable disable
+
 namespace Nano.Template.Web.Migrations
 {
-    /// <summary>
-    /// 
-    /// </summary>
+    /// <inheritdoc />
     public partial class Initial : Migration
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="migrationBuilder"></param>
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
@@ -93,6 +90,23 @@ namespace Nano.Template.Web.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK___EFAuthUser", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "__EFDataProtectionKeys",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    FriendlyName = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Xml = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK___EFDataProtectionKeys", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -437,10 +451,7 @@ namespace Nano.Template.Web.Migrations
                 unique: true);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="migrationBuilder"></param>
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
@@ -460,6 +471,9 @@ namespace Nano.Template.Web.Migrations
 
             migrationBuilder.DropTable(
                 name: "__EFAuthUserToken");
+
+            migrationBuilder.DropTable(
+                name: "__EFDataProtectionKeys");
 
             migrationBuilder.DropTable(
                 name: "Sample");
