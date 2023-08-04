@@ -1,4 +1,0 @@
-services:
-  nano.template.api:
-    volumes:
-      - ../:/root/.dotnet/https
