@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Nano.App.Api.Requests.Auth;
+using Nano.App.Api.Requests.Identity;
+using Nano.Models;
+using Nano.Models.Const;
 using Nano.Security.Models;
 using Nano.Template.Api.Models.Requests.Profiles;
 using Nano.Template.Api.Models.Responses.Profiles;
 using Nano.Template.Web.Models;
 using Nano.Template.Web.Models.Api;
-using Nano.Web.Api.Requests.Auth;
-using Nano.Web.Api.Requests.Identity;
-using Nano.Web.Const;
 using Nano.Web.Controllers;
-using Nano.Web.Models;
 
 namespace Nano.Template.Api.Controllers;
 
