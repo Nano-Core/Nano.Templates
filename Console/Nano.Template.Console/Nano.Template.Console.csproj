@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<ApplicationIcon />
 		<OutputType>Exe</OutputType>
 		<Version>1.0.0.0</Version>
@@ -15,7 +15,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Nano.Template.Console.Models\Nano.Template.Console.Models.csproj" />
+	  <ProjectReference Include="..\Nano.Template.Console.Models\Nano.Template.Console.Models.csproj" />
 	</ItemGroup>
 
 </Project>
