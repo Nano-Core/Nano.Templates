@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Nano.Eventing.Interfaces;
+using Nano.Models;
 using Nano.Repository.Interfaces;
 using Nano.Template.Web.Models;
 using Nano.Template.Web.Models.Criterias;
 using Nano.Template.Web.Models.Events;
 using Nano.Web.Controllers;
-using Nano.Web.Models;
 
 namespace Nano.Template.Web.Controllers;
 

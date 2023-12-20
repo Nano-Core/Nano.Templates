@@ -1,4 +1,4 @@
-ARG DOTNET_ASPNET_VERSION="7.0.5-jammy"
+ARG DOTNET_ASPNET_VERSION="8.0.0-jammy"
 
 FROM mcr.microsoft.com/dotnet/aspnet:$DOTNET_ASPNET_VERSION AS base
 

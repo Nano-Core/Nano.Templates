@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<Authors>Michael Vivet</Authors>
 		<Product>Nano.Template.Web.Models</Product>
 		<Description>Models for Nano web template.</Description>
@@ -19,18 +19,6 @@
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<DocumentationFile>$(MSBuildThisFileDirectory)\bin\$(Configuration)\Nano.Template.Web.Models.xml</DocumentationFile>
   	</PropertyGroup>
-
-	<ItemGroup>
-	  <Compile Remove="Enums\**" />
-	  <Compile Remove="Extensions\**" />
-	  <Compile Remove="Types\**" />
-	  <EmbeddedResource Remove="Enums\**" />
-	  <EmbeddedResource Remove="Extensions\**" />
-	  <EmbeddedResource Remove="Types\**" />
-	  <None Remove="Enums\**" />
-	  <None Remove="Extensions\**" />
-	  <None Remove="Types\**" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\Nano.Library\Nano.App\Nano.App.csproj" />

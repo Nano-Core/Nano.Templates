@@ -1,4 +1,4 @@
-﻿using Nano.Web.Api.Requests;
+﻿using Nano.App.Api.Requests;
 
 namespace Nano.Template.Web.Models.Api.Requests;
 
