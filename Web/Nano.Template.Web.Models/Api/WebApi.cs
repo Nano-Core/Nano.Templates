@@ -2,6 +2,7 @@
 using System.Threading;
 using Nano.App.Api;
 using Nano.Template.Web.Models.Api.Requests;
+using Nano.Template.Web.Models.Data;
 
 namespace Nano.Template.Web.Models.Api;
 

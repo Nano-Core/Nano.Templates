@@ -1,0 +1,18 @@
+username: GitHub Actions
+icon_url: https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png
+
+pretext: "{{icon jobStatus}} *<{{repositoryUrl}}|{{repositoryName}}>* <{{workflowRunUrl}}|`#{{runNumber}}`> triggered via {{eventName}} by *<https://github.com/{{actor}}|{{actor}}>* for branch <{{refUrl}}|`{{ref}}`>."
+
+text: |
+  {{#if payload.commits}}
+  *Commits*
+  {{#each payload.commits}}
+  <{{this.url}}|`{{truncate this.id 8}}`> - {{this.message}}
+  {{/each}}
+  {{/if}}
+
+footer: >-
+  <{{repositoryUrl}}|{{repositoryName}}> #{{runNumber}}
+  
+fallback: |-
+  [GitHub] {{workflow}} #{{runNumber}} {{jobName}} is {{jobStatus}}

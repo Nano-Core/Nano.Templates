@@ -1,5 +1,5 @@
 ﻿using System;
-using Nano.Template.Web.Models;
+using Nano.Template.Web.Models.Data;
 
 namespace Nano.Template.Api.Models.Responses.Samples;
 

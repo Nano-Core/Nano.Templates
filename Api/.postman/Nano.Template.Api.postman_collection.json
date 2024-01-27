@@ -2,7 +2,8 @@
 	"info": {
 		"_postman_id": "233585a0-ef32-4f29-b0df-13adf7d0b146",
 		"name": "Nano.Template.Api",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3345683"
 	},
 	"item": [
 		{
@@ -24,12 +25,8 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/samples/15e1eaa0-2206-4fd4-8fe5-aaaaf1b8440f",
+							"raw": "http://{{host}}:{{port}}/api/samples/{{Sample.Id}}",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -38,13 +35,7 @@
 							"path": [
 								"api",
 								"samples",
-								"15e1eaa0-2206-4fd4-8fe5-aaaaf1b8440f"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": ""
-								}
+								"{{Sample.Id}}"
 							]
 						}
 					},
@@ -68,7 +59,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"Name\": \"sample\",\r\n\t\"Order\": {\r\n\t\t\"By\": \"CreatedAt\",\r\n\t\t\"Direction\": \"Desc\"\r\n\t},\r\n\t\"Paging\": {\r\n\t\t\"Number\": 1,\r\n\t\t\"Count\": 25\r\n\t}\r\n}"
+							"raw": "{\r\n\t\"Name\": \"{{Sample.Name}}\",\r\n\t\"Order\": {\r\n\t\t\"By\": \"CreatedAt\",\r\n\t\t\"Direction\": \"Desc\"\r\n\t},\r\n\t\"Paging\": {\r\n\t\t\"Number\": 1,\r\n\t\t\"Count\": 25\r\n\t}\r\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/samples/query",
@@ -88,6 +79,20 @@
 				},
 				{
 					"name": "Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"Sample.Id\", jsonData.Id);\r",
+									"pm.collectionVariables.set(\"Sample.Name\", jsonData.Name);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -143,10 +148,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/users/me",
 							"protocol": "http",
@@ -165,6 +166,21 @@
 				},
 				{
 					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"User.Id\", jsonData.UserId);\r",
+									"pm.collectionVariables.set(\"Auth.Token\", jsonData.Token);\r",
+									"pm.collectionVariables.set(\"Auth.RefreshToken\", jsonData.RefreshToken?.Token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -177,7 +193,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"Username\": \"johndoe@domain.com\",\r\n\t\"Password\": \"cV&kY(7_T3VNbAd!\"\r\n}"
+							"raw": "{\r\n    \"AppId\": \"Default\",\r\n\t\"Username\": \"{{User.Username}}\",\r\n\t\"Password\": \"{{User.Password}}\"\r\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/users/login",
@@ -196,7 +212,67 @@
 					"response": []
 				},
 				{
+					"name": "Login Refresh",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"User.Id\", jsonData.UserId);\r",
+									"pm.collectionVariables.set(\"Auth.Token\", jsonData.Token);\r",
+									"pm.collectionVariables.set(\"Auth.RefreshToken\", jsonData.RefreshToken?.Token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"RefreshToken\": \"{{Auth.RefreshToken}}\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/login/refresh",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"login",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "SignUp",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"User.Id\", jsonData.Id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -209,7 +285,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"Name\": \"John Doe\",\n\t\"Nickname\": \"The Doe\",\n\t\"EmailAddress\": {\n\t\t\"Email\": \"johndoe@domain.com\"\n\t},\n\t\"Password\": \"cV&kY(7_T3VNbAd!\"\n  }\n}"
+							"raw": "{\n    \"Name\": \"{{User.Name}}\",\n    \"EmailAddress\": \"{{User.EmailAddress}}\",\n    \"PhoneNumber\": \"{{User.PhoneNumber}}\",\n    \"Password\": \"{{User.Password}}\"\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/users/signup",
@@ -226,6 +302,475 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Forgot Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"EmailAddress\": \"{{User.EmailAddress}}\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/password/forgot",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"password",
+								"forgot"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(request.data);\r",
+									"pm.collectionVariables.set(\"User.Password\", jsonData.Password);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"UserId\": \"{{User.Id}}\",\r\n\t\"Token\": \"\",\r\n    \"Password\": \"new-abc12|+d34DadD\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/password/reset",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"password",
+								"reset"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(request.data);\r",
+									"pm.collectionVariables.set(\"User.Password\", jsonData.NewPassword);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"OldPassword\": \"{{User.Password}}\",\r\n    \"NewPassword\": \"new-abc12|+d34DadD\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/password/change",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"password",
+								"change"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Email Confirm Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/email/confirm/token",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"email",
+								"confirm",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Email Confirm",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"UserId\": \"{{User.Id}}\",\r\n    \"Token\": \"\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/email/confirm",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"email",
+								"confirm"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Email Change Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"NewEmailAddress\": \"johndoe-new@domain.com\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/email/change/token",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"email",
+								"change",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Email Change",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(request.data);\r",
+									"pm.collectionVariables.set(\"User.EmailAddress\", jsonData.NewEmailAddress);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"UserId\": \"{{User.Id}}\",\r\n    \"Token\": \"\",\r\n    \"NewEmailAddress\": \"johndoe-new@domain.com\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/email/change",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"email",
+								"change"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Phone Confirm Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/phone/confirm/token",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"phone",
+								"confirm",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Phone Confirm",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(request.data);\r",
+									"pm.collectionVariables.set(\"User.Password\", jsonData.NewPassword);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"UserId\": \"{{User.Id}}\",\r\n    \"Token\": \"150511\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/phone/confirm",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"phone",
+								"confirm"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Phone Change Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"NewPhoneNumber\": \"+4511111111\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/phone/change/token",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"phone",
+								"change",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Phone Change",
+					"request": {
+						"method": "POST",
+						"header": []
+					},
+					"response": []
 				}
 			]
 		}
@@ -235,7 +780,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkNDFhODQxNS03N2RiLTQ3ODAtODgwOS0xYTNkNzM4ZDNhZmQiLCJzdWIiOiI0NzY3MjVjNi0wMDg0LTRiYWQtOWUwZS1jYzJiNTJlNWFkZTkiLCJlbWFpbCI6ImpvaG5kb2VAZG9tYWluLmNvbSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJqb2huZG9lQGRvbWFpbi5jb20iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjQ3NjcyNWM2LTAwODQtNGJhZC05ZTBlLWNjMmI1MmU1YWRlOSIsImFwcElkIjoiRGVmYXVsdCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJ3cml0ZXIiLCJzZXJ2aWNlIiwicmVhZGVyIl0sIm5iZiI6MTU5ODI1Njc4NiwiZXhwIjoxNjA2MDMyNzg2LCJpc3MiOiJkZXZlbG9wbWVudC5uYW5vIiwiYXVkIjoiZGV2ZWxvcG1lbnQubmFubyJ9.mA-6uWcm2irUfeYB9uAd4DlIbGHvd7oPqCmFTkuF750",
+				"value": "{{Auth.Token}}",
 				"type": "string"
 			}
 		]
@@ -244,7 +789,6 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "ed007310-c063-4609-9d14-79cba6b84d12",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -254,7 +798,6 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "3ea019bc-5fbb-4ef7-9466-5f61ecb6c549",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -264,15 +807,49 @@
 	],
 	"variable": [
 		{
-			"id": "29d2cef3-3fa5-4ee1-ba23-8bf5c54132c6",
 			"key": "host",
-			"value": "localhost",
+			"value": "localhost"
+		},
+		{
+			"key": "port",
+			"value": "80"
+		},
+		{
+			"key": "Auth.Token",
+			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "86b26a9c-51a4-409f-bace-68e9c633a6ce",
-			"key": "port",
-			"value": "8080",
+			"key": "Auth.RefreshToken",
+			"value": ""
+		},
+		{
+			"key": "User.Username",
+			"value": "JohnDoe@doamin.com",
+			"type": "string"
+		},
+		{
+			"key": "User.Password",
+			"value": "aBac%v4(dcAfFT13",
+			"type": "string"
+		},
+		{
+			"key": "User.Id",
+			"value": ""
+		},
+		{
+			"key": "User.EmailAddress",
+			"value": "JohnDoe@doamin.com",
+			"type": "string"
+		},
+		{
+			"key": "User.PhoneNumber",
+			"value": "+4500000000",
+			"type": "string"
+		},
+		{
+			"key": "User.Name",
+			"value": "John Doe",
 			"type": "string"
 		}
 	]

@@ -2,7 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
-
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nano.Template.Console", "Nano.Template.Console\Nano.Template.Console.csproj", "{C563A416-5EDD-4228-B8C7-B5AFEC141466}"
 EndProject
@@ -11,7 +10,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".solution", ".solution", "{F9091FFF-8BDF-4447-A4CC-19ACF2F783A3}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		appveyor.yml = appveyor.yml
 		localhost.pfx = localhost.pfx
 		README.md = README.md
 	EndProjectSection
@@ -55,6 +53,18 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nano.Security", "..\..\Nano.Library\Nano.Security\Nano.Security.csproj", "{4A49B5F6-C660-47E5-BA88-76B21A5DCB74}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nano.Web", "..\..\Nano.Library\Nano.Web\Nano.Web.csproj", "{18666189-635F-4C2D-8C67-C25C86D9CAE6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{530D085E-BE1C-42C7-9B74-87E791DFA4A2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{C5676710-E363-4808-80B5-CE2EB49DFD27}"
+	ProjectSection(SolutionItems) = preProject
+		.github\config\slack.yml = .github\config\slack.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{EB0103E3-FEDE-4F5B-ADCA-A3AF50A47818}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build-and-deploy.yml = .github\workflows\build-and-deploy.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -134,6 +144,8 @@ Global
 		{C543372C-8B2A-4703-B663-C2FC02C222D6} = {06514BD5-76DD-468A-9B0E-398FF055B759}
 		{4A49B5F6-C660-47E5-BA88-76B21A5DCB74} = {06514BD5-76DD-468A-9B0E-398FF055B759}
 		{18666189-635F-4C2D-8C67-C25C86D9CAE6} = {06514BD5-76DD-468A-9B0E-398FF055B759}
+		{C5676710-E363-4808-80B5-CE2EB49DFD27} = {530D085E-BE1C-42C7-9B74-87E791DFA4A2}
+		{EB0103E3-FEDE-4F5B-ADCA-A3AF50A47818} = {530D085E-BE1C-42C7-9B74-87E791DFA4A2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {72ED70A7-E1BB-4D06-B6FD-E092DA575FBE}

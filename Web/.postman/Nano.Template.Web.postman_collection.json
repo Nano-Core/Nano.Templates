@@ -2,9 +2,75 @@
 	"info": {
 		"_postman_id": "56415864-70b3-4c67-a555-21ad041a4913",
 		"name": "Nano.Template.Web",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3345683"
 	},
 	"item": [
+		{
+			"name": "_External",
+			"item": [
+				{
+					"name": "Get Microsoft Auth Code",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://login.microsoftonline.com/{{Auth.Microsoft.TenantId}}/oauth2/v2.0/authorize?client_id={{Auth.Microsoft.ClientId}}&response_type=code&response_mode=query&scope=email openid profile offline_access&redirect_uri={{Auth.Microsoft.RedirectUri}}&code_challenge={{Auth.Microsoft.CodeVerifier}}",
+							"protocol": "https",
+							"host": [
+								"login",
+								"microsoftonline",
+								"com"
+							],
+							"path": [
+								"{{Auth.Microsoft.TenantId}}",
+								"oauth2",
+								"v2.0",
+								"authorize"
+							],
+							"query": [
+								{
+									"key": "client_id",
+									"value": "{{Auth.Microsoft.ClientId}}"
+								},
+								{
+									"key": "response_type",
+									"value": "code"
+								},
+								{
+									"key": "response_mode",
+									"value": "query"
+								},
+								{
+									"key": "scope",
+									"value": "email openid profile offline_access"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "{{Auth.Microsoft.RedirectUri}}"
+								},
+								{
+									"key": "code_challenge",
+									"value": "{{Auth.Microsoft.CodeVerifier}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "Audit",
 			"item": [
@@ -39,6 +105,19 @@
 				},
 				{
 					"name": "Index",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"Audit.Id\", jsonData[0].Id);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -143,12 +222,8 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/audit/details/b7ead627-e550-4063-9da5-cffd5fc5278d",
+							"raw": "http://{{host}}:{{port}}/api/audit/details/{{Audit.Id}}",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -158,7 +233,7 @@
 								"api",
 								"audit",
 								"details",
-								"b7ead627-e550-4063-9da5-cffd5fc5278d"
+								"{{Audit.Id}}"
 							]
 						}
 					},
@@ -187,7 +262,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/audit/details/many?Ids=b7ead627-e550-4063-9da5-cffd5fc5278d&Ids=701f6ca1-fc64-4536-b57f-5a5dc2bf230a",
+							"raw": "http://{{host}}:{{port}}/api/audit/details/many?Ids={{Audit.Id}}",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -202,11 +277,7 @@
 							"query": [
 								{
 									"key": "Ids",
-									"value": "b7ead627-e550-4063-9da5-cffd5fc5278d"
-								},
-								{
-									"key": "Ids",
-									"value": "701f6ca1-fc64-4536-b57f-5a5dc2bf230a"
+									"value": "{{Audit.Id}}"
 								}
 							]
 						}
@@ -230,7 +301,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\n\t\"b7ead627-e550-4063-9da5-cffd5fc5278d\",\n\t\"701f6ca1-fc64-4536-b57f-5a5dc2bf230a\"\n]"
+							"raw": "[\n    \"{{Audit.Id}}\"\n]"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/audit/details/many",
@@ -272,7 +343,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/audit/query?EntityTypeName=sample&Paging.Number=1&Paging.Count=10&Order.By=CreatedAt&Order.Direction=Desc",
+							"raw": "http://{{host}}:{{port}}/api/audit/query?Name={{Sample.Name}}&EntityTypeName=Sample&AfterAt=2000-07-04T14:08:10&BeforeAt=2100-07-08T14:08:10&Paging.Number=1&Paging.Count=10&Order.By=CreatedAt&Order.Direction=Desc",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -285,18 +356,20 @@
 							],
 							"query": [
 								{
+									"key": "Name",
+									"value": "{{Sample.Name}}"
+								},
+								{
 									"key": "EntityTypeName",
-									"value": "sample"
+									"value": "Sample"
 								},
 								{
 									"key": "AfterAt",
-									"value": "2020-07-04T14:08:10",
-									"disabled": true
+									"value": "2000-07-04T14:08:10"
 								},
 								{
 									"key": "BeforeAt",
-									"value": "2020-07-08T14:08:10",
-									"disabled": true
+									"value": "2100-07-08T14:08:10"
 								},
 								{
 									"key": "Paging.Number",
@@ -336,7 +409,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"Criteria\": {\r\n\t\t\"EntityTypeName\": \"sample\"\r\n\t},\r\n\t\"Paging\": {\r\n\t\t\"Count\": 10,\r\n\t\t\"Number\": 1\r\n\t},\r\n\t\"Order\": {\r\n\t\t\"By\": \"CreatedAt\",\r\n\t\t\"Direction\": \"Desc\"\r\n\t}\r\n}"
+							"raw": "{\r\n\t\"Criteria\": {\r\n        \"Name\": \"{{Sample.Name}}\",\r\n\t\t\"EntityTypeName\": \"Sample\",\r\n        \"AfterAt\": \"2000-07-04T14:08:10\",\r\n        \"BeforeAt\": \"2100-07-08T14:08:10\"\r\n\t},\r\n\t\"Paging\": {\r\n\t\t\"Count\": 10,\r\n\t\t\"Number\": 1\r\n\t},\r\n\t\"Order\": {\r\n\t\t\"By\": \"CreatedAt\",\r\n\t\t\"Direction\": \"Desc\"\r\n\t}\r\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/audit/query",
@@ -377,7 +450,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/audit/query/first?EntityTypeName=sample&Order.By=CreatedAt&Order.Direction=Desc",
+							"raw": "http://{{host}}:{{port}}/api/audit/query/first?Name={{Sample.Name}}&EntityTypeName=Sample&Order.By=CreatedAt&Order.Direction=Desc",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -391,18 +464,12 @@
 							],
 							"query": [
 								{
+									"key": "Name",
+									"value": "{{Sample.Name}}"
+								},
+								{
 									"key": "EntityTypeName",
-									"value": "sample"
-								},
-								{
-									"key": "AfterAt",
-									"value": "2020-07-04T14:08:10",
-									"disabled": true
-								},
-								{
-									"key": "BeforeAt",
-									"value": "2020-07-08T14:08:10",
-									"disabled": true
+									"value": "Sample"
 								},
 								{
 									"key": "Order.By",
@@ -434,7 +501,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"Criteria\": {\r\n\t\t\"EntityTypeName\": \"sample\"\r\n\t},\r\n\t\"Order\": {\r\n\t\t\"By\": \"CreatedAt\",\r\n\t\t\"Direction\": \"Desc\"\r\n\t}\r\n}"
+							"raw": "{\r\n\t\"Criteria\": {\r\n        \"Name\": \"{{Sample.Name}}\",\r\n\t\t\"EntityTypeName\": \"Sample\"\r\n\t},\r\n\t\"Order\": {\r\n\t\t\"By\": \"CreatedAt\",\r\n\t\t\"Direction\": \"Desc\"\r\n\t}\r\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/audit/query/first",
@@ -476,7 +543,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/audit/query/count?Name=sample-name",
+							"raw": "http://{{host}}:{{port}}/api/audit/query/count?Name={{Sample.Name}}&EntityTypeName=Sample",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -491,17 +558,11 @@
 							"query": [
 								{
 									"key": "Name",
-									"value": "sample-name"
+									"value": "{{Sample.Name}}"
 								},
 								{
-									"key": "AfterAt",
-									"value": "2020-07-04T14:08:10",
-									"disabled": true
-								},
-								{
-									"key": "BeforeAt",
-									"value": "2020-07-08T14:08:10",
-									"disabled": true
+									"key": "EntityTypeName",
+									"value": "Sample"
 								}
 							]
 						}
@@ -525,7 +586,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"Criteria\": {\r\n\t\t\"Name\": \"sample\"\r\n\t}\r\n}"
+							"raw": "{\r\n\t\"Criteria\": {\r\n        \"Name\": \"{{Sample.Name}}\",\r\n\t\t\"EntityTypeName\": \"Sample\"\r\n\t}\r\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/audit/query/count",
@@ -550,7 +611,7 @@
 			"name": "Auth",
 			"item": [
 				{
-					"name": "External Schems",
+					"name": "Get External Schems",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -594,6 +655,21 @@
 				},
 				{
 					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"User.Id\", jsonData.UserId);\r",
+									"pm.collectionVariables.set(\"Auth.Token\", jsonData.Token);\r",
+									"pm.collectionVariables.set(\"Auth.RefreshToken\", jsonData.RefreshToken?.Token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -612,7 +688,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"Username\": \"admin\",\r\n\t\"Password\": \"abc12|+d34DadD\"\r\n}"
+							"raw": "{\r\n\t\"Username\": \"{{User.Username}}\",\r\n\t\"Password\": \"{{User.Password}}\",\r\n    \"IsRefreshable\": true\r\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/auth/login",
@@ -632,7 +708,21 @@
 					"response": []
 				},
 				{
-					"name": "Login Refresh",
+					"name": "Login Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"User.Id\", jsonData.UserId);\r",
+									"pm.collectionVariables.set(\"Auth.Token\", jsonData.Token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -651,7 +741,60 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"Token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhNTdkMDRmZi03NTU5LTRkNTMtYjdjYS03MmFmM2ZiZGQ0N2YiLCJzdWIiOiIzMmFmYTA5Ni04ZDYyLTQ0MzgtYmU2Yi1iM2E1MDUxMzQ0YWEiLCJlbWFpbCI6ImFkbWluQGRvbWFpbi5jb20iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjMyYWZhMDk2LThkNjItNDQzOC1iZTZiLWIzYTUwNTEzNDRhYSIsImFwcElkIjoiRGVmYXVsdCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJzZXJ2aWNlIiwiYWRtaW5pc3RyYXRvciJdLCJuYmYiOjE1OTM4MzM3MjUsImV4cCI6MTYwMTYwOTcyNSwiaXNzIjoiZGV2ZWxvcG1lbnQubmFubyIsImF1ZCI6ImRldmVsb3BtZW50Lm5hbm8ifQ.Pn_tBxiQzAN35CM_LSiJDYfkZWibTbrAVifeK4GwUus\",\r\n\t\"RefreshToken\": \"ul4+MPM/G2NPAZe/FUIHef7WS5AwSSDTHAO2nhpbKDs=\"\r\n}"
+							"raw": "{\r\n\t\"Username\": \"admin@domain.com\",\r\n\t\"Password\": \"abc12|+d34DadD\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Refresh",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"User.Id\", jsonData.UserId);\r",
+									"pm.collectionVariables.set(\"Auth.Token\", jsonData.Token);\r",
+									"pm.collectionVariables.set(\"Auth.RefreshToken\", jsonData.RefreshToken?.Token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Token\": \"{{Auth.Token}}\",\r\n\t\"RefreshToken\": \"{{Auth.RefreshToken}}\"\r\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/auth/login/refresh",
@@ -672,7 +815,7 @@
 					"response": []
 				},
 				{
-					"name": "Login External (Facebook)",
+					"name": "Get External Login Data Google",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -691,50 +834,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"LoginProvider\": \"Facebook\",\r\n\t\"ProviderKey\": {{facebook-id}},\r\n\t\"AccessToken\": {{facebook-access-token}}\r\n}"
+							"raw": "{\r\n  \"Provider\": {\r\n    \"AccessToken\": \"{{Auth.External.Token}}\"\r\n  },\r\n  \"Parameters\": {\r\n    \"AppId\": \"Default\",\r\n    \"IsRememberMe\": false,\r\n    \"IsRefreshable\": true,\r\n    \"TransientRoles\": [\r\n      \"\"\r\n    ],\r\n    \"TransientClaims\": {\r\n    }\r\n  }\r\n}"
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/auth/login/external",
-							"protocol": "http",
-							"host": [
-								"{{host}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"api",
-								"auth",
-								"login",
-								"external"
-							]
-						},
-						"description": "      "
-					},
-					"response": []
-				},
-				{
-					"name": "Login Transient (Facebook)",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\t\"Roles\": [\r\n\t\t\"service\"\r\n\t],\r\n\t\"Claims\": {\r\n\t},\r\n\t\"LoginProvider\": \"Facebook\",\r\n\t\"ProviderKey\": {{facebook-id}},\r\n\t\"AccessToken\": {{facebook-access-token}}\r\n}"
-						},
-						"url": {
-							"raw": "http://{{host}}:{{port}}/api/auth/login/external/transient",
+							"raw": "http://{{host}}:{{port}}/api/auth/login/external/data/google",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -745,6 +848,340 @@
 								"auth",
 								"login",
 								"external",
+								"data",
+								"google"
+							]
+						},
+						"description": "      "
+					},
+					"response": []
+				},
+				{
+					"name": "Login External Google",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Provider\": {\r\n    \"AccessToken\": \"{{Auth.External.Token}}\"\r\n  },\r\n  \"Parameters\": {\r\n    \"AppId\": \"Default\",\r\n    \"IsRememberMe\": false,\r\n    \"IsRefreshable\": true,\r\n    \"TransientRoles\": [\r\n      \"\"\r\n    ],\r\n    \"TransientClaims\": {\r\n    }\r\n  }\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/auth/login/external/google",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"auth",
+								"login",
+								"external",
+								"google"
+							]
+						},
+						"description": "      "
+					},
+					"response": []
+				},
+				{
+					"name": "Login External Google Transient",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Provider\": {\r\n    \"AccessToken\": \"{{Auth.External.Token}}\"\r\n  },\r\n  \"Parameters\": {\r\n    \"AppId\": \"Default\",\r\n    \"IsRememberMe\": false,\r\n    \"IsRefreshable\": true,\r\n    \"TransientRoles\": [\r\n      \"\"\r\n    ],\r\n    \"TransientClaims\": {\r\n    }\r\n  }\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/auth/login/external/google/transient",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"auth",
+								"login",
+								"external",
+								"google",
+								"transient"
+							]
+						},
+						"description": "      "
+					},
+					"response": []
+				},
+				{
+					"name": "Get External Login Data Facebook",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Provider\": {\r\n    \"AccessToken\": \"{{Auth.External.Token}}\"\r\n  },\r\n  \"Parameters\": {\r\n    \"AppId\": \"Default\",\r\n    \"IsRememberMe\": false,\r\n    \"IsRefreshable\": true,\r\n    \"TransientRoles\": [\r\n      \"\"\r\n    ],\r\n    \"TransientClaims\": {\r\n    }\r\n  }\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/auth/login/external/data/facebook",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"auth",
+								"login",
+								"external",
+								"data",
+								"facebook"
+							]
+						},
+						"description": "      "
+					},
+					"response": []
+				},
+				{
+					"name": "Login External Facebook",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Provider\": {\r\n    \"AccessToken\": \"{{Auth.External.Token}}\"\r\n  },\r\n  \"Parameters\": {\r\n    \"AppId\": \"Default\",\r\n    \"IsRememberMe\": false,\r\n    \"IsRefreshable\": true,\r\n    \"TransientRoles\": [\r\n      \"\"\r\n    ],\r\n    \"TransientClaims\": {\r\n    }\r\n  }\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/auth/login/external/facebook",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"auth",
+								"login",
+								"external",
+								"facebook"
+							]
+						},
+						"description": "      "
+					},
+					"response": []
+				},
+				{
+					"name": "Login External Facebook Transient",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Provider\": {\r\n    \"AccessToken\": \"{{Auth.External.Token}}\"\r\n  },\r\n  \"Parameters\": {\r\n    \"AppId\": \"Default\",\r\n    \"IsRememberMe\": false,\r\n    \"IsRefreshable\": true,\r\n    \"TransientRoles\": [\r\n      \"\"\r\n    ],\r\n    \"TransientClaims\": {\r\n    }\r\n  }\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/auth/login/external/facebook/transient",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"auth",
+								"login",
+								"external",
+								"facebook",
+								"transient"
+							]
+						},
+						"description": "      "
+					},
+					"response": []
+				},
+				{
+					"name": "Get External Login Data Microsoft",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Provider\": {\r\n    \"Code\": \"{{Auth.External.Token}}\",\r\n    \"CodeVerifier\": \"{{Auth.Microsoft.CodeVerifier}}\",\r\n    \"RedirectUri\": \"{{Auth.Microsoft.RedirectUri}}\"\r\n  },\r\n  \"Parameters\": {\r\n    \"AppId\": \"Default\",\r\n    \"IsRememberMe\": false,\r\n    \"IsRefreshable\": true,\r\n    \"TransientRoles\": [\r\n      \"\"\r\n    ],\r\n    \"TransientClaims\": {\r\n    }\r\n  }\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/auth/login/external/data/microsoft",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"auth",
+								"login",
+								"external",
+								"data",
+								"microsoft"
+							]
+						},
+						"description": "      "
+					},
+					"response": []
+				},
+				{
+					"name": "Login External Microsoft",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Provider\": {\r\n    \"Code\": \"{{Auth.External.Token}}\",\r\n    \"CodeVerifier\": \"{{Auth.Microsoft.CodeVerifier}}\",\r\n    \"RedirectUri\": \"{{Auth.Microsoft.RedirectUri}}\"\r\n  },\r\n  \"Parameters\": {\r\n    \"AppId\": \"Default\",\r\n    \"IsRememberMe\": false,\r\n    \"IsRefreshable\": true,\r\n    \"TransientRoles\": [\r\n      \"\"\r\n    ],\r\n    \"TransientClaims\": {\r\n    }\r\n  }\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/auth/login/external/microsoft",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"auth",
+								"login",
+								"external",
+								"microsoft"
+							]
+						},
+						"description": "      "
+					},
+					"response": []
+				},
+				{
+					"name": "Login External Microsoft Transient",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Provider\": {\r\n    \"Code\": \"{{Auth.External.Token}}\",\r\n    \"CodeVerifier\": \"{{Auth.Microsoft.CodeVerifier}}\",\r\n    \"RedirectUri\": \"{{Auth.Microsoft.RedirectUri}}\"\r\n  },\r\n  \"Parameters\": {\r\n    \"AppId\": \"Default\",\r\n    \"IsRememberMe\": false,\r\n    \"IsRefreshable\": true,\r\n    \"TransientRoles\": [\r\n      \"\"\r\n    ],\r\n    \"TransientClaims\": {\r\n    }\r\n  }\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/auth/login/external/microsoft/transient",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"auth",
+								"login",
+								"external",
+								"microsoft",
 								"transient"
 							]
 						},
@@ -812,10 +1249,6 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/home/ping",
 							"protocol": "http",
@@ -835,9 +1268,6 @@
 				{
 					"name": "User",
 					"request": {
-						"auth": {
-							"type": "noauth"
-						},
 						"method": "GET",
 						"header": [
 							{
@@ -851,10 +1281,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/home/user",
 							"protocol": "http",
@@ -887,10 +1313,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/home/user",
 							"protocol": "http",
@@ -902,84 +1324,6 @@
 								"api",
 								"home",
 								"user"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Services",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://{{host}}:{{port}}/api/home/services",
-							"protocol": "http",
-							"host": [
-								"{{host}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"api",
-								"home",
-								"services"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Services - Filter",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://{{host}}:{{port}}/api/home/ping?filter=Nano",
-							"protocol": "http",
-							"host": [
-								"{{host}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"api",
-								"home",
-								"ping"
-							],
-							"query": [
-								{
-									"key": "filter",
-									"value": "Nano"
-								}
 							]
 						}
 					},
@@ -1004,10 +1348,6 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/home/language?code=da-DK",
 							"protocol": "http",
@@ -1049,10 +1389,6 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/home/timezone?name=Europe/Copenhagen",
 							"protocol": "http",
@@ -1088,6 +1424,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json"
+							},
+							{
+								"key": "Origin",
+								"value": "http://localhost",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -1185,7 +1526,7 @@
 							"raw": "{\r\n\t\"Paging\": {\r\n\t\t\"Count\": 10,\r\n\t\t\"Number\": 1\r\n\t},\r\n\t\"Order\": {\r\n\t\t\"By\": \"CreatedAt\",\r\n\t\t\"Direction\": \"Desc\"\r\n\t}\r\n}"
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/audit/index",
+							"raw": "http://{{host}}:{{port}}/api/samples/index",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -1193,7 +1534,7 @@
 							"port": "{{port}}",
 							"path": [
 								"api",
-								"audit",
+								"samples",
 								"index"
 							]
 						}
@@ -1215,12 +1556,8 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/samples/details/15e1eaa0-2206-4fd4-8fe5-aaaaf1b8440f",
+							"raw": "http://{{host}}:{{port}}/api/samples/details/{{Sample.Id}}",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -1230,7 +1567,7 @@
 								"api",
 								"samples",
 								"details",
-								"15e1eaa0-2206-4fd4-8fe5-aaaaf1b8440f"
+								"{{Sample.Id}}"
 							]
 						}
 					},
@@ -1259,7 +1596,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/samples/details/many?Ids=10cb8aab-a02e-4b40-9608-a763c9efbd7e&Ids=8e90c2ee-831f-4cd4-a5f8-3bc7bb1c4ba6&Ids=b20b9eb8-c6d9-4245-ac30-eb11d49e4c16",
+							"raw": "http://{{host}}:{{port}}/api/samples/details/many?Ids={{Sample.Id}}",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -1274,15 +1611,7 @@
 							"query": [
 								{
 									"key": "Ids",
-									"value": "10cb8aab-a02e-4b40-9608-a763c9efbd7e"
-								},
-								{
-									"key": "Ids",
-									"value": "8e90c2ee-831f-4cd4-a5f8-3bc7bb1c4ba6"
-								},
-								{
-									"key": "Ids",
-									"value": "b20b9eb8-c6d9-4245-ac30-eb11d49e4c16"
+									"value": "{{Sample.Id}}"
 								}
 							]
 						}
@@ -1306,7 +1635,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\n\t\"10cb8aab-a02e-4b40-9608-a763c9efbd7e\",\n\t\"8e90c2ee-831f-4cd4-a5f8-3bc7bb1c4ba6\",\n\t\"b20b9eb8-c6d9-4245-ac30-eb11d49e4c16\"\n]"
+							"raw": "[\n\t\"{{Sample.Id}}\"\n]"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/samples/details/many",
@@ -1348,7 +1677,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/samples/query?Name=sample-name&Paging.Number=1&Paging.Count=10&Order.By=CreatedAt&Order.Direction=Desc",
+							"raw": "http://{{host}}:{{port}}/api/samples/query?Name={{Sample.Name}}&AfterAt=2000-07-04T14:08:10&BeforeAt=2100-07-08T14:08:10&Paging.Number=1&Paging.Count=10&Order.By=CreatedAt&Order.Direction=Desc",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -1362,17 +1691,15 @@
 							"query": [
 								{
 									"key": "Name",
-									"value": "sample-name"
+									"value": "{{Sample.Name}}"
 								},
 								{
 									"key": "AfterAt",
-									"value": "2020-07-04T14:08:10",
-									"disabled": true
+									"value": "2000-07-04T14:08:10"
 								},
 								{
 									"key": "BeforeAt",
-									"value": "2020-07-08T14:08:10",
-									"disabled": true
+									"value": "2100-07-08T14:08:10"
 								},
 								{
 									"key": "Paging.Number",
@@ -1412,7 +1739,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"Criteria\": {\r\n\t\t\"Name\": \"sample\"\r\n\t},\r\n\t\"Paging\": {\r\n\t\t\"Count\": 10,\r\n\t\t\"Number\": 1\r\n\t},\r\n\t\"Order\": {\r\n\t\t\"By\": \"CreatedAt\",\r\n\t\t\"Direction\": \"Desc\"\r\n\t}\r\n}"
+							"raw": "{\r\n\t\"Criteria\": {\r\n\t\t\"Name\": \"{{Sample.Name}}\",\r\n        \"AfterAt\": \"2000-07-04T14:08:10\",\r\n        \"BeforeAt\": \"2100-07-08T14:08:10\"\r\n\t},\r\n\t\"Paging\": {\r\n\t\t\"Count\": 10,\r\n\t\t\"Number\": 1\r\n\t},\r\n\t\"Order\": {\r\n\t\t\"By\": \"CreatedAt\",\r\n\t\t\"Direction\": \"Desc\"\r\n\t}\r\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/samples/query",
@@ -1453,7 +1780,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/samples/query/first?Name=sample-name&Order.By=CreatedAt&Order.Direction=Desc",
+							"raw": "http://{{host}}:{{port}}/api/samples/query/first?Name={{Sample.Name}}&Order.By=CreatedAt&Order.Direction=Desc",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -1468,17 +1795,7 @@
 							"query": [
 								{
 									"key": "Name",
-									"value": "sample-name"
-								},
-								{
-									"key": "AfterAt",
-									"value": "2020-07-04T14:08:10",
-									"disabled": true
-								},
-								{
-									"key": "BeforeAt",
-									"value": "2020-07-08T14:08:10",
-									"disabled": true
+									"value": "{{Sample.Name}}"
 								},
 								{
 									"key": "Order.By",
@@ -1510,7 +1827,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"Criteria\": {\r\n\t\t\"Name\": \"sample\"\r\n\t},\r\n\t\"Order\": {\r\n\t\t\"By\": \"CreatedAt\",\r\n\t\t\"Direction\": \"Desc\"\r\n\t}\r\n}"
+							"raw": "{\r\n\t\"Criteria\": {\r\n\t\t\"Name\": \"{{Sample.Name}}\"\r\n\t},\r\n\t\"Order\": {\r\n\t\t\"By\": \"CreatedAt\",\r\n\t\t\"Direction\": \"Desc\"\r\n\t}\r\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/samples/query/first",
@@ -1552,7 +1869,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/samples/query/count?Name=sample-name",
+							"raw": "http://{{host}}:{{port}}/api/samples/query/count?Name={{Sample.Name}}",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -1567,17 +1884,7 @@
 							"query": [
 								{
 									"key": "Name",
-									"value": "sample-name"
-								},
-								{
-									"key": "AfterAt",
-									"value": "2020-07-04T14:08:10",
-									"disabled": true
-								},
-								{
-									"key": "BeforeAt",
-									"value": "2020-07-08T14:08:10",
-									"disabled": true
+									"value": "{{Sample.Name}}"
 								}
 							]
 						}
@@ -1601,7 +1908,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"Criteria\": {\r\n\t\t\"Name\": \"sample\"\r\n\t}\r\n}"
+							"raw": "{\r\n\t\"Criteria\": {\r\n\t\t\"Name\": \"{{Sample.Name}}\"\r\n\t}\r\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/samples/query/count",
@@ -1622,6 +1929,20 @@
 				},
 				{
 					"name": "Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"Sample.Id\", jsonData.Id);\r",
+									"pm.collectionVariables.set(\"Sample.Name\", jsonData.Name);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1637,7 +1958,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"Id\": \"15e1eaa0-2206-4fd4-8fe5-aaaaf1b8440f\",\r\n\t\"Name\": \"sample-name\"\r\n}"
+							"raw": "{\r\n\t\"Name\": \"sample-name\"\r\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/samples/create/",
@@ -1658,6 +1979,20 @@
 				},
 				{
 					"name": "Create Many",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"Sample.Id\", jsonData[0].Id);\r",
+									"pm.collectionVariables.set(\"Sample.Name\", jsonData[0].Name);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1673,7 +2008,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\n\t{\n\t\t\"Id\": \"10cb8aab-a02e-4b40-9608-a763c9efbd7e\",\n\t\t\"Name\": \"sample-name-1\"\n\t},\n\t{\n\t\t\"Id\": \"8e90c2ee-831f-4cd4-a5f8-3bc7bb1c4ba6\",\n\t\t\"Name\": \"sample-name-2\"\n\t},\n\t{\n\t\t\"Id\": \"b20b9eb8-c6d9-4245-ac30-eb11d49e4c16\",\n\t\t\"Name\": \"sample-name-3\"\n\t}\n]"
+							"raw": "[\n\t{\n\t\t\"Name\": \"sample-name-1\"\n\t}\n]"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/samples/create/many",
@@ -1694,6 +2029,19 @@
 				},
 				{
 					"name": "Edit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"Sample.Name\", jsonData.Name);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1709,7 +2057,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"Name\": \"sample-name-edited\",\n    \"CreatedAt\": \"2020-07-05T14:07:36+00:00\",\n    \"Id\": \"15e1eaa0-2206-4fd4-8fe5-aaaaf1b8440f\"\n}"
+							"raw": "{\n    \"Id\": \"{{Sample.Id}}\",\n    \"Name\": \"sample-name-edited\"\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/samples/edit/",
@@ -1730,6 +2078,19 @@
 				},
 				{
 					"name": "Edit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"Sample.Name\", jsonData.Name);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -1745,7 +2106,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"Name\": \"sample-name-edited\",\n    \"CreatedAt\": \"2020-07-05T14:07:36+00:00\",\n    \"Id\": \"15e1eaa0-2206-4fd4-8fe5-aaaaf1b8440f\"\n}"
+							"raw": "{\n    \"Id\": \"{{Sample.Id}}\",\n    \"Name\": \"sample-name-edited\"\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/samples/edit/",
@@ -1766,6 +2127,19 @@
 				},
 				{
 					"name": "Edit Many",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"Sample.Name\", jsonData[0].Name);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1781,7 +2155,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\n    {\n        \"Name\": \"sample-name-1-edited\",\n        \"CreatedAt\": \"2020-07-05T14:08:10+00:00\",\n        \"Id\": \"10cb8aab-a02e-4b40-9608-a763c9efbd7e\"\n    },\n    {\n        \"Name\": \"sample-name-2-edited\",\n        \"CreatedAt\": \"2020-07-05T14:08:10+00:00\",\n        \"Id\": \"8e90c2ee-831f-4cd4-a5f8-3bc7bb1c4ba6\"\n    },\n    {\n        \"Name\": \"sample-name-3-edited\",\n        \"CreatedAt\": \"2020-07-05T14:08:10+00:00\",\n        \"Id\": \"b20b9eb8-c6d9-4245-ac30-eb11d49e4c16\"\n    }\n]"
+							"raw": "[\n    {\n        \"Id\": \"{{Sample.Id}}\",\n        \"Name\": \"sample-name-edited\"\n    }\n]"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/samples/edit/many",
@@ -1802,6 +2176,19 @@
 				},
 				{
 					"name": "Edit Many",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"Sample.Name\", jsonData[0].Name);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -1817,7 +2204,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\n    {\n        \"Name\": \"sample-name-1-edited\",\n        \"CreatedAt\": \"2020-07-05T14:08:10+00:00\",\n        \"Id\": \"10cb8aab-a02e-4b40-9608-a763c9efbd7e\"\n    },\n    {\n        \"Name\": \"sample-name-2-edited\",\n        \"CreatedAt\": \"2020-07-05T14:08:10+00:00\",\n        \"Id\": \"8e90c2ee-831f-4cd4-a5f8-3bc7bb1c4ba6\"\n    },\n    {\n        \"Name\": \"sample-name-3-edited\",\n        \"CreatedAt\": \"2020-07-05T14:08:10+00:00\",\n        \"Id\": \"b20b9eb8-c6d9-4245-ac30-eb11d49e4c16\"\n    }\n]"
+							"raw": "[\n    {\n        \"Id\": \"{{Sample.Id}}\", \n        \"Name\": \"sample-name-1-edited\"\n    }\n]"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/samples/edit/many",
@@ -1838,6 +2225,19 @@
 				},
 				{
 					"name": "Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"Sample.Id\", null);\r",
+									"pm.collectionVariables.set(\"Sample.Name\", null);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1856,7 +2256,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/samples/delete/15e1eaa0-2206-4fd4-8fe5-aaaaf1b8440f",
+							"raw": "http://{{host}}:{{port}}/api/samples/delete/{{Sample.Id}}",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -1866,7 +2266,7 @@
 								"api",
 								"samples",
 								"delete",
-								"15e1eaa0-2206-4fd4-8fe5-aaaaf1b8440f"
+								"{{Sample.Id}}"
 							]
 						}
 					},
@@ -1874,6 +2274,19 @@
 				},
 				{
 					"name": "Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"Sample.Id\", null);\r",
+									"pm.collectionVariables.set(\"Sample.Name\", null);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -1892,7 +2305,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/samples/delete/15e1eaa0-2206-4fd4-8fe5-aaaaf1b8440f",
+							"raw": "http://{{host}}:{{port}}/api/samples/delete/{{Sample.Id}}",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -1902,7 +2315,7 @@
 								"api",
 								"samples",
 								"delete",
-								"15e1eaa0-2206-4fd4-8fe5-aaaaf1b8440f"
+								"{{Sample.Id}}"
 							]
 						}
 					},
@@ -1910,6 +2323,19 @@
 				},
 				{
 					"name": "Delete Many",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"Sample.Id\", null);\r",
+									"pm.collectionVariables.set(\"Sample.Name\", null);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1925,7 +2351,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n\t\"10cb8aab-a02e-4b40-9608-a763c9efbd7e\",\r\n\t\"8e90c2ee-831f-4cd4-a5f8-3bc7bb1c4ba6\",\r\n\t\"b20b9eb8-c6d9-4245-ac30-eb11d49e4c16\"\r\n]\t"
+							"raw": "[\r\n\t\"{{Sample.Id}}\"\r\n]\t"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/samples/delete/many",
@@ -1946,6 +2372,19 @@
 				},
 				{
 					"name": "Delete Many",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"Sample.Id\", null);\r",
+									"pm.collectionVariables.set(\"Sample.Name\", null);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -1961,7 +2400,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n\t\"10cb8aab-a02e-4b40-9608-a763c9efbd7e\",\r\n\t\"8e90c2ee-831f-4cd4-a5f8-3bc7bb1c4ba6\",\r\n\t\"b20b9eb8-c6d9-4245-ac30-eb11d49e4c16\"\r\n]\t"
+							"raw": "[\r\n\t\"{{Sample.Id}}\"\r\n]\t"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/samples/delete/many",
@@ -1982,6 +2421,19 @@
 				},
 				{
 					"name": "Delete Query",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"Sample.Id\", null);\r",
+									"pm.collectionVariables.set(\"Sample.Name\", null);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1997,7 +2449,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"Name\": \"sample-name-1\"\r\n}"
+							"raw": "{\r\n\t\"Name\": \"{{Sample.Name}}\"\r\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/samples/delete/query",
@@ -2018,6 +2470,19 @@
 				},
 				{
 					"name": "Delete Query",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"Sample.Id\", null);\r",
+									"pm.collectionVariables.set(\"Sample.Name\", null);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -2033,7 +2498,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"Name\": \"sample-name-1\"\r\n}"
+							"raw": "{\r\n\t\"Name\": \"{{Sample.Name}}\"\r\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/samples/delete/query",
@@ -2047,6 +2512,50 @@
 								"samples",
 								"delete",
 								"query"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Custom v1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/samples/custom",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"samples",
+								"custom"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Custom v2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v2/samples/custom",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v2",
+								"samples",
+								"custom"
 							]
 						}
 					},
@@ -2057,6 +2566,38 @@
 		{
 			"name": "Users",
 			"item": [
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/details/{{User.Id}}",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"details",
+								"{{User.Id}}"
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "Index",
 					"request": {
@@ -2072,10 +2613,6 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/users/index",
 							"protocol": "http",
@@ -2093,7 +2630,51 @@
 					"response": []
 				},
 				{
+					"name": "Get Password Options",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/password/options",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"password",
+								"options"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "SignUp",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"User.Id\", jsonData.Id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -2112,7 +2693,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"User\": {\r\n\t\t\"Name\": \"John Doe\"\r\n\t},\r\n\t\"EmailAddress\": \"JohnDoe@doamin.com\",\r\n\t\"Username\": \"JohnDoe@doamin.com\",\r\n\t\"Password\": \"aBac%v4(dcAfFT13\",\r\n\t\"ConfirmPassword\": \"aBac%v4(dcAfFT13\"\r\n  }\r\n}\r\n"
+							"raw": "{\r\n\t\"User\": {\r\n\t\t\"Name\": \"{{User.Name}}\"\r\n\t},\r\n\t\"EmailAddress\": \"{{User.EmailAddress}}\",\r\n    \"PhoneNumber\": \"{{User.PhoneNumber}}\",\r\n\t\"Username\": \"{{User.Username}}\",\r\n\t\"Password\": \"{{User.Password}}\",\r\n\t\"ConfirmPassword\": \"{{User.Password}}\"\r\n}\r\n\r\n"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/users/signup",
@@ -2131,7 +2712,7 @@
 					"response": []
 				},
 				{
-					"name": "SignUp External",
+					"name": "SignUp External Google",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -2150,10 +2731,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"User\": {\r\n\t\t\"Name\": \"John Doe\"\r\n\t},\r\n\t\"EmailAddress\": \"JohnDoe@domain.com\",\r\n\t\"ExternalLogin\": {\r\n\t\t\"LoginProvider\": \"Facebook\",\r\n\t\t\"ProviderKey\": \"xxxxxxxxxxxxxxxxx\",\r\n\t\t\"AccessToken\": \"token\"\r\n\t}\r\n  }\r\n}\r\n"
+							"raw": "{\r\n\t\"User\": {\r\n\t\t\"Name\": \"{{User.Name}}\"\r\n\t},\r\n\t\"Provider\": {\r\n\t\t\"AccessToken\": \"{{Auth.External.Token}}\"\r\n\t}\r\n}"
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/users/signup/external",
+							"raw": "http://{{host}}:{{port}}/api/users/signup/external/google",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -2163,16 +2744,20 @@
 								"api",
 								"users",
 								"signup",
-								"external"
+								"external",
+								"google"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get Email Change Token",
+					"name": "SignUp External Facebook",
 					"request": {
-						"method": "GET",
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -2186,10 +2771,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\r\n\t\"User\": {\r\n\t\t\"Name\": \"{{User.Name}}\"\r\n\t},\r\n\t\"Provider\": {\r\n\t\t\"AccessToken\": \"{{Auth.External.Token}}\"\r\n\t}\r\n}"
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/users/email/change/token?emailAddress=admin@domain.com&newEmailAddress=admin_changed@domain.com",
+							"raw": "http://{{host}}:{{port}}/api/users/signup/external/facebook",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -2198,28 +2783,36 @@
 							"path": [
 								"api",
 								"users",
-								"email",
-								"change",
-								"token"
-							],
-							"query": [
-								{
-									"key": "emailAddress",
-									"value": "admin@domain.com"
-								},
-								{
-									"key": "newEmailAddress",
-									"value": "admin_changed@domain.com"
-								}
+								"signup",
+								"external",
+								"facebook"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get Confirm Email Token",
+					"name": "SignUp External Microsoft",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"User.Id\", jsonData.Id);\r",
+									"pm.collectionVariables.set(\"User.Name\", jsonData.Name);\r",
+									"pm.collectionVariables.set(\"User.EmailAddress\", jsonData.IdentityUser.Email);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
-						"method": "GET",
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -2233,10 +2826,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\r\n\t\"User\": {\r\n\t\t\"Name\": \"{{User.Name}}\"\r\n\t},\r\n\t\"Provider\": {\r\n\t\t\"Code\": \"{{Auth.External.Token}}\",\r\n\t\t\"CodeVerifier\": \"{{Microsoft.CodeVerifier}}\",\r\n        \"RedirectUri\": \"{{Auth.Microsoft.RedirectUri}}\"\r\n\t}\r\n}"
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/users/email/confirm/token?emailAddress=admin@domain.com",
+							"raw": "http://{{host}}:{{port}}/api/users/signup/external/microsoft",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -2245,22 +2838,75 @@
 							"path": [
 								"api",
 								"users",
-								"email",
-								"confirm",
-								"token"
-							],
-							"query": [
-								{
-									"key": "emailAddress",
-									"value": "admin@domain.com"
-								}
+								"signup",
+								"external",
+								"microsoft"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Email Change",
+					"name": "Edit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"User.Name\", jsonData.Name);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Id\": \"{{User.Id}}\",\r\n    \"Name\": \"John doe edited\",\r\n    \"IdentityUserId\": \"{{User.Id}}\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/edit",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"User.Name\", jsonData.Name);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -2276,10 +2922,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"Token\": \"CfDJ8D19E0kjpHNFqtQcVc2YGD8eI0EXDREk9xIehye4N3jHPmmKprdlPfij4xbwxzumevchjy3Md1Bi7yfSUr0RDZz87VHhRVzSalm1oeoSxI3bcRFqnKDst9VED2jN23cxE1Gry1CmtzYjbpXSi7iUHNaK2RiwHgMWvduBo23FDYAMhIwjrInlmnIt5+HkFTrkpBHTpgKfEJ5s97FaA8DIZASV6+s3a6xC0d9FwwYZZtQgIeUB/UzRUXkw48RX3OhhzA==\",\n    \"UserId\": \"1aaee188-2ded-48aa-96f1-55ee8fd184a0\",\n    \"NewEmailAddress\": \"admin_changed@domain.com\"\n}"
+							"raw": "{\r\n    \"Id\": \"{{User.Id}}\",\r\n    \"Name\": \"John doe edited\",\r\n    \"IdentityUserId\": \"{{User.Id}}\"\r\n}"
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/users/email/change",
+							"raw": "http://{{host}}:{{port}}/api/users/edit",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -2288,15 +2934,26 @@
 							"path": [
 								"api",
 								"users",
-								"email",
-								"change"
+								"edit"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Email Confirm",
+					"name": "Edit Many",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"User.Name\", jsonData[0].Name);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -2312,10 +2969,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"Token\": \"CfDJ8D19E0kjpHNFqtQcVc2YGD8Z++sK8+bE1Mmpbh6Cso28xmFQbN/+CuEVgpbyiDOm/5YgIbFdSyGBFoc/t3d07YrAb/66YHt3787l1uzgawBbn34/BNrf0oCJ7RXW+4oDktfYM4ygFzTljQez6GsDhHC6lKueOw3fosMK6wfRu4OgsiWrok+XuH/E/u9HRSRNGhv/fxdlzvnI11Md/bhrXEnaSNqjV9/t4dJBJip3ZqA/EAVC/txFtV3rdVJGEot+oQ==\",\n    \"EmailAddress\": \"admin@domain.com\"\n}"
+							"raw": "[\r\n    {\r\n        \"Id\": \"{{User.Id}}\",\r\n        \"Name\": \"John doe edited\",\r\n        \"IdentityUserId\": \"{{User.Id}}\"\r\n    }\r\n]"
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/users/email/confirm",
+							"raw": "http://{{host}}:{{port}}/api/users/edit/many",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -2324,58 +2981,28 @@
 							"path": [
 								"api",
 								"users",
-								"email",
-								"confirm"
+								"edit",
+								"many"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get Password Reset Token",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
+					"name": "Set Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(request.data);\r",
+									"pm.collectionVariables.set(\"User.Password\", jsonData.NewPassword);\r",
+									""
+								],
+								"type": "text/javascript"
 							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://{{host}}:{{port}}/api/users/password/reset/token?emailAddress=admin@domain.com",
-							"protocol": "http",
-							"host": [
-								"{{host}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"api",
-								"users",
-								"password",
-								"reset",
-								"token"
-							],
-							"query": [
-								{
-									"key": "emailAddress",
-									"value": "admin@domain.com"
-								}
-							]
 						}
-					},
-					"response": []
-				},
-				{
-					"name": "Password Set",
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -2391,7 +3018,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"UserId\": \"1aaee188-2ded-48aa-96f1-55ee8fd184a0\",\r\n\t\"NewPassword\": \"new-abc12|+d34DadD\"\r\n}"
+							"raw": "{\r\n\t\"UserId\": \"{{User.Id}}\",\r\n\t\"NewPassword\": \"new-abc12|+d34DadD\"\r\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/users/password/set",
@@ -2411,7 +3038,20 @@
 					"response": []
 				},
 				{
-					"name": "Username Set",
+					"name": "Set Username",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(request.data);\r",
+									"pm.collectionVariables.set(\"User.Username\", jsonData.NewUsername);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -2427,7 +3067,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"UserId\": \"1aaee188-2ded-48aa-96f1-55ee8fd184a0\",\r\n\t\"NewUsername\": \"new-admin\"\r\n}"
+							"raw": "{\r\n\t\"UserId\": \"{{User.Id}}\",\r\n\t\"NewUsername\": \"new-admin\"\r\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/users/username/set",
@@ -2447,7 +3087,21 @@
 					"response": []
 				},
 				{
-					"name": "Password Change",
+					"name": "Get Email Change Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"User.Email.Change.Token\", jsonData.Token);\r",
+									"pm.collectionVariables.set(\"User.Email.Change.NewEmailAddress\", jsonData.NewEmailAddress);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -2457,16 +3111,442 @@
 							},
 							{
 								"key": "Accept",
-								"type": "text",
-								"value": "application/json"
+								"value": "application/json",
+								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"UserId\": \"1aaee188-2ded-48aa-96f1-55ee8fd184a0\",\n\t\"OldPassword\": \"abc12|+d34DadD\",\n\t\"NewPassword\": \"new-abc12|+d34DadD\",\n\t\"ConfirmNewPassword\": \"new-abc12|+d34DadD\"\n}"
+							"raw": "{\r\n    \"UserId\": \"{{User.Id}}\",\r\n    \"NewEmailAddress\": \"admin_changed@domain.com\"   \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/api/users/password/change",
+							"raw": "http://{{host}}:{{port}}/api/users/email/change/token",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"email",
+								"change",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Email Change",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"User.Email.Change.Token\", null);\r",
+									"pm.collectionVariables.set(\"User.Email.Change.NewPhoneNumber\", null);\r",
+									"\r",
+									"var jsonData = JSON.parse(request.data);\r",
+									"pm.collectionVariables.set(\"User.EmailAddress\", jsonData.NewEmailAddress);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"UserId\": \"{{User.Id}}\",\n    \"Token\": \"{{User.Email.Change.Token}}\",\n    \"NewEmailAddress\": \"{{User.Email.Change.NewEmailAddress}}\"\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/email/change",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"email",
+								"change"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Confirm Email Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"User.Email.Confirm.Token\", jsonData.Token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"UserId\": \"{{User.Id}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/email/confirm/token",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"email",
+								"confirm",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Email Confirm",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"User.Email.Confirm.Token\", null);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"UserId\": \"{{User.Id}}\",\n    \"Token\": \"{{User.Email.Confirm.Token}}\"\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/email/confirm",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"email",
+								"confirm"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Phone Change Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"User.Phone.Change.Token\", jsonData.Token);\r",
+									"pm.collectionVariables.set(\"User.Phone.Change.NewPhoneNumber\", jsonData.NewPhoneNumber);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"UserId\": \"{{User.Id}}\",\r\n    \"NewPhoneNumber\": \"+4511111111\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/phone/change/token",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"phone",
+								"change",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Phone Change",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"User.Phone.Change.Token\", null);\r",
+									"pm.collectionVariables.set(\"User.Phone.Change.NewPhoneNumber\", null);\r",
+									"\r",
+									"var jsonData = JSON.parse(request.data);\r",
+									"pm.collectionVariables.set(\"User.PhoneNumber\", jsonData.NewPhoneNumber);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"UserId\": \"{{User.Id}}\",\n    \"Token\": \"{{User.Phone.Change.Token}}\",\n    \"NewPhoneNumber\": \"{{User.Phone.Change.NewPhoneNumber}}\" \n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/phone/change",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"phone",
+								"change"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Confirm Phone Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"User.Phone.Confirm.Token\", jsonData.Token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"UserId\": \"{{User.Id}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/phone/confirm/token",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"phone",
+								"confirm",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Phone Confirm",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"User.Phone.Confirm.Token\", null);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"UserId\": \"{{User.Id}}\",\n    \"Token\": \"{{User.Phone.Confirm.Token}}\"\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/phone/confirm",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"phone",
+								"confirm"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Password Reset Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"User.Password.Reset.Token\", jsonData.Token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"EmailAddress\": \"{{User.EmailAddress}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/password/reset/token",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -2476,7 +3556,8 @@
 								"api",
 								"users",
 								"password",
-								"change"
+								"reset",
+								"token"
 							]
 						}
 					},
@@ -2484,6 +3565,21 @@
 				},
 				{
 					"name": "Password Reset",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"User.Password.Reset.Token\", null);\r",
+									"\r",
+									"var jsonData = JSON.parse(request.data);\r",
+									"pm.collectionVariables.set(\"User.Password\", jsonData.Password);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -2502,7 +3598,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"Token\": \"CfDJ8D19E0kjpHNFqtQcVc2YGD97fT1XowoTOR6wAzP6ibz+bAKiPaOIpypyVsMF+2iEu7+w4gCSte8kmpSh+EDmrJ85YDuWuxXGS4s3cNV3EBIwUSK22VQDEdhsodDn7AdnM3bUV8TyFZVR9tgAA4lKZEOq/USrc87/4XQvSV7ugjEQC5rvLTDrWwYzgdgUiU9wJgIGXrklROnIR/CmV5ZwT4LV1fcFwnYqn0yFyCykyndn\",\r\n\t\"EmailAddress\": \"admin@domain.com\",\r\n\t\"Password\": \"new-abc12|+d34DadD\"\r\n}"
+							"raw": "{\r\n    \"UserId\": \"{{User.Id}}\",\r\n\t\"Token\": \"{{User.Password.Reset.Token}}\",\r\n\t\"Password\": \"new-abc12|+d34DadD\"\r\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/api/users/password/reset",
@@ -2516,6 +3612,55 @@
 								"users",
 								"password",
 								"reset"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Password Change",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(request.data);\r",
+									"pm.collectionVariables.set(\"User.Password\", jsonData.NewPassword);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"UserId\": \"{{User.Id}}\",\n\t\"OldPassword\": \"{{User.Password}}\",\n\t\"NewPassword\": \"new-abc12|+d34DadD\",\n\t\"ConfirmNewPassword\": \"new-abc12|+d34DadD\"\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/password/change",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"password",
+								"change"
 							]
 						}
 					},
@@ -2557,13 +3702,387 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get Roles",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/roles/{{User.Id}}",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"roles",
+								"{{User.Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assign Role",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"UserId\": \"{{User.Id}}\",\r\n    \"RoleName\": \"guest\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/roles/assign",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"roles",
+								"assign"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Role",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"UserId\": \"{{User.Id}}\",\r\n    \"RoleName\": \"guest\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/roles/remove",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"roles",
+								"remove"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Role",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"UserId\": \"{{User.Id}}\",\r\n    \"RoleName\": \"guest\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/roles/remove",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"roles",
+								"remove"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Claims",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/claims/{{User.Id}}",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"claims",
+								"{{User.Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assign Claim",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"UserId\": \"{{User.Id}}\",\r\n    \"ClaimType\": \"type\",\r\n    \"ClaimValue\": \"value\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/claims/assign",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"claims",
+								"assign"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Claim",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"UserId\": \"{{User.Id}}\",\r\n    \"ClaimType\": \"type\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/claims/remove",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"claims",
+								"remove"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Claim",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"UserId\": \"{{User.Id}}\",\r\n    \"ClaimType\": \"type\"\r\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/claims/remove",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"claims",
+								"remove"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"User.Id\", null);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/delete/{{User.Id}}",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"delete",
+								"{{User.Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Many",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"User.Id\", null);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    \"{{User.Id}}\"\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/users/delete/many",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"users",
+								"delete",
+								"many"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"event": [
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "805ce7d3-10d5-47ef-9381-cfbb90e97dd1",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -2573,7 +4092,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "d7a1e2c4-2c8e-45f5-bb85-2894e6e7d585",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -2588,7 +4106,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhZDkzMTQxNC05ZjUwLTQyNWEtOTMxNC1jOTMwNTBmNzllMjQiLCJzdWIiOiIxYWFlZTE4OC0yZGVkLTQ4YWEtOTZmMS01NWVlOGZkMTg0YTAiLCJlbWFpbCI6ImFkbWluQGRvbWFpbi5jb20iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibmV3LWFkbWluIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiIxYWFlZTE4OC0yZGVkLTQ4YWEtOTZmMS01NWVlOGZkMTg0YTAiLCJhcHBJZCI6IkRlZmF1bHQiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsic2VydmljZSIsImFkbWluaXN0cmF0b3IiXSwibmJmIjoxNTk1ODc0MDk2LCJleHAiOjE2MDM2NTAwOTYsImlzcyI6ImRldmVsb3BtZW50Lm5hbm8iLCJhdWQiOiJkZXZlbG9wbWVudC5uYW5vIn0.n2SU5lB1kf45qek-yJiCISyWaUIJh-AraDQqD_coyjI",
+				"value": "{{Auth.Token}}",
 				"type": "string"
 			}
 		]
@@ -2597,7 +4115,6 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "3f3adfb2-0925-4292-91ff-f5b2b3794454",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -2607,7 +4124,6 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "077e0579-a25e-4cf4-a251-7c0884f399a6",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -2617,16 +4133,117 @@
 	],
 	"variable": [
 		{
-			"id": "10028853-bf3d-41ea-9e3c-de95670c6802",
 			"key": "host",
-			"value": "localhost",
+			"value": "localhost"
+		},
+		{
+			"key": "port",
+			"value": "8080"
+		},
+		{
+			"key": "Auth.Token",
+			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "fc240ace-519c-4d2b-b471-b1d6bcf15f75",
-			"key": "port",
-			"value": "80",
+			"key": "Auth.RefreshToken",
+			"value": "",
 			"type": "string"
+		},
+		{
+			"key": "Auth.External.Token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "Auth.Microsoft.TenantId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "Auth.Microsoft.ClientId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "Auth.Microsoft.CodeVerifier",
+			"value": "ThisIsntRandomButItNeedsToBe43CharactersLong",
+			"type": "string"
+		},
+		{
+			"key": "Auth.Microsoft.RedirectUri",
+			"value": "http://localhost/accounts/login/microsoft/callback",
+			"type": "string"
+		},
+		{
+			"key": "User.Id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "User.Username",
+			"value": "JohnDoe@doamin.com",
+			"type": "string"
+		},
+		{
+			"key": "User.Password",
+			"value": "aBac%v4(dcAfFT13",
+			"type": "string"
+		},
+		{
+			"key": "User.Name",
+			"value": "John Doe",
+			"type": "string"
+		},
+		{
+			"key": "User.EmailAddress",
+			"value": "JohnDoe@doamin.com",
+			"type": "string"
+		},
+		{
+			"key": "User.PhoneNumber",
+			"value": "+4500000000",
+			"type": "string"
+		},
+		{
+			"key": "User.Password.Reset.Token",
+			"value": ""
+		},
+		{
+			"key": "User.Email.Change.Token",
+			"value": ""
+		},
+		{
+			"key": "User.Email.Change.NewEmailAddress",
+			"value": ""
+		},
+		{
+			"key": "User.Email.Confirm.Token",
+			"value": ""
+		},
+		{
+			"key": "User.Phone.Change.Token",
+			"value": ""
+		},
+		{
+			"key": "User.Phone.Change.NewPhoneNumber",
+			"value": ""
+		},
+		{
+			"key": "User.Phone.Confirm.Token",
+			"value": ""
+		},
+		{
+			"key": "Sample.Id",
+			"value": ""
+		},
+		{
+			"key": "Sample.Name",
+			"value": ""
+		},
+		{
+			"key": "Audit.Id",
+			"value": ""
 		}
 	]
 }

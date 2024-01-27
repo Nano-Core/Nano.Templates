@@ -2,7 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
-
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nano.Template.Web", "Nano.Template.Web\Nano.Template.Web.csproj", "{C563A416-5EDD-4228-B8C7-B5AFEC141466}"
 EndProject
@@ -11,8 +10,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".solution", ".solution", "{F9091FFF-8BDF-4447-A4CC-19ACF2F783A3}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		appveyor.yml = appveyor.yml
 		localhost.pfx = localhost.pfx
+		mysql.user.sql = mysql.user.sql
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -26,6 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".tests", ".tests", "{7E0D2A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".kubernetes", ".kubernetes", "{0C4D782F-72EF-42B4-BC1B-AF4044CC863A}"
 	ProjectSection(SolutionItems) = preProject
+		.kubernetes\autoscaler.yaml = .kubernetes\autoscaler.yaml
 		.kubernetes\configmap.yaml = .kubernetes\configmap.yaml
 		.kubernetes\deployment.yaml = .kubernetes\deployment.yaml
 		.kubernetes\service.yaml = .kubernetes\service.yaml
@@ -34,11 +34,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Nano.Template.Web", ".tests\Tests.Nano.Template.Web\Tests.Nano.Template.Web.csproj", "{EA602798-C127-44E3-8CBA-27E9BA269EB7}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", ".docker\docker-compose.dcproj", "{557A0C48-DA6A-4D7C-8668-94F08A390F4B}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".postman", ".postman", "{EA5F5ECD-6FC4-4874-B60F-C3A202880A6D}"
-	ProjectSection(SolutionItems) = preProject
-		.postman\Nano.Template.Web.postman_collection.json = .postman\Nano.Template.Web.postman_collection.json
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nano", ".nano", "{3339F5B7-AA56-4192-B201-75B2620036B1}"
 EndProject
@@ -61,6 +56,25 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nano.Security", "..\..\Nano.Library\Nano.Security\Nano.Security.csproj", "{72F2C0D8-859E-42BE-8153-755EBC9BEBB7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nano.Web", "..\..\Nano.Library\Nano.Web\Nano.Web.csproj", "{7900488D-125F-47D5-95A7-26DB25F8062F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{426FE279-89DF-4C2A-ABBB-729FDA4D893A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{5C605BF3-D5A3-4334-8AFA-4D45A6DC365E}"
+	ProjectSection(SolutionItems) = preProject
+		.github\config\slack.yml = .github\config\slack.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{F547FB13-43D4-4AAB-8629-B41FFF4A251F}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build-and-deploy.yml = .github\workflows\build-and-deploy.yml
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nano.Template.Web.Events", "Nano.Template.Web.Events\Nano.Template.Web.Events.csproj", "{C32E75EA-1A87-421C-B955-88A8D2BAA6BC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".postman", ".postman", "{569F3ADF-1D54-4157-95CD-7BC822ED63E0}"
+	ProjectSection(SolutionItems) = preProject
+		.postman\Nano.Template.Web.postman_collection.json = .postman\Nano.Template.Web.postman_collection.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -123,6 +137,10 @@ Global
 		{7900488D-125F-47D5-95A7-26DB25F8062F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7900488D-125F-47D5-95A7-26DB25F8062F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7900488D-125F-47D5-95A7-26DB25F8062F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C32E75EA-1A87-421C-B955-88A8D2BAA6BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C32E75EA-1A87-421C-B955-88A8D2BAA6BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C32E75EA-1A87-421C-B955-88A8D2BAA6BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C32E75EA-1A87-421C-B955-88A8D2BAA6BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,6 +158,8 @@ Global
 		{600A9B74-BB8C-42BB-96F9-08B8DF7903C6} = {3339F5B7-AA56-4192-B201-75B2620036B1}
 		{72F2C0D8-859E-42BE-8153-755EBC9BEBB7} = {3339F5B7-AA56-4192-B201-75B2620036B1}
 		{7900488D-125F-47D5-95A7-26DB25F8062F} = {3339F5B7-AA56-4192-B201-75B2620036B1}
+		{5C605BF3-D5A3-4334-8AFA-4D45A6DC365E} = {426FE279-89DF-4C2A-ABBB-729FDA4D893A}
+		{F547FB13-43D4-4AAB-8629-B41FFF4A251F} = {426FE279-89DF-4C2A-ABBB-729FDA4D893A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {72ED70A7-E1BB-4D06-B6FD-E092DA575FBE}

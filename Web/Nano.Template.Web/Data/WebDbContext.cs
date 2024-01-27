@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Nano.Data;
 using Nano.Data.Models.Mappings.Extensions;
 using Nano.Template.Web.Data.Mappings;
-using Nano.Template.Web.Models;
+using Nano.Template.Web.Models.Data;
 
 namespace Nano.Template.Web.Data;
 

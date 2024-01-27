@@ -5,25 +5,24 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".dockers", ".dockers", "{8DE3DF8D-7C8E-433A-B325-CECCCE939585}"
 	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
 		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".solution", ".solution", "{8B945C94-7BAF-451C-A622-461B91559C7B}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		appveyor.yml = appveyor.yml
 		localhost.pfx = localhost.pfx
 		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".kubernetes", ".kubernetes", "{A0815236-F5A3-42A6-A6D3-ACD762007A3F}"
 	ProjectSection(SolutionItems) = preProject
+		.kubernetes\autoscaler.yaml = .kubernetes\autoscaler.yaml
 		.kubernetes\configmap.yaml = .kubernetes\configmap.yaml
 		.kubernetes\deployment.yaml = .kubernetes\deployment.yaml
 		.kubernetes\service.yaml = .kubernetes\service.yaml
 	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nano.Template.Api.Models", "Nano.Template.Api.Models\Nano.Template.Api.Models.csproj", "{D996FAB9-CBE0-4A29-82A1-602D5752F0EA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nano.Template.Api", "Nano.Template.Api\Nano.Template.Api.csproj", "{4A8767D6-80F6-4D2A-89CC-C66E008313D9}"
 EndProject
@@ -57,16 +56,29 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nano.Security", "..\..\Nano
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nano.Web", "..\..\Nano.Library\Nano.Web\Nano.Web.csproj", "{6059FB91-B7D4-4497-9457-6934B46688D4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{2531C309-DB58-4F22-AE32-C89D848C1EAD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{ED81B307-0B29-44C0-A919-527D31CEA553}"
+	ProjectSection(SolutionItems) = preProject
+		.github\config\slack.yml = .github\config\slack.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{74171981-09E6-475A-8B5F-6B22A9B07811}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build-and-deploy.yml = .github\workflows\build-and-deploy.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".postman", ".postman", "{E164B498-4562-4F29-ACD6-7A4676D40ED8}"
+	ProjectSection(SolutionItems) = preProject
+		.postman\Nano.Template.Api.postman_collection.json = .postman\Nano.Template.Api.postman_collection.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D996FAB9-CBE0-4A29-82A1-602D5752F0EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D996FAB9-CBE0-4A29-82A1-602D5752F0EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D996FAB9-CBE0-4A29-82A1-602D5752F0EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D996FAB9-CBE0-4A29-82A1-602D5752F0EA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4A8767D6-80F6-4D2A-89CC-C66E008313D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4A8767D6-80F6-4D2A-89CC-C66E008313D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A8767D6-80F6-4D2A-89CC-C66E008313D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -140,6 +152,8 @@ Global
 		{A3310EC3-2503-4BDD-BBC8-32009FF9770E} = {A7A47F2F-CDE5-4033-BB4B-BFB1675F8A64}
 		{0D32D097-410F-4C54-930C-35762BA23D78} = {A7A47F2F-CDE5-4033-BB4B-BFB1675F8A64}
 		{6059FB91-B7D4-4497-9457-6934B46688D4} = {A7A47F2F-CDE5-4033-BB4B-BFB1675F8A64}
+		{ED81B307-0B29-44C0-A919-527D31CEA553} = {2531C309-DB58-4F22-AE32-C89D848C1EAD}
+		{74171981-09E6-475A-8B5F-6B22A9B07811} = {2531C309-DB58-4F22-AE32-C89D848C1EAD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7E1EB40D-7A79-483A-934A-02883E98E157}

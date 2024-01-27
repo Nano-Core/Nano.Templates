@@ -2,8 +2,8 @@
 using Nano.Eventing.Interfaces;
 using Nano.Repository.Interfaces;
 using Nano.Security;
-using Nano.Template.Web.Models;
 using Nano.Template.Web.Models.Criterias;
+using Nano.Template.Web.Models.Data;
 using Nano.Web.Controllers;
 
 namespace Nano.Template.Web.Controllers;

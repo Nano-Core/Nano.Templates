@@ -1,13 +1,13 @@
 ﻿using System;
 using Nano.Models.Types;
-using Nano.Template.Web.Models;
+using Nano.Template.Web.Models.Data;
 
-namespace Nano.Template.Api.Models.Responses.Profiles;
+namespace Nano.Template.Api.Controllers.Responses.Users;
 
 /// <summary>
 /// Get User Response.
 /// </summary>
-public class GetUserResponse
+public class UserResponse
 {
     /// <summary>
     /// Id.
@@ -22,31 +22,25 @@ public class GetUserResponse
     /// <summary>
     /// Email Address.
     /// </summary>
-    public EmailAddress EmailAddress { get; set; }
+    public string EmailAddress { get; set; }
 
     /// <summary>
-    /// Constructor.
+    /// Phone Number.
     /// </summary>
-    public GetUserResponse()
-    {
-
-    }
+    public string PhoneNumber { get; set; }
 
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="user">The <see cref="User"/>.</param>
-    public GetUserResponse(User user)
-        : this()
+    public UserResponse(User user)
     {
         if (user == null)
             throw new ArgumentNullException(nameof(user));
 
         this.Id = user.Id;
         this.Name = user.Name;
-        this.EmailAddress = new EmailAddress
-        {
-            Email = user.IdentityUser.Email
-        };
+        this.EmailAddress = user.IdentityUser.Email;
+        this.PhoneNumber = user.IdentityUser.PhoneNumber;
     }
 }

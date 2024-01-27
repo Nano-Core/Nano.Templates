@@ -15,9 +15,10 @@ Know that in order to take full advantage of Nano, it's hightly recommended to r
 #### Solution / Infrastructure:
 3. When opening the solution, you will see the a set of solution folders.  
    3a. The ```.docker``` folder contains a docker-compose project, used for setting up local environment, and a Dockerfile used for cloud environments. NOTE: Ensure, that the docker-compose is set as the start-up project.  
+   3e. The ```.github``` folder contains files for deploying using GitHub Actions.  
    3b. The ```.kubernetes``` folder contains templates for deploying the application to a kubernetes cluster. Not used in local environment.  
    3c. The ```.postman``` folder contains a collection of requests, that can be imported into Postman, and used to interact with this service locally.  
-   3e. The ```.solution``` folder contains various solution items. Most importantly is the ```appveyor.yml``` file, that is continious-integation. See later.  
+   3e. The ```.solution``` folder contains various solution items.  
    3d. The ```.tests``` folder contains an empty test project, ready for your tests to be implemented.  
 NTOE: The template contains commented-out code for using a MySql database instead of Sql-Server. Inspect the ```docker-compose``` files,  
 
@@ -37,17 +38,15 @@ NOTE: If you choose MySql as data provider, change the provider in the registrat
  
 ### Cloud Deployment
 The solution has configuration for three environemnts: Development, Staging and Production.
-In the appveyor.yml replace the followng environmental variables.
-Describe cofiguation. App.settings vs Appveyor. Different environments, how settings are handled. It should be a secret in Kubernetes and not just config-map
+In the build-and-deploy.yml replace the followng environmental variables.
 
-Ingress in front. Or implemnt layered architecture, where all services are connected to an api.
+Ingress in front. Or implement layered architecture, where all services are connected to an api.
 
 API_ClIENT: Describe how to stack services (api vs svc)
 CREATE DB USER ON CLOUD DATABASE
 MIGRATING!!!!
  
 GutHub
-Appveyor
 Azare ACR - Container Registry.
 Azure AKS - Kubernetes
 

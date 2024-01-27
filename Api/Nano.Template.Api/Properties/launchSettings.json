@@ -1,11 +1,3 @@
 {
-  "Nano.Template.Api": {
-    "commandName": "Project",
-    "launchBrowser": false,
-    "launchUrl": "api/docs",
-    "environmentVariables": {
-      "ASPNETCORE_ENVIRONMENT": "Development"
-    },
-    "applicationUrl": "https://localhost:8443;http://localhost:8080"
-  }
+
 }

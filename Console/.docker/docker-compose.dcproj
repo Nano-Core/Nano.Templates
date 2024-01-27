@@ -10,9 +10,7 @@
     <DockerServiceName>Nano.Template.Console</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="docker-compose.vs.debug.yml">
-      <DependentUpon>docker-compose.yml</DependentUpon>
-    </None>
+    <None Include=".env" />
     <None Include="docker-compose.yml" />
   </ItemGroup>
 </Project>

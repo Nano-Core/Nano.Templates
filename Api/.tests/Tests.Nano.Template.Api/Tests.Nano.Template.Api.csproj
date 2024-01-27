@@ -18,7 +18,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Nano.Template.Api\Nano.Template.Api.csproj" />
-		<ProjectReference Include="..\..\Nano.Template.Api.Models\Nano.Template.Api.Models.csproj" />
 	</ItemGroup>
 
 </Project>

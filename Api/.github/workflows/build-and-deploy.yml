@@ -1,0 +1,177 @@
+name: Build And Deploy
+on:
+  push
+env:
+  APP_NAME: Nano.Template.Api
+  IMAGE_NAME: nano.template.api
+  SERVICE_NAME: nano-template-api
+  VERSION: '${{ vars.VERSION }}.${{ github.run_number }}.${{ github.run_attempt }}'
+  DOTNET_SDK_VERSION: 8.0.101-jammy
+  DOTNET_ASPNET_VERSION: 8.0.1-jammy
+  ENVIRONMENT: ${{ github.ref == 'refs/heads/master' && 'Production' || 'Staging' }}
+  AZURE_GROUP: Kubernetes
+  AZURE_LOCATION: North Europe
+  KUBERNETES_CLUSTER: ${{ github.ref == 'refs/heads/master' && 'production-cluster' || 'staging-cluster' }}
+  KUBERNETES_NAMESPACE: apps
+  KUBERNETES_CPU_REQUEST: 200m
+  KUBERNETES_CPU_LIMIT: 600m
+  KUBERNETES_CPU_SCALING: 180
+  KUBERNETES_MEMORY_REQUEST: 512Mi   
+  KUBERNETES_MEMORY_LIMIT: 1536Mi
+  KUBERNETES_MEMORY_SCALING: 180
+  KUBERNETES_REPLICA_COUNT: ${{ github.ref == 'refs/heads/master' && 3 || 2 }}
+  KUBERNETES_REPLICA_HISTORY_COUNT: 0
+  KUBERNETES_REPLICA_COUNT_MAX: ${{ github.ref == 'refs/heads/master' && 8 || 5 }}
+  ASPNETCORE_ENVIRONMENT: ${{ github.ref == 'refs/heads/master' && 'Production' || 'Staging' }}
+  AZURE_WORKSPACE_NAME: DefaultWorkspace
+  AZURE_MONITOR_ACTION_GROUP_NAME: monitor-action-group
+  APPLICATION_INSIGHT_AVAILABILITY_URI: ${{ github.ref == 'refs/heads/master' && 'https://domain.com/healthz' || 'https://domain.com/healthz' }}
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    concurrency:
+      group: ${{ github.repository }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set Environmental Variables
+        id: set-variables
+        shell: pwsh
+        run: |
+          if ('${{ github.ref }}' -eq 'refs/heads/master') {
+            echo "AZURE_SUBSCRIPTION_ID=${{ secrets.PRODUCTION_AZURE_SUBSCRIPTION_ID }}" >> $env:GITHUB_ENV;
+            echo "AZURE_ACR_HOST=${{ secrets.PRODUCTION_AZURE_ACR_HOST }}" >> $env:GITHUB_ENV;
+            echo "AZURE_ACR_USERNAME=${{ secrets.PRODUCTION_AZURE_ACR_USERNAME }}" >> $env:GITHUB_ENV;
+            echo "AZURE_ACR_PASSWORD=${{ secrets.PRODUCTION_AZURE_ACR_PASSWORD }}" >> $env:GITHUB_ENV;
+          }
+          else {
+            echo "AZURE_SUBSCRIPTION_ID=${{ secrets.STAGING_AZURE_SUBSCRIPTION_ID }}" >> $env:GITHUB_ENV;
+            echo "AZURE_ACR_HOST=${{ secrets.STAGING_AZURE_ACR_HOST }}" >> $env:GITHUB_ENV;
+            echo "AZURE_ACR_USERNAME=${{ secrets.STAGING_AZURE_ACR_USERNAME }}" >> $env:GITHUB_ENV;
+            echo "AZURE_ACR_PASSWORD=${{ secrets.STAGING_AZURE_ACR_PASSWORD }}" >> $env:GITHUB_ENV;
+          }
+
+      - name: Build and Deploy
+        shell: pwsh
+        run: |
+          dotnet nuget add source ${{ secrets.NUGET_HOST }} -n private -u ${{ secrets.NUGET_USERNAME }} -p ${{ secrets.NUGET_PASSWORD }} --store-password-in-clear-text;
+          dotnet build -c Release .\$env:APP_NAME.sln;
+          if ($LastExitCode -ne 0)
+          { 
+            throw "error";
+          };
+          dotnet test .\.tests\Tests.$env:APP_NAME\Tests.$env:APP_NAME.csproj;
+          if ($LastExitCode -ne 0)
+          { 
+            throw "error";
+          };
+
+          sudo az login --service-principal -u "${{ secrets.AZURE_CLIENT_ID }}" -p "${{ secrets.AZURE_CLIENT_SECRET }}" --tenant "${{ secrets.AZURE_TENANT_ID }}" -o none;
+          sudo az account set -s $env:AZURE_SUBSCRIPTION_ID -o none;
+          sudo az aks get-credentials -g "${{ vars.AZURE_KUBERNETES_RESOURCE_GROUP }}" -n $env:KUBERNETES_CLUSTER --overwrite -o none;
+          
+          #sudo az extension add -n application-insights;
+
+          # $env:SERVICE_NAME_INSIGTHS = $env:SERVICE_NAME + "-insights";
+          # $env:APPLICATION_INSIGHT_ID = sudo az monitor app-insights component show -g $env:AZURE_GROUP --query "[?contains(name, '$env:SERVICE_NAME_INSIGTHS')].[id]" -o tsv;
+          # if ([string]::IsNullOrEmpty($env:APPLICATION_INSIGHT_ID))
+          # {
+          #   $env:WORKSPACE_ID = sudo az monitor log-analytics workspace list --query "[?contains(name, '$env:AZURE_WORKSPACE_NAME')].[id]" -o tsv;
+          #   sudo az monitor app-insights component create -a $env:SERVICE_NAME_INSIGTHS -l $env:AZURE_LOCATION -g $env:AZURE_GROUP --workspace $env:WORKSPACE_ID;
+
+          #   $env:APPLICATION_INSIGHT_ID = sudo az monitor app-insights component show -g $env:AZURE_GROUP --query "[?contains(name, '$env:SERVICE_NAME_INSIGTHS')].[id]" -o tsv;
+          #   $env:ACTION_GROUP_NAME = sudo az monitor action-group list -g Kubernetes --query "[?groupShortName == 'SmartDetect'].name" -o tsv;
+        
+          #   $AD_USERS = (sudo az ad group member list -g "Admin" --query "[].[userPrincipalName]" -o tsv);
+          #   foreach ($USER in $AD_USERS) 
+          #   {
+          #       $USER_NAME = sudo az ad user list --upn $USER --query "[0].[displayName]" -o tsv;
+          #       $USER_EMAIL = sudo az ad user list --upn $USER --query "[0].[mail]" -o tsv;
+          #       sudo az monitor action-group update -n $env:ACTION_GROUP_NAME -g $env:AZURE_GROUP --add-action azureapppush $USER.Name $USER.Email;    
+          #   }
+          # };
+
+          # $env:SERVICE_NAME_AVAILABILITY = $env:SERVICE_NAME +'-availability-' + $env:ENVIRONMENT;
+          # $env:APPLICATION_INSIGHT_CONNECTIONSTRING = sudo az monitor app-insights component show -g $env:AZURE_GROUP --query "[?contains(id, '$env:APPLICATION_INSIGHT_ID')].[connectionString]" -o tsv;
+
+          # $env:APPLICATION_INSIGHT_AVAILABILITY_ID = sudo az monitor app-insights web-test list -g $env:AZURE_GROUP --query "[?contains(name, '$env:SERVICE_NAME_AVAILABILITY')].[id]" -o tsv;
+          # if ([string]::IsNullOrEmpty($env:APPLICATION_INSIGHT_AVAILABILITY_ID))
+          # {
+          #   $env:APPLICATION_INSIGHT_HIDDEN_LINK = 'hidden-link:' + $env:APPLICATION_INSIGHT_ID + '=Resource';
+          #   sudo az monitor app-insights web-test create -n $env:SERVICE_NAME_AVAILABILITY --defined-web-test-name $env:SERVICE_NAME_AVAILABILITY -g $env:AZURE_GROUP -l $env:AZURE_LOCATION --kind 'multistep' --web-test-kind standard --enabled true --retry-enabled true --ssl-check true --ssl-lifetime-check 30 --http-verb GET --request-url $env:APPLICATION_INSIGHT_AVAILABILITY_URI --expected-status-code 200 --content-validation content-match='\"status\":\"unhealthy\"' ignore-case=true pass-if-text-found=false --tags $env:APPLICATION_INSIGHT_HIDDEN_LINK --locations Id='us-ca-sjc-azr' --locations Id='us-va-ash-azr' --locations Id='emea-gb-db3-azr' --locations Id='emea-nl-ams-azr' --locations Id='apac-hk-hkn-azr';
+
+          #   # The alert rule won't be created before the application insight availability is manually edited and saved in Azure Portal;
+
+          #   $env:ALERT_ACTION_GROUP = sudo az monitor action-group list -g Monitoring --query "[?contains(name, '$env:AZURE_MONITOR_ACTION_GROUP_NAME')].[id]" -o tsv;
+          #   $env:AVAILABILITY_ALERT_ID = sudo az monitor metrics alert list --query "[?name=='SERVICE_NAME_AVAILABILITY'].[id]" -o tsv;
+          #   sudo az monitor metrics alert update --ids $env:AVAILABILITY_ALERT_ID --add-action $env:ALERT_ACTION_GROUP --enabled true
+          # };
+          # if ($LastExitCode -ne 0)
+          # { 
+          #   throw "error";
+          # };
+
+          sudo docker build `
+            -t $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":latest" `
+            -t $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":"$env:VERSION `
+            --build-arg DOTNET_SDK_VERSION=$env:DOTNET_SDK_VERSION `
+            --build-arg DOTNET_ASPNET_VERSION=$env:DOTNET_ASPNET_VERSION `
+            --build-arg NUGET_HOST=${{ secrets.NUGET_HOST }} `
+            --build-arg NUGET_USERNAME=${{ secrets.NUGET_USERNAME }} `
+            --build-arg NUGET_PASSWORD=${{ secrets.NUGET_PASSWORD }} `
+            ./;
+
+          if ($LastExitCode -ne 0) 
+          { 
+            throw "error";
+          };
+
+          sudo docker login -u="$env:AZURE_ACR_USERNAME" -p="$env:AZURE_ACR_PASSWORD" $env:AZURE_ACR_HOST;
+          sudo docker push $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":latest";
+          sudo docker push $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":"$env:VERSION;
+          if ($LastExitCode -ne 0) 
+          { 
+            throw "error";
+          };  
+
+          Get-Content .kubernetes/service.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/service.tmp.yaml;
+          Get-Content .kubernetes/configmap.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/configmap.tmp.yaml;
+          Get-Content .kubernetes/deployment.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/deployment.tmp.yaml;
+          Get-Content .kubernetes/autoscaler.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/autoscaler.tmp.yaml;
+
+          sudo kubectl apply -f .kubernetes/service.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+            throw "error";
+          };
+
+          sudo kubectl apply -f .kubernetes/configmap.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+            throw "error";
+          };
+
+          sudo kubectl apply -f .kubernetes/deployment.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+            throw "error";
+          };
+
+          sudo kubectl apply -f .kubernetes/autoscaler.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+            throw "error";
+          };
+
+      - name: Slack Notification
+        if: always()
+        uses: act10ns/slack@v2
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK }}
+          config: .github/config/slack.yml
+          status: ${{ job.status }}
+          channel: ${{ vars.SLACK_CHANNEL }}

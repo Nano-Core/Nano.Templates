@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Nano.Template.Web.Models;
+namespace Nano.Template.Web.Models.Data;
 
 /// <summary>
 /// Derived Sample 2.

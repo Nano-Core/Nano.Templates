@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Nano.Data.Models.Mappings;
-using Nano.Template.Web.Models;
+using Nano.Template.Web.Models.Data;
 
 namespace Nano.Template.Web.Data.Mappings;
 
@@ -29,5 +29,8 @@ public class SampleMapping : DefaultEntityMapping<Sample>
 
         builder
             .HasIndex(x => x.Name);
+
+        builder
+            .Ignore(x => x.HasName);
     }
 }

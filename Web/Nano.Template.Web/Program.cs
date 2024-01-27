@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Nano.Data.Extensions;
 using Nano.Data.Providers.MySql;
-//using Nano.Data.Providers.SqlServer;
 using Nano.Eventing.Extensions;
 using Nano.Eventing.Providers.EasyNetQ;
 using Nano.Logging.Extensions;
@@ -29,7 +28,7 @@ public class Program
             .ConfigureServices(x =>
             {
                 x.AddLogging<SerilogProvider>();
-                x.AddDataContext</*SqlServerProvider*/MySqlProvider, WebDbContext>();
+                x.AddDataContext<MySqlProvider, WebDbContext>();
                 x.AddEventing<EasyNetQProvider>();
 
                 x.AddSingleton<ISampleService, SampleService>();

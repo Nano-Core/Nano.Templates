@@ -19,13 +19,37 @@ spec:
       securityContext:
         runAsUser: 1000
         runAsGroup: 2000 
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              name: %SERVICE_NAME%  
+      automountServiceAccountToken: false
       containers:
       - name: %SERVICE_NAME%
-        image: %DOCKER_REGISTRY%/%APP_NAME%:%APP_VERSION%
+        image: %AZURE_ACR_HOST%/%APP_NAME%:%VERSION%
         ports:
-        - containerPort: 80
-        - containerPort: 443
+        - containerPort: 8080
+        - containerPort: 4443
         imagePullPolicy: Always 
+        env:
+        - name: Eventing__Password
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq
+              key: rabbitmq-password
+        - name: Security__Jwt__PublicKey
+          valueFrom:
+            secretKeyRef:
+              name: auth-jwt-keys-secret
+              key: jwt-public-key
+        - name: Security__Jwt__PrivateKey
+          valueFrom:
+            secretKeyRef:
+              name: auth-jwt-keys-secret
+              key: jwt-private-key
         envFrom:
         - configMapRef:
             name: %SERVICE_NAME%-config
@@ -49,22 +73,29 @@ spec:
         livenessProbe:
           httpGet:
             path: /healthz
-            port: 80
+            port: 8080
             scheme: HTTP
           periodSeconds: 10
-          initialDelaySeconds: 30
+          initialDelaySeconds: 20
         readinessProbe:
           httpGet:
             path: /healthz
-            port: 80
+            port: 8080
             scheme: HTTP
           periodSeconds: 5
           initialDelaySeconds: 10
         volumeMounts:
         - name: tmp
           mountPath: /tmp
+        - name: %SERVICE_NAME%-volume
+          mountPath: /mnt/%STORAGE_SHARE_NAME%
       volumes:
       - name: tmp
         emptyDir: {}
+      - name: %SERVICE_NAME%-volume
+        azureFile:
+          secretName: storage-account-secret
+          shareName: %STORAGE_SHARE_NAME%
+          readOnly: false
       imagePullSecrets:
       - name: docker-registry-secret

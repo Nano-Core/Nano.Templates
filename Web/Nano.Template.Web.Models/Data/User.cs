@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Nano.Models;
 
-namespace Nano.Template.Web.Models;
+namespace Nano.Template.Web.Models.Data;
 
 /// <summary>
 /// User.

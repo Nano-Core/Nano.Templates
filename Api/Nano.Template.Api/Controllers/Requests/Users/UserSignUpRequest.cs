@@ -1,12 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Nano.Models.Types;
 
-namespace Nano.Template.Api.Models.Requests.Profiles;
+namespace Nano.Template.Api.Controllers.Requests.Users;
 
 /// <summary>
-/// Sign Up Request.
+/// User Sign Up Request.
 /// </summary>
-public class SignUpRequest
+public class UserSignUpRequest
 {
     /// <summary>
     /// Name.
@@ -19,7 +18,14 @@ public class SignUpRequest
     /// Email Address.
     /// </summary>
     [Required]
-    public virtual EmailAddress EmailAddress { get; set; } = new();
+    [EmailAddress]
+    public virtual string EmailAddress { get; set; }
+
+    /// <summary>
+    /// Phone Number.
+    /// </summary>
+    [Phone]
+    public virtual string PhoneNumber { get; set; }
 
     /// <summary>
     /// Password.

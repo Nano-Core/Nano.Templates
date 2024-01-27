@@ -4,8 +4,6 @@ metadata:
   name: %SERVICE_NAME%-config
   namespace: %KUBERNETES_NAMESPACE%
 data:
+  App__Version: %VERSION%
   ASPNETCORE_ENVIRONMENT: %ENVIRONMENT%
-  App__Version: %APP_VERSION%
   Data__ConnectionString: %DATA_CONNECTIONSTRING%
-  Eventing__Username: %EVENTING_USERNAME%
-  Eventing__Password: %EVENTING_PASSWORD%

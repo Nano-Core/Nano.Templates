@@ -9,6 +9,7 @@
     <DockerServiceName>nano.template.api</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Include=".env" />
     <None Include="docker-compose.yml" />
   </ItemGroup>
 </Project>

@@ -12,9 +12,9 @@ using Nano.Models;
 using Nano.Models.Const;
 using Nano.Template.Api.Models.Requests.Samples;
 using Nano.Template.Api.Models.Responses.Samples;
-using Nano.Template.Web.Models;
 using Nano.Template.Web.Models.Api;
 using Nano.Template.Web.Models.Criterias;
+using Nano.Template.Web.Models.Data;
 using Nano.Web.Controllers;
 
 namespace Nano.Template.Api.Controllers;

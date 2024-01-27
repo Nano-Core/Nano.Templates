@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Nano.Template.Api.Models.Requests.Profiles;
+namespace Nano.Template.Api.Controllers.Requests.Users;
 
 /// <summary>
-/// Log-In Request.
+/// User Log In Request.
 /// </summary>
-public class SignInRequest
+public class UserLogInRequest
 {
     /// <summary>
     /// App Id.
@@ -14,7 +14,7 @@ public class SignInRequest
     public virtual string AppId { get; set; }
 
     /// <summary>
-    /// Username (email).
+    /// Username.
     /// </summary>
     [Required]
     [MaxLength(256)]
