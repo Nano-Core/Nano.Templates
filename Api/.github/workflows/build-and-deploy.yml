@@ -26,6 +26,7 @@ env:
   AZURE_WORKSPACE_NAME: DefaultWorkspace
   AZURE_MONITOR_ACTION_GROUP_NAME: monitor-action-group
   APPLICATION_INSIGHT_AVAILABILITY_URI: ${{ github.ref == 'refs/heads/master' && 'https://domain.com/healthz' || 'https://domain.com/healthz' }}
+  NONCE_TOKEN: @@EC7AB5F8F500DC90338DC6C28443727568DB49F01CFC2E2861A14A3556681879@@
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest

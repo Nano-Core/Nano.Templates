@@ -6,5 +6,6 @@ metadata:
 data:
   App__Version: %VERSION%
   ASPNETCORE_ENVIRONMENT: %ENVIRONMENT%
+  Web__Documentation__CspNonce: %NONCE_TOKEN%
   #Monitoring__ConnectionString: %APPLICATION_INSIGHT_CONNECTIONSTRING%
 
