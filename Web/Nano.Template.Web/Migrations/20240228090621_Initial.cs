@@ -117,7 +117,7 @@ namespace Nano.Template.Web.Migrations
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Name = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    type = table.Column<string>(type: "longtext", nullable: false)
+                    type = table.Column<string>(type: "varchar(21)", maxLength: 21, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Description = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -434,11 +434,6 @@ namespace Nano.Template.Web.Migrations
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_Name",
-                table: "User",
-                column: "Name");
-
-            migrationBuilder.CreateIndex(
                 name: "UX_User_IdentityUserId",
                 table: "User",
                 column: "IdentityUserId",
@@ -448,6 +443,12 @@ namespace Nano.Template.Web.Migrations
                 name: "UX_User_IdentityUserId_IsDeleted",
                 table: "User",
                 columns: new[] { "IdentityUserId", "IsDeleted" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "UX_User_Name_IsDeleted",
+                table: "User",
+                columns: new[] { "Name", "IsDeleted" },
                 unique: true);
         }
 

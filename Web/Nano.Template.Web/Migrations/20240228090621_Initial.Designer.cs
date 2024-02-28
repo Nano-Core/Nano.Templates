@@ -11,7 +11,7 @@ using Nano.Template.Web.Data;
 namespace Nano.Template.Web.Migrations
 {
     [DbContext(typeof(WebDbContext))]
-    [Migration("20230414080035_Initial")]
+    [Migration("20240228090621_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -19,7 +19,7 @@ namespace Nano.Template.Web.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Microsoft.AspNetCore.DataProtection.EntityFrameworkCore.DataProtectionKey", b =>
@@ -339,7 +339,7 @@ namespace Nano.Template.Web.Migrations
                     b.ToTable("__EFAuthUserToken", (string)null);
                 });
 
-            modelBuilder.Entity("Nano.Template.Web.Models.Sample", b =>
+            modelBuilder.Entity("Nano.Template.Web.Models.Data.Sample", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -361,7 +361,8 @@ namespace Nano.Template.Web.Migrations
 
                     b.Property<string>("type")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(21)
+                        .HasColumnType("varchar(21)");
 
                     b.HasKey("Id");
 
@@ -378,7 +379,7 @@ namespace Nano.Template.Web.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("Nano.Template.Web.Models.User", b =>
+            modelBuilder.Entity("Nano.Template.Web.Models.Data.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -411,18 +412,20 @@ namespace Nano.Template.Web.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.HasIndex("Name");
-
                     b.HasIndex("IdentityUserId", "IsDeleted")
                         .IsUnique()
                         .HasDatabaseName("UX_User_IdentityUserId_IsDeleted");
 
+                    b.HasIndex("Name", "IsDeleted")
+                        .IsUnique()
+                        .HasDatabaseName("UX_User_Name_IsDeleted");
+
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("Nano.Template.Web.Models.DerivedSample1", b =>
+            modelBuilder.Entity("Nano.Template.Web.Models.Data.DerivedSample1", b =>
                 {
-                    b.HasBaseType("Nano.Template.Web.Models.Sample");
+                    b.HasBaseType("Nano.Template.Web.Models.Data.Sample");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -432,9 +435,9 @@ namespace Nano.Template.Web.Migrations
                     b.HasDiscriminator().HasValue("DerivedSample1");
                 });
 
-            modelBuilder.Entity("Nano.Template.Web.Models.DerivedSample2", b =>
+            modelBuilder.Entity("Nano.Template.Web.Models.Data.DerivedSample2", b =>
                 {
-                    b.HasBaseType("Nano.Template.Web.Models.Sample");
+                    b.HasBaseType("Nano.Template.Web.Models.Data.Sample");
 
                     b.Property<string>("Summary")
                         .IsRequired()
@@ -506,11 +509,11 @@ namespace Nano.Template.Web.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Nano.Template.Web.Models.User", b =>
+            modelBuilder.Entity("Nano.Template.Web.Models.Data.User", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", "IdentityUser")
                         .WithOne()
-                        .HasForeignKey("Nano.Template.Web.Models.User", "IdentityUserId")
+                        .HasForeignKey("Nano.Template.Web.Models.Data.User", "IdentityUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

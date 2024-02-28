@@ -22,6 +22,7 @@ public class UserMapping : DefaultEntityUserMapping<User>
             .IsRequired();
 
         builder
-            .HasIndex(x => x.Name);
+            .HasIndex(x => x.Name)
+            .IsUnique();
     }
 }
