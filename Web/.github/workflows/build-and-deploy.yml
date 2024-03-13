@@ -13,8 +13,7 @@ env:
   MYSQL_DATABASE_NAME: webDb
   MYSQL_DATABASE_USER: nano-template-web-user
   AZURE_GROUP: Kubernetes
-  KUBERNETES_CLUSTER: ${{ github.ref == 'refs/heads/master' && 'production-cluster' || 'staging-cluster' }}
-  KUBERNETES_NAMESPACE: apps
+  KUBERNETES_NAMESPACE: default
   KUBERNETES_CPU_REQUEST: 200m
   KUBERNETES_CPU_LIMIT: 600m
   KUBERNETES_CPU_SCALING: 180
@@ -47,6 +46,7 @@ jobs:
             echo "AZURE_ACR_HOST=${{ secrets.PRODUCTION_AZURE_ACR_HOST }}" >> $env:GITHUB_ENV;
             echo "AZURE_ACR_USERNAME=${{ secrets.PRODUCTION_AZURE_ACR_USERNAME }}" >> $env:GITHUB_ENV;
             echo "AZURE_ACR_PASSWORD=${{ secrets.PRODUCTION_AZURE_ACR_PASSWORD }}" >> $env:GITHUB_ENV;
+            echo "KUBERNETES_CLUSTER=${{ secrets.PRODUCTION_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
             echo "NANO_AUTH_JWT_PUBLIC_KEY=${{ secrets.PRODUCTION_NANO_AUTH_JWT_PUBLIC_KEY }}" >> $env:GITHUB_ENV;
             echo "NANO_AUTH_JWT_PRIVATE_KEY=${{ secrets.PRODUCTION_NANO_AUTH_JWT_PRIVATE_KEY }}" >> $env:GITHUB_ENV;
             echo "MYSQL_CONNECTIONSTRING=Server=${{ secrets.PRODUCTION_MYSQL_HOST }};Port=${{ vars.MYSQL_PORT }};Database=$env:MYSQL_DATABASE_NAME;Uid=$env:MYSQL_DATABASE_USER;Pwd=${{ secrets.PRODUCTION_MYSQL_WEB_DB_PASSWORD }};SslMode=Preferred;" >> $env:GITHUB_ENV;
@@ -59,6 +59,7 @@ jobs:
             echo "AZURE_ACR_HOST=${{ secrets.STAGING_AZURE_ACR_HOST }}" >> $env:GITHUB_ENV;
             echo "AZURE_ACR_USERNAME=${{ secrets.STAGING_AZURE_ACR_USERNAME }}" >> $env:GITHUB_ENV;
             echo "AZURE_ACR_PASSWORD=${{ secrets.STAGING_AZURE_ACR_PASSWORD }}" >> $env:GITHUB_ENV;
+            echo "KUBERNETES_CLUSTER=${{ secrets.STAGING_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
             echo "NANO_AUTH_JWT_PUBLIC_KEY=${{ secrets.STAGING_NANO_AUTH_JWT_PUBLIC_KEY }}" >> $env:GITHUB_ENV;
             echo "NANO_AUTH_JWT_PRIVATE_KEY=${{ secrets.STAGING_NANO_AUTH_JWT_PRIVATE_KEY }}" >> $env:GITHUB_ENV;
             echo "MYSQL_CONNECTIONSTRING=Server=${{ secrets.STAGING_MYSQL_HOST }};Port=${{ vars.MYSQL_PORT }};Database=$env:MYSQL_DATABASE_NAME;Uid=$env:MYSQL_DATABASE_USER;Pwd=${{ secrets.STAGING_MYSQL_WEB_DB_PASSWORD }};SslMode=Preferred;" >> $env:GITHUB_ENV;

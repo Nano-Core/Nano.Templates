@@ -57,7 +57,5 @@ spec:
           volumes:
           - name: tmp
             emptyDir: {}
-          imagePullSecrets:
-          - name: docker-registry-secret
 
 

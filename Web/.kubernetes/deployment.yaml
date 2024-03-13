@@ -30,7 +30,7 @@ spec:
       automountServiceAccountToken: false
       containers:
       - name: %SERVICE_NAME%
-        image: %AZURE_ACR_HOST%/%APP_NAME%:%VERSION%
+        image: %AZURE_ACR_HOST%/%IMAGE_NAME%:%VERSION%
         ports:
         - containerPort: 8080
         - containerPort: 4443
@@ -72,19 +72,15 @@ spec:
             drop:
             - ALL
         livenessProbe:
-          httpGet:
-            path: /healthz
+          tcpSocket:
             port: 8080
-            scheme: HTTP
-          periodSeconds: 10
-          initialDelaySeconds: 20
+          periodSeconds: 20
+          initialDelaySeconds: 25
         readinessProbe:
-          httpGet:
-            path: /healthz
+          tcpSocket:
             port: 8080
-            scheme: HTTP
           periodSeconds: 5
-          initialDelaySeconds: 10
+          initialDelaySeconds: 20
         volumeMounts:
         - name: tmp
           mountPath: /tmp
@@ -98,5 +94,4 @@ spec:
           secretName: storage-account-secret
           shareName: %STORAGE_SHARE_NAME%
           readOnly: false
-      imagePullSecrets:
-      - name: docker-registry-secret
+

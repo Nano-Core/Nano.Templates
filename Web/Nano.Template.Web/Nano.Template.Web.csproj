@@ -6,9 +6,9 @@
 		<OutputType>Exe</OutputType>
 		<Version>1.0.0.0</Version>
 		<AssemblyVersion>1.0.0.0</AssemblyVersion>
-		<WarningsAsErrors />
+		<!--<WarningsAsErrors />
 		<NoWarn />
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>-->
 		<UserSecretsId>ea7b387b-00d6-4018-a791-705c74d450ad</UserSecretsId>
 		<DocumentationFile>$(MSBuildThisFileDirectory)\bin\$(Configuration)\Nano.Template.Web.xml</DocumentationFile>
 	</PropertyGroup>
@@ -31,6 +31,10 @@
 			<Generator>PublicResXFileCodeGenerator</Generator>
 			<LastGenOutput>Exceptions.Designer.cs</LastGenOutput>
 		</EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Migrations\" />
 	</ItemGroup>
 
 </Project>

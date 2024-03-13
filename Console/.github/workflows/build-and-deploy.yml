@@ -9,8 +9,7 @@ env:
   DOTNET_SDK_VERSION: 7.0.403-jammy
   DOTNET_ASPNET_VERSION: 7.0.13-jammy
   AZURE_GROUP: Kubernetes
-  KUBERNETES_CLUSTER: ${{ github.ref == 'refs/heads/master' && 'live-cluster' || 'staging-cluster' }}
-  KUBERNETES_NAMESPACE: apps
+  KUBERNETES_NAMESPACE: default
   KUBERNETES_CPU_REQUEST: 50m
   KUBERNETES_CPU_LIMIT: 150m
   KUBERNETES_MEMORY_REQUEST: 256Mi
@@ -41,6 +40,7 @@ jobs:
             echo "AZURE_ACR_HOST=${{ secrets.LIVE_AZURE_ACR_HOST }}" >> $env:GITHUB_ENV;
             echo "AZURE_ACR_USERNAME=${{ secrets.LIVE_AZURE_ACR_USERNAME }}" >> $env:GITHUB_ENV;
             echo "AZURE_ACR_PASSWORD=${{ secrets.LIVE_AZURE_ACR_PASSWORD }}" >> $env:GITHUB_ENV;
+            echo "KUBERNETES_CLUSTER=${{ secrets.PRODUCTION_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
             echo "MYSQL_CONNECTIONSTRING=Server=${{ secrets.PRODUCTION_MYSQL_HOST }};Port=${{ vars.MYSQL_PORT }};Database=$env:MYSQL_DATABASE_NAME;Uid=$env:MYSQL_DATABASE_USER;Pwd=${{ secrets.PRODUCTION_MYSQL_WEB_DB_PASSWORD }};SslMode=Preferred;" >> $env:GITHUB_ENV;
             echo "MYSQL_MIGRATION_CONNECTIONSTRING=Server=${{ secrets.PRODUCTION_MYSQL_HOST }};Port=${{ vars.MYSQL_PORT }};Database=$env:MYSQL_DATABASE_NAME;Uid=${{ secrets.PRODUCTION_MYSQL_ADMIN_USER }};Pwd=${{ secrets.PRODUCTION_MYSQL_ADMIN_PASSWORD }};SslMode=Preferred;" >> $env:GITHUB_ENV;
           }
@@ -49,6 +49,7 @@ jobs:
             echo "AZURE_ACR_HOST=${{ secrets.STAGING_AZURE_ACR_HOST }}" >> $env:GITHUB_ENV;
             echo "AZURE_ACR_USERNAME=${{ secrets.STAGING_AZURE_ACR_USERNAME }}" >> $env:GITHUB_ENV;
             echo "AZURE_ACR_PASSWORD=${{ secrets.STAGING_AZURE_ACR_PASSWORD }}" >> $env:GITHUB_ENV;
+            echo "KUBERNETES_CLUSTER=${{ secrets.STAGING_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
             echo "MYSQL_CONNECTIONSTRING=Server=${{ secrets.STAGING_MYSQL_HOST }};Port=${{ vars.MYSQL_PORT }};Database=$env:MYSQL_DATABASE_NAME;Uid=$env:MYSQL_DATABASE_USER;Pwd=${{ secrets.STAGING_MYSQL_WEB_DB_PASSWORD }};SslMode=Preferred;" >> $env:GITHUB_ENV;
             echo "MYSQL_MIGRATION_CONNECTIONSTRING=Server=${{ secrets.STAGING_MYSQL_HOST }};Port=${{ vars.MYSQL_PORT }};Database=$env:MYSQL_DATABASE_NAME;Uid=${{ secrets.STAGING_MYSQL_ADMIN_USER }};Pwd=${{ secrets.STAGING_MYSQL_ADMIN_PASSWORD }};SslMode=Preferred;" >> $env:GITHUB_ENV;
           }

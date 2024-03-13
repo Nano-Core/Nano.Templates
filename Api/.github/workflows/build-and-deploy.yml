@@ -11,8 +11,7 @@ env:
   ENVIRONMENT: ${{ github.ref == 'refs/heads/master' && 'Production' || 'Staging' }}
   AZURE_GROUP: Kubernetes
   AZURE_LOCATION: North Europe
-  KUBERNETES_CLUSTER: ${{ github.ref == 'refs/heads/master' && 'production-cluster' || 'staging-cluster' }}
-  KUBERNETES_NAMESPACE: apps
+  KUBERNETES_NAMESPACE: default
   KUBERNETES_CPU_REQUEST: 200m
   KUBERNETES_CPU_LIMIT: 600m
   KUBERNETES_CPU_SCALING: 180
@@ -23,10 +22,6 @@ env:
   KUBERNETES_REPLICA_HISTORY_COUNT: 0
   KUBERNETES_REPLICA_COUNT_MAX: ${{ github.ref == 'refs/heads/master' && 8 || 5 }}
   ASPNETCORE_ENVIRONMENT: ${{ github.ref == 'refs/heads/master' && 'Production' || 'Staging' }}
-  AZURE_WORKSPACE_NAME: DefaultWorkspace
-  AZURE_MONITOR_ACTION_GROUP_NAME: monitor-action-group
-  APPLICATION_INSIGHT_AVAILABILITY_URI: ${{ github.ref == 'refs/heads/master' && 'https://domain.com/healthz' || 'https://domain.com/healthz' }}
-  NONCE_TOKEN: @@EC7AB5F8F500DC90338DC6C28443727568DB49F01CFC2E2861A14A3556681879@@
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -48,12 +43,18 @@ jobs:
             echo "AZURE_ACR_HOST=${{ secrets.PRODUCTION_AZURE_ACR_HOST }}" >> $env:GITHUB_ENV;
             echo "AZURE_ACR_USERNAME=${{ secrets.PRODUCTION_AZURE_ACR_USERNAME }}" >> $env:GITHUB_ENV;
             echo "AZURE_ACR_PASSWORD=${{ secrets.PRODUCTION_AZURE_ACR_PASSWORD }}" >> $env:GITHUB_ENV;
+            echo "KUBERNETES_CLUSTER=${{ secrets.PRODUCTION_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
+            echo "NONCE_TOKEN=${{ secrets.PRODUCTION_WEB_NONCE_TOKEN }}" >> $env:GITHUB_ENV;
+            echo "APPLICATION_INSIGHT_AVAILABILITY_URI=https://api.${{ secrets.PRODUCTION_HOST }}/healthz" >> $env:GITHUB_ENV;
           }
           else {
             echo "AZURE_SUBSCRIPTION_ID=${{ secrets.STAGING_AZURE_SUBSCRIPTION_ID }}" >> $env:GITHUB_ENV;
             echo "AZURE_ACR_HOST=${{ secrets.STAGING_AZURE_ACR_HOST }}" >> $env:GITHUB_ENV;
             echo "AZURE_ACR_USERNAME=${{ secrets.STAGING_AZURE_ACR_USERNAME }}" >> $env:GITHUB_ENV;
             echo "AZURE_ACR_PASSWORD=${{ secrets.STAGING_AZURE_ACR_PASSWORD }}" >> $env:GITHUB_ENV;
+            echo "KUBERNETES_CLUSTER=${{ secrets.STAGING_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
+            echo "NONCE_TOKEN=${{ secrets.STAGING_WEB_NONCE_TOKEN }}" >> $env:GITHUB_ENV;
+            echo "APPLICATION_INSIGHT_AVAILABILITY_URI=https://api.${{ secrets.STAGING_HOST }}/healthz" >> $env:GITHUB_ENV;
           }
 
       - name: Build and Deploy
@@ -81,7 +82,7 @@ jobs:
           # $env:APPLICATION_INSIGHT_ID = sudo az monitor app-insights component show -g $env:AZURE_GROUP --query "[?contains(name, '$env:SERVICE_NAME_INSIGTHS')].[id]" -o tsv;
           # if ([string]::IsNullOrEmpty($env:APPLICATION_INSIGHT_ID))
           # {
-          #   $env:WORKSPACE_ID = sudo az monitor log-analytics workspace list --query "[?contains(name, '$env:AZURE_WORKSPACE_NAME')].[id]" -o tsv;
+          #   $env:WORKSPACE_ID = sudo az monitor log-analytics workspace list -g Logs --query "[0].[id]" -o tsv;
           #   sudo az monitor app-insights component create -a $env:SERVICE_NAME_INSIGTHS -l $env:AZURE_LOCATION -g $env:AZURE_GROUP --workspace $env:WORKSPACE_ID;
 
           #   $env:APPLICATION_INSIGHT_ID = sudo az monitor app-insights component show -g $env:AZURE_GROUP --query "[?contains(name, '$env:SERVICE_NAME_INSIGTHS')].[id]" -o tsv;
@@ -107,7 +108,7 @@ jobs:
 
           #   # The alert rule won't be created before the application insight availability is manually edited and saved in Azure Portal;
 
-          #   $env:ALERT_ACTION_GROUP = sudo az monitor action-group list -g Monitoring --query "[?contains(name, '$env:AZURE_MONITOR_ACTION_GROUP_NAME')].[id]" -o tsv;
+          #   $env:ALERT_ACTION_GROUP = sudo az monitor action-group list -g Logs --query "[0].[id]" -o tsv;
           #   $env:AVAILABILITY_ALERT_ID = sudo az monitor metrics alert list --query "[?name=='SERVICE_NAME_AVAILABILITY'].[id]" -o tsv;
           #   sudo az monitor metrics alert update --ids $env:AVAILABILITY_ALERT_ID --add-action $env:ALERT_ACTION_GROUP --enabled true
           # };

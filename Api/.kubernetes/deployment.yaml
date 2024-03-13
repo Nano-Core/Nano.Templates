@@ -30,7 +30,7 @@ spec:
       automountServiceAccountToken: false
       containers:
       - name: %SERVICE_NAME%
-        image: %AZURE_ACR_HOST%/%APP_NAME%:%VERSION%
+        image: %AZURE_ACR_HOST%/%IMAGE_NAME%:%VERSION%
         ports:
         - containerPort: 8080
         - containerPort: 4443
@@ -51,13 +51,6 @@ spec:
           limits:
             memory: %KUBERNETES_MEMORY_LIMIT%
             cpu: %KUBERNETES_CPU_LIMIT%
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 80
-            scheme: HTTP
-          periodSeconds: 20
-          initialDelaySeconds: 15
         securityContext:
           privileged: false
           allowPrivilegeEscalation: false
@@ -68,18 +61,19 @@ spec:
           capabilities:
             drop:
             - ALL
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          periodSeconds: 20
+          initialDelaySeconds: 25
         readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 80
-            scheme: HTTP
+          tcpSocket:
+            port: 8080
           periodSeconds: 5
-          initialDelaySeconds: 10
+          initialDelaySeconds: 20
         volumeMounts:
         - name: tmp
           mountPath: /tmp
       volumes:
       - name: tmp
         emptyDir: {}
-      imagePullSecrets:
-      - name: docker-registry-secret

@@ -336,6 +336,30 @@ namespace Nano.Template.Web.Migrations
                     b.ToTable("__EFAuthUserToken", (string)null);
                 });
 
+            modelBuilder.Entity("Nano.Template.Web.Models.Data.Nested", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<long>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasDefaultValue(0L);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Nested");
+                });
+
             modelBuilder.Entity("Nano.Template.Web.Models.Data.Sample", b =>
                 {
                     b.Property<Guid>("Id")
@@ -356,6 +380,9 @@ namespace Nano.Template.Web.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
 
+                    b.Property<Guid>("NestedId")
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("type")
                         .IsRequired()
                         .HasMaxLength(21)
@@ -368,6 +395,8 @@ namespace Nano.Template.Web.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.HasIndex("Name");
+
+                    b.HasIndex("NestedId");
 
                     b.ToTable("Sample");
 
@@ -506,6 +535,17 @@ namespace Nano.Template.Web.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Nano.Template.Web.Models.Data.Sample", b =>
+                {
+                    b.HasOne("Nano.Template.Web.Models.Data.Nested", "Nested")
+                        .WithMany("Samples")
+                        .HasForeignKey("NestedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Nested");
+                });
+
             modelBuilder.Entity("Nano.Template.Web.Models.Data.User", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", "IdentityUser")
@@ -520,6 +560,11 @@ namespace Nano.Template.Web.Migrations
             modelBuilder.Entity("Nano.Data.Models.DefaultAuditEntry", b =>
                 {
                     b.Navigation("Properties");
+                });
+
+            modelBuilder.Entity("Nano.Template.Web.Models.Data.Nested", b =>
+                {
+                    b.Navigation("Samples");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,6 +1,7 @@
 services:
   nano.template.web:
     image: nano.template.web
+    hostname: nano-template-web
     restart: on-failure
     env_file:
       - .env
@@ -34,6 +35,7 @@ services:
 
   eventing: 
     image: rabbitmq:latest
+    hostname: rabbitmq
     ports:
       - 5671:5671
       - 5672:5672
