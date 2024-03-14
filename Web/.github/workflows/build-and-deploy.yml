@@ -6,7 +6,7 @@ env:
   IMAGE_NAME: nano.template.web
   SERVICE_NAME: nano-template-web
   VERSION: '${{ vars.VERSION }}.${{ github.run_number }}.${{ github.run_attempt }}'
-  ENVIRONMENT: ${{ github.ref == 'refs/heads/master' && 'Production' || 'Staging' }}
+  ASPNETCORE_ENVIRONMENT: ${{ github.ref == 'refs/heads/master' && 'Production' || 'Staging' }}
   DOTNET_SDK_VERSION: 8.0.101-jammy
   DOTNET_ASPNET_VERSION: 8.0.1-jammy
   DOTNET_EF_TOOLS_VERSION: 8.0.1
@@ -88,7 +88,7 @@ jobs:
           $env:DOTNET_HOST_FACTORY_RESOLVER_DEFAULT_TIMEOUT_IN_SECONDS=0;
           dotnet new tool-manifest;
           dotnet tool install --local dotnet-ef --version $env:DOTNET_EF_TOOLS_VERSION;
-          dotnet ef database update --no-build --startup-project $env:APP_NAME -- --environment $ENVIRONMENT;
+          dotnet ef database update --no-build --startup-project $env:APP_NAME -- --environment $env:ASPNETCORE_ENVIRONMENT;
           if ($LastExitCode -ne 0)
           { 
             throw "error";

@@ -62,15 +62,19 @@ spec:
             drop:
             - ALL
         livenessProbe:
-          tcpSocket:
+          httpGet:
+            path: /healthz
             port: 8080
-          periodSeconds: 20
-          initialDelaySeconds: 25
+            scheme: HTTP
+          periodSeconds: 10
+          initialDelaySeconds: 30
         readinessProbe:
-          tcpSocket:
+          httpGet:
+            path: /healthz
             port: 8080
+            scheme: HTTP
           periodSeconds: 5
-          initialDelaySeconds: 20
+          initialDelaySeconds: 10
         volumeMounts:
         - name: tmp
           mountPath: /tmp

@@ -5,7 +5,9 @@ metadata:
   namespace: %KUBERNETES_NAMESPACE%
 data:
   App__Version: %VERSION%
-  ASPNETCORE_ENVIRONMENT: %ENVIRONMENT%
+  ASPNETCORE_ENVIRONMENT: %ASPNETCORE_ENVIRONMENT%
   Web__Documentation__CspNonce: %NONCE_TOKEN%
   #Monitoring__ConnectionString: %APPLICATION_INSIGHT_CONNECTIONSTRING%
+  Web__Hosting__Cors__AllowedOrigins_0: %NANO_WEB_HOSTING_CORS_ALLOWED_ORIGINS_0%
+  Web__Hosting__Cors__AllowedOrigins_1: %NANO_WEB_HOSTING_CORS_ALLOWED_ORIGINS_1%
 

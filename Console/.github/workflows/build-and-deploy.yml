@@ -6,6 +6,7 @@ env:
   IMAGE_NAME: cmd.conversion.cleanup
   SERVICE_NAME: cmd-conversion-cleanup
   VERSION: '${{ vars.VERSION }}.${{ github.run_number }}.${{ github.run_attempt }}'
+  ASPNETCORE_ENVIRONMENT: ${{ github.ref == 'refs/heads/master' && 'Production' || 'Staging' }}
   DOTNET_SDK_VERSION: 7.0.403-jammy
   DOTNET_ASPNET_VERSION: 7.0.13-jammy
   AZURE_GROUP: Kubernetes
