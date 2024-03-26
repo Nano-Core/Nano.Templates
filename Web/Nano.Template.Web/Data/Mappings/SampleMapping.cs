@@ -7,7 +7,6 @@ namespace Nano.Template.Web.Data.Mappings;
 
 /// <inheritdoc />
 public class SampleMapping : DefaultEntityMapping<Sample>
-//        where T : Sample
 {
     /// <inheritdoc />
     public override void Map(EntityTypeBuilder<Sample> builder)
@@ -32,30 +31,5 @@ public class SampleMapping : DefaultEntityMapping<Sample>
 
         builder
             .Ignore(x => x.HasName);
-
-        builder
-            .HasOne(x => x.Nested)
-            .WithMany(x => x.Samples)
-            .IsRequired();
-    }
-}
-
-
-/// <inheritdoc />
-public class NestedMapping : DefaultEntityMapping<Nested>
-//        where T : Sample
-{
-    /// <inheritdoc />
-    public override void Map(EntityTypeBuilder<Nested> builder)
-    {
-        if (builder == null)
-            throw new ArgumentNullException(nameof(builder));
-
-        base.Map(builder);
-
-        builder
-            .HasMany(x => x.Samples)
-            .WithOne(x => x.Nested)
-            .IsRequired();
     }
 }

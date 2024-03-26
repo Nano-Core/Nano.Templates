@@ -27,7 +27,6 @@ public class WebDbContext : DefaultDbContext
 
         modelBuilder
             .AddMapping<Sample, SampleMapping>()
-            .AddMapping<Nested, NestedMapping>()
             .AddMapping<DerivedSample1, DerivedSample1Mapping>()
             .AddMapping<DerivedSample2, DerivedSample2Mapping>()
             .AddMapping<User, UserMapping>();

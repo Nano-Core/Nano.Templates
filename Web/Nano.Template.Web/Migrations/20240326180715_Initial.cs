@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Nano.Template.Web.Migrations
 {
     /// <inheritdoc />
-    public partial class aaa : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -111,17 +111,25 @@ namespace Nano.Template.Web.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Nested",
+                name: "Sample",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Name = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    type = table.Column<string>(type: "varchar(21)", maxLength: 21, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Description = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Summary = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     IsDeleted = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Nested", x => x.Id);
+                    table.PrimaryKey("PK_Sample", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -301,36 +309,6 @@ namespace Nano.Template.Web.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateTable(
-                name: "Sample",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    Name = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    NestedId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    type = table.Column<string>(type: "varchar(21)", maxLength: 21, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Summary = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsDeleted = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Sample", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Sample_Nested_NestedId",
-                        column: x => x.NestedId,
-                        principalTable: "Nested",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
             migrationBuilder.CreateIndex(
                 name: "IX___EFAudit_CreatedAt",
                 table: "__EFAudit",
@@ -431,16 +409,6 @@ namespace Nano.Template.Web.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Nested_CreatedAt",
-                table: "Nested",
-                column: "CreatedAt");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Nested_IsDeleted",
-                table: "Nested",
-                column: "IsDeleted");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Sample_CreatedAt",
                 table: "Sample",
                 column: "CreatedAt");
@@ -454,11 +422,6 @@ namespace Nano.Template.Web.Migrations
                 name: "IX_Sample_Name",
                 table: "Sample",
                 column: "Name");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Sample_NestedId",
-                table: "Sample",
-                column: "NestedId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_CreatedAt",
@@ -524,9 +487,6 @@ namespace Nano.Template.Web.Migrations
 
             migrationBuilder.DropTable(
                 name: "__EFAuthRole");
-
-            migrationBuilder.DropTable(
-                name: "Nested");
 
             migrationBuilder.DropTable(
                 name: "__EFAuthUser");
