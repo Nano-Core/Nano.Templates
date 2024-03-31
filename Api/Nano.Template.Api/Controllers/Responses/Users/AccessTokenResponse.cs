@@ -26,7 +26,7 @@ public class AccessTokenResponse
     /// <summary>
     /// Expire At.
     /// </summary>
-    public DateTime ExpireAt { get; set; }
+    public DateTimeOffset ExpireAt { get; set; }
 
     /// <summary>
     /// Refresh Token.
