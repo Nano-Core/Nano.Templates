@@ -5,7 +5,7 @@
 _ReSharper*
 **/bin
 **/obj
-*.DotSettings
+*.DotSettings.User
 packages
 wwwroot
 .env
