@@ -1,11 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Nano.Models;
+using Nano.Models.Attributes;
 
 namespace Nano.Template.Web.Models.Data;
 
 /// <summary>
 /// User.
 /// </summary>
+[UxException("Custom UX Error...", [nameof(Name), nameof(IsDeleted)])]
 public class User : DefaultEntityUser
 {
     /// <summary>
