@@ -1,5 +1,4 @@
 ﻿using System;
-using Nano.Models.Types;
 using Nano.Template.Web.Models.Data;
 
 namespace Nano.Template.Api.Controllers.Responses.Users;

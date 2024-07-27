@@ -15,6 +15,5 @@ public class UsersController : DefaultIdentityController<User, UserQueryCriteria
     public UsersController(ILogger logger, IRepository repository, IEventing eventing, DefaultIdentityManager identityManager)
         : base(logger, repository, eventing, identityManager)
     {
-
     }
 }

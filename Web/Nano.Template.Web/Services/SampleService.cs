@@ -3,7 +3,4 @@
 namespace Nano.Template.Web.Services;
 
 /// <inheritdoc />
-public class SampleService : ISampleService
-{
-
-}
+public class SampleService : ISampleService;

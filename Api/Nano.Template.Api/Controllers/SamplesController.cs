@@ -10,8 +10,8 @@ using Microsoft.Extensions.Logging;
 using Nano.App.Api.Requests;
 using Nano.Models;
 using Nano.Models.Const;
-using Nano.Template.Api.Models.Requests.Samples;
-using Nano.Template.Api.Models.Responses.Samples;
+using Nano.Template.Api.Controllers.Requests.Samples;
+using Nano.Template.Api.Controllers.Responses.Samples;
 using Nano.Template.Web.Models.Api;
 using Nano.Template.Web.Models.Criterias;
 using Nano.Template.Web.Models.Data;
@@ -47,7 +47,7 @@ public class SamplesController : BaseController
     /// <response code="500">Error occured.</response>
     [HttpGet]
     [Route("{id:guid}")]
-    [Produces(HttpContentType.JSON, HttpContentType.XML)]
+    [Produces(HttpContentType.JSON)]
     [ProducesResponseType(typeof(GetSampleResponse), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
@@ -79,7 +79,7 @@ public class SamplesController : BaseController
     /// <response code="500">Error occured.</response>
     [HttpPost]
     [Route("query")]
-    [Produces(HttpContentType.JSON, HttpContentType.XML)]
+    [Produces(HttpContentType.JSON)]
     [ProducesResponseType(typeof(IEnumerable<GetSampleResponse>), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
@@ -123,8 +123,8 @@ public class SamplesController : BaseController
     /// <response code="500">Error occured.</response>
     [HttpPost]
     [Route("create")]
-    [Consumes(HttpContentType.JSON, HttpContentType.XML)]
-    [Produces(HttpContentType.JSON, HttpContentType.XML)]
+    [Consumes(HttpContentType.JSON)]
+    [Produces(HttpContentType.JSON)]
     [ProducesResponseType(typeof(GetSampleResponse), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]

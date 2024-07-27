@@ -1,7 +1,7 @@
 ﻿using System;
 using Nano.Template.Web.Models.Data;
 
-namespace Nano.Template.Api.Models.Responses.Samples;
+namespace Nano.Template.Api.Controllers.Responses.Samples;
 
 /// <summary>
 /// Get Sample Response.

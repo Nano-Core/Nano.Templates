@@ -1,9 +1,6 @@
-﻿namespace Nano.Template.Web.Models.Events;
+﻿namespace Nano.Template.Web.Events;
 
 /// <summary>
 /// Sample Event.
 /// </summary>
-public class SampleEvent
-{
-
-}
+public class SampleEvent;

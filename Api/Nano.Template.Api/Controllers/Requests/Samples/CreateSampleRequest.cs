@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Nano.Template.Api.Models.Requests.Samples;
+namespace Nano.Template.Api.Controllers.Requests.Samples;
 
 /// <summary>
 /// Create Sample Request.

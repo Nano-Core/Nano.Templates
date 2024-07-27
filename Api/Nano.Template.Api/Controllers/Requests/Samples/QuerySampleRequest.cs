@@ -1,6 +1,6 @@
 ﻿using DynamicExpression.Entities;
 
-namespace Nano.Template.Api.Models.Requests.Samples;
+namespace Nano.Template.Api.Controllers.Requests.Samples;
 
 /// <summary>
 /// Query Sample Request.

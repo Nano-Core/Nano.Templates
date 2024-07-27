@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Nano.Eventing.Interfaces;
-using Nano.Template.Web.Models.Events;
+using Nano.Template.Web.Events;
 using Nano.Template.Web.Services.Interfaces;
 
 namespace Nano.Template.Web.Eventing;

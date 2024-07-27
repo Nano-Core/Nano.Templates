@@ -13,7 +13,6 @@ public class WebApi : DefaultIdentityApi<User>
     public WebApi(ApiOptions options)
         : base(options)
     {
-
     }
 
     /// <summary>
@@ -21,8 +20,8 @@ public class WebApi : DefaultIdentityApi<User>
     /// </summary>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>Void.</returns>
-    public virtual async Task SamplesCustom(CancellationToken cancellationToken = default)
+    public virtual Task SamplesCustom(CancellationToken cancellationToken = default)
     {
-        await this.InvokeAsync(new SamplesCustomRequest(), cancellationToken);
+        return this.InvokeAsync(new SamplesCustomRequest(), cancellationToken);
     }
 }

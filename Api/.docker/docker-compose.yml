@@ -42,30 +42,6 @@ services:
   #   networks:
   #     - network
 
-  # database:
-  #   image: mysql/mysql-server:latest
-  #   ports:
-  #     - 3306:3306
-  #   environment:
-  #     MYSQL_USER: "sa"
-  #     MYSQL_PASSWORD: "myPassword_123"
-  #     MYSQL_ROOT_PASSWORD: "myPassword_123"
-  #     MYSQL_DATABASE: "webDb"
-  #   networks:
-  #     - network
-
-  # eventing: 
-  #   image: rabbitmq:latest
-  #   ports:
-  #     - 5671:5671
-  #     - 5672:5672
-  #   environment: 
-  #     RABBITMQ_DEFAULT_USER: "myUser"
-  #     RABBITMQ_DEFAULT_PASS: "myPassword"
-  #     RABBITMQ_DEFAULT_VHOST: "/"
-  #   networks:
-  #     - network
-
 networks:
   network:
     name: network

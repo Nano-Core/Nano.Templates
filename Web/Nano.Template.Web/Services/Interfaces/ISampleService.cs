@@ -3,7 +3,4 @@
 /// <summary>
 /// Sample Service
 /// </summary>
-public interface ISampleService
-{
-
-}
+public interface ISampleService;

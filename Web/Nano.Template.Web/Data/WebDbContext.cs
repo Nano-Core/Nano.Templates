@@ -14,7 +14,6 @@ public class WebDbContext : DefaultDbContext
     public WebDbContext(DbContextOptions dbContextOptions, DataOptions dataOptions)
         : base(dbContextOptions, dataOptions)
     {
-
     }
 
     /// <inheritdoc />

@@ -7,9 +7,9 @@ using Microsoft.Extensions.Logging;
 using Nano.Eventing.Interfaces;
 using Nano.Models;
 using Nano.Repository.Interfaces;
+using Nano.Template.Web.Events;
 using Nano.Template.Web.Models.Criterias;
 using Nano.Template.Web.Models.Data;
-using Nano.Template.Web.Models.Events;
 using Nano.Web.Controllers;
 
 namespace Nano.Template.Web.Controllers;
@@ -23,7 +23,6 @@ public class SamplesController : DefaultController<Sample, SampleQueryCriteria>
     public SamplesController(ILogger logger, IRepository repository, IEventing eventing)
         : base(logger, repository, eventing)
     {
-
     }
 
     /// <summary>

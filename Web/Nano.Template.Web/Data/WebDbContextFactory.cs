@@ -5,7 +5,4 @@ using Nano.Data.Providers.MySql;
 namespace Nano.Template.Web.Data;
 
 /// <inheritdoc />
-public class WebDbContextFactory : BaseDbContextFactory</*SqlServerProvider*/MySqlProvider, WebDbContext>
-{
-
-}
+public class WebDbContextFactory : BaseDbContextFactory<MySqlProvider, WebDbContext>;
