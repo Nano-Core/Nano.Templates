@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using Nano.Eventing.Interfaces;
+using Nano.Models.Eventing.Interfaces;
 using Nano.Repository.Interfaces;
 using Nano.Security;
 using Nano.Template.Web.Models.Criterias;

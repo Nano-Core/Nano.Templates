@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Nano.Console.Workers;
-using Nano.Eventing.Interfaces;
+using Nano.Models.Eventing.Interfaces;
 using Nano.Repository.Interfaces;
 using Nano.Template.Console.Services.Interfaces;
 
