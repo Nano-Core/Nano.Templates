@@ -1,0 +1,55 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: %APP_NAME%-nginx-web
+  namespace: %KUBERNETES_NAMESPACE%
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/ingress.allow-http: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "128m"
+    nginx.ingress.kubernetes.io/proxy-max-temp-file-size: "128m"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
+    nginx.ingress.kubernetes.io/session-cookie-samesite: "Strict"
+    nginx.ingress.kubernetes.io/enable-substitution: "true"
+    nginx.ingress.kubernetes.io/sub-filter-recursive: "on"
+    nginx.ingress.kubernetes.io/sub-filter-order: last
+    nginx.ingress.kubernetes.io/sub-filter-exclude-content-type: "text/event-stream"
+    nginx.ingress.kubernetes.io/sub-filter-ignore-content-type: "text/html"
+    nginx.ingress.kubernetes.io/custom-http-errors: "400"
+    nginx.ingress.kubernetes.io/configuration-snippet: | 
+      more_set_headers "X-Frame-Options: Deny"
+      more_set_headers "Referrer-Policy: same-origin"
+      more_set_headers "X-XSS-Protection: 1; mode=block"
+      more_set_headers "X-Content-Type-Options: nosniff"
+      more_set_headers "X-Robots-Tag: noindex, nofollow"
+      more_set_headers "Cross-Origin-Embedder-Policy: require-corp"
+      more_set_headers "Cross-Origin-Opener-Policy: same-origin"
+      more_set_headers "Cross-Origin-Resource-Policy: same-origin"
+      more_set_headers "Content-Security-Policy: default-src 'none'; manifest-src 'self'; img-src 'self' data:; object-src 'self'; script-src 'self' 'nonce-${request_id}'; style-src 'self' https://*.%CERTIFICATE_HOST% 'nonce-${request_id}'; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; font-src 'self' data:; connect-src https://*.%CERTIFICATE_HOST% wss://events.%CERTIFICATE_HOST% https://dc.services.visualstudio.com/v2/track blob: https://*.%CERTIFICATE_HOST%";
+      more_set_headers "Permissions-Policy: accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), display-capture=(), document-domain=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=(self), gamepad=(), geolocation=(), gyroscope=(), layout-animations=(), legacy-image-formats=(), magnetometer=(), microphone=(), midi=(), navigation-override=(self), oversized-images=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), speaker-selection=(), sync-xhr=(), unoptimized-images=(), unsized-media=(), usb=(), screen-wake-lock=(), web-share=(), xr-spatial-tracking=()";
+      proxy_set_header Accept-Encoding "";
+      sub_filter_once off;
+      sub_filter '%NONCE_TOKEN%' $request_id;
+      sub_filter '(<body[^>]*>)(.*?)%NONCE_TOKEN%(.*?<\/body>)' '$1$2"$request_id"$3';
+    nginx.org/client-max-body-size: "128m"
+spec:
+  tls:
+  - hosts:
+    - %CERTIFICATE_HOST%
+    secretName: %CERTIFICATE_HOST%-tls
+  rules:
+  - host: %CERTIFICATE_HOST%
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: api
+            port:
+              number: 8080

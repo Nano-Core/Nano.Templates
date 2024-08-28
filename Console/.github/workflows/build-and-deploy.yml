@@ -2,24 +2,20 @@ name: Build And Deploy
 on:
   push
 env:
-  APP_NAME: Cmd.Conversion.CleanUp
-  IMAGE_NAME: cmd.conversion.cleanup
-  SERVICE_NAME: cmd-conversion-cleanup
+  APP_NAME: Nano.Template.Console
+  IMAGE_NAME: nano.template.console
+  SERVICE_NAME: nano-template-console
   VERSION: '${{ vars.VERSION }}.${{ github.run_number }}.${{ github.run_attempt }}'
-  ASPNETCORE_ENVIRONMENT: ${{ github.ref == 'refs/heads/master' && 'Production' || 'Staging' }}
-  DOTNET_SDK_VERSION: 7.0.403-jammy
-  DOTNET_ASPNET_VERSION: 7.0.13-jammy
+  DOTNET_SDK_VERSION: 8.0-jammy
+  DOTNET_ASPNET_VERSION: 8.0-jammy
   AZURE_GROUP: Kubernetes
   KUBERNETES_NAMESPACE: default
-  KUBERNETES_CPU_REQUEST: 50m
-  KUBERNETES_CPU_LIMIT: 150m
+  KUBERNETES_REPLICA_HISTORY_COUNT: 4
   KUBERNETES_MEMORY_REQUEST: 256Mi
   KUBERNETES_MEMORY_LIMIT: 768Mi
-  KUBERNETES_REPLICA_HISTORY_COUNT: 4
+  KUBERNETES_CPU_REQUEST: 50m
+  KUBERNETES_CPU_LIMIT: 150m
   ASPNETCORE_ENVIRONMENT: ${{ github.ref == 'refs/heads/master' && 'Production' || 'Staging' }}
-  STORAGE_SHARE_NAME_XBRL: svc-xbrl
-  STORAGE_SHARE_NAME_FONTS: svc-fonts
-  STORAGE_SHARE_NAME_FILE_CONVERSION: svc-file-conversion
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -28,7 +24,7 @@ jobs:
       id-token: write
     concurrency:
       group: ${{ github.repository }}
-      cancel-in-progress: false
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
 
@@ -37,52 +33,50 @@ jobs:
         shell: pwsh
         run: |
           if ('${{ github.ref }}' -eq 'refs/heads/master') {
-            echo "AZURE_SUBSCRIPTION_ID=${{ secrets.LIVE_AZURE_SUBSCRIPTION_ID }}" >> $env:GITHUB_ENV;
-            echo "AZURE_ACR_HOST=${{ secrets.LIVE_AZURE_ACR_HOST }}" >> $env:GITHUB_ENV;
-            echo "AZURE_ACR_USERNAME=${{ secrets.LIVE_AZURE_ACR_USERNAME }}" >> $env:GITHUB_ENV;
-            echo "AZURE_ACR_PASSWORD=${{ secrets.LIVE_AZURE_ACR_PASSWORD }}" >> $env:GITHUB_ENV;
-            echo "KUBERNETES_CLUSTER=${{ secrets.PRODUCTION_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
-            echo "MYSQL_CONNECTIONSTRING=Server=${{ secrets.PRODUCTION_MYSQL_HOST }};Port=${{ vars.MYSQL_PORT }};Database=$env:MYSQL_DATABASE_NAME;Uid=$env:MYSQL_DATABASE_USER;Pwd=${{ secrets.PRODUCTION_MYSQL_WEB_DB_PASSWORD }};SslMode=Preferred;" >> $env:GITHUB_ENV;
-            echo "MYSQL_MIGRATION_CONNECTIONSTRING=Server=${{ secrets.PRODUCTION_MYSQL_HOST }};Port=${{ vars.MYSQL_PORT }};Database=$env:MYSQL_DATABASE_NAME;Uid=${{ secrets.PRODUCTION_MYSQL_ADMIN_USER }};Pwd=${{ secrets.PRODUCTION_MYSQL_ADMIN_PASSWORD }};SslMode=Preferred;" >> $env:GITHUB_ENV;
+              echo "AZURE_SUBSCRIPTION_ID=${{ secrets.LIVE_AZURE_SUBSCRIPTION_ID }}" >> $env:GITHUB_ENV;
+              echo "AZURE_ACR_HOST=${{ secrets.LIVE_AZURE_ACR_HOST }}" >> $env:GITHUB_ENV;
+              echo "AZURE_ACR_USERNAME=${{ secrets.LIVE_AZURE_ACR_USERNAME }}" >> $env:GITHUB_ENV;
+              echo "AZURE_ACR_PASSWORD=${{ secrets.LIVE_AZURE_ACR_PASSWORD }}" >> $env:GITHUB_ENV;
+              echo "KUBERNETES_CLUSTER=${{ secrets.PRODUCTION_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
           }
           else {
-            echo "AZURE_SUBSCRIPTION_ID=${{ secrets.STAGING_AZURE_SUBSCRIPTION_ID }}" >> $env:GITHUB_ENV;
-            echo "AZURE_ACR_HOST=${{ secrets.STAGING_AZURE_ACR_HOST }}" >> $env:GITHUB_ENV;
-            echo "AZURE_ACR_USERNAME=${{ secrets.STAGING_AZURE_ACR_USERNAME }}" >> $env:GITHUB_ENV;
-            echo "AZURE_ACR_PASSWORD=${{ secrets.STAGING_AZURE_ACR_PASSWORD }}" >> $env:GITHUB_ENV;
-            echo "KUBERNETES_CLUSTER=${{ secrets.STAGING_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
-            echo "MYSQL_CONNECTIONSTRING=Server=${{ secrets.STAGING_MYSQL_HOST }};Port=${{ vars.MYSQL_PORT }};Database=$env:MYSQL_DATABASE_NAME;Uid=$env:MYSQL_DATABASE_USER;Pwd=${{ secrets.STAGING_MYSQL_WEB_DB_PASSWORD }};SslMode=Preferred;" >> $env:GITHUB_ENV;
-            echo "MYSQL_MIGRATION_CONNECTIONSTRING=Server=${{ secrets.STAGING_MYSQL_HOST }};Port=${{ vars.MYSQL_PORT }};Database=$env:MYSQL_DATABASE_NAME;Uid=${{ secrets.STAGING_MYSQL_ADMIN_USER }};Pwd=${{ secrets.STAGING_MYSQL_ADMIN_PASSWORD }};SslMode=Preferred;" >> $env:GITHUB_ENV;
+              echo "AZURE_SUBSCRIPTION_ID=${{ secrets.STAGING_AZURE_SUBSCRIPTION_ID }}" >> $env:GITHUB_ENV;
+              echo "AZURE_ACR_HOST=${{ secrets.STAGING_AZURE_ACR_HOST }}" >> $env:GITHUB_ENV;
+              echo "AZURE_ACR_USERNAME=${{ secrets.STAGING_AZURE_ACR_USERNAME }}" >> $env:GITHUB_ENV;
+              echo "AZURE_ACR_PASSWORD=${{ secrets.STAGING_AZURE_ACR_PASSWORD }}" >> $env:GITHUB_ENV;
+              echo "KUBERNETES_CLUSTER=${{ secrets.STAGING_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
           }
 
       - name: Build and Deploy
         shell: pwsh
         run: |
           dotnet nuget add source ${{ secrets.NUGET_HOST }} -n private -u ${{ secrets.NUGET_USERNAME }} -p ${{ secrets.NUGET_PASSWORD }} --store-password-in-clear-text;
+
           dotnet build -c Release .\$env:APP_NAME.sln;
           if ($LastExitCode -ne 0)
           { 
-            throw "error";
+              throw "error";
           };
+
           dotnet test .\.tests\Tests.$env:APP_NAME\Tests.$env:APP_NAME.csproj;
           if ($LastExitCode -ne 0)
           { 
-            throw "error";
+              throw "error";
           };
 
           sudo docker build `
-            -t $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":latest" `
-            -t $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":"$env:VERSION `
-            --build-arg DOTNET_SDK_VERSION=$env:DOTNET_SDK_VERSION `
-            --build-arg DOTNET_ASPNET_VERSION=$env:DOTNET_ASPNET_VERSION `
-            --build-arg NUGET_HOST=${{ secrets.NUGET_HOST }} `
-            --build-arg NUGET_USERNAME=${{ secrets.NUGET_USERNAME }} `
-            --build-arg NUGET_PASSWORD=${{ secrets.NUGET_PASSWORD }} `
-            ./;
+              -t $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":latest" `
+              -t $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":"$env:VERSION `
+              --build-arg DOTNET_SDK_VERSION=$env:DOTNET_SDK_VERSION `
+              --build-arg DOTNET_ASPNET_VERSION=$env:DOTNET_ASPNET_VERSION `
+              --build-arg NUGET_HOST=${{ secrets.NUGET_HOST }} `
+              --build-arg NUGET_USERNAME=${{ secrets.NUGET_USERNAME }} `
+              --build-arg NUGET_PASSWORD=${{ secrets.NUGET_PASSWORD }} `
+              ./;
 
           if ($LastExitCode -ne 0) 
           { 
-            throw "error";
+              throw "error";
           };
 
           sudo docker login -u="$env:AZURE_ACR_USERNAME" -p="$env:AZURE_ACR_PASSWORD" $env:AZURE_ACR_HOST;
@@ -90,7 +84,7 @@ jobs:
           sudo docker push $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":"$env:VERSION;
           if ($LastExitCode -ne 0) 
           { 
-            throw "error";
+              throw "error";
           };  
 
           sudo az login --service-principal -u "${{ secrets.AZURE_CLIENT_ID }}" -p "${{ secrets.AZURE_CLIENT_SECRET }}" --tenant "${{ secrets.AZURE_TENANT_ID }}" -o none;
@@ -98,18 +92,17 @@ jobs:
           sudo az aks get-credentials -g "${{ vars.AZURE_KUBERNETES_RESOURCE_GROUP }}" -n $env:KUBERNETES_CLUSTER --overwrite -o none;
 
           Get-Content .kubernetes/configmap.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/configmap.tmp.yaml;
-          Get-Content .kubernetes/cronjob.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/cronjob.tmp.yaml;
-
           sudo kubectl apply -f .kubernetes/configmap.tmp.yaml;
           if ($LastExitCode -ne 0) 
           { 
-            throw "error";
+              throw "error";
           };  
 
+          Get-Content .kubernetes/cronjob.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/cronjob.tmp.yaml;
           sudo kubectl apply -f .kubernetes/cronjob.tmp.yaml;
           if ($LastExitCode -ne 0) 
           { 
-            throw "error";
+              throw "error";
           };  
 
       - name: Slack Notification
