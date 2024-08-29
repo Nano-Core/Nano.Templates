@@ -9,21 +9,21 @@ services:
     ports:
       - 80:80
       - 443:443
-    #depends_on:
-      #- clamav
+    depends_on:
+      - clamav
       #- nano.template.web
     networks:
       - network
     volumes:
       - ../:/root/.dotnet/https
 
-  # clamav: 
-  #   image: clamav/clamav
-  #   hostname: clamav
-  #   ports:
-  #     - 3310:3310
-  #   networks:
-  #     - network
+  clamav: 
+    image: clamav/clamav
+    hostname: clamav
+    ports:
+      - 3310:3310
+    networks:
+      - network
       
   # nano.template.web:
   #   image: nano.template.web:dev
