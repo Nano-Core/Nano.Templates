@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: %APP_NAME%-nginx-web
+  name: ingress-%SERVICE_NAME%
   namespace: %KUBERNETES_NAMESPACE%
   annotations:
     kubernetes.io/ingress.class: nginx
@@ -9,11 +9,11 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
-    nginx.ingress.kubernetes.io/proxy-body-size: "128m"
-    nginx.ingress.kubernetes.io/proxy-max-temp-file-size: "128m"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-body-size: "128m"
+    nginx.ingress.kubernetes.io/proxy-max-temp-file-size: "128m"
     nginx.ingress.kubernetes.io/session-cookie-samesite: "Strict"
     nginx.ingress.kubernetes.io/enable-substitution: "true"
     nginx.ingress.kubernetes.io/sub-filter-recursive: "on"
@@ -30,7 +30,7 @@ metadata:
       more_set_headers "Cross-Origin-Embedder-Policy: require-corp"
       more_set_headers "Cross-Origin-Opener-Policy: same-origin"
       more_set_headers "Cross-Origin-Resource-Policy: same-origin"
-      more_set_headers "Content-Security-Policy: default-src 'none'; manifest-src 'self'; img-src 'self' data:; object-src 'self'; script-src 'self' 'nonce-${request_id}'; style-src 'self' https://*.%CERTIFICATE_HOST% 'nonce-${request_id}'; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; font-src 'self' data:; connect-src https://*.%CERTIFICATE_HOST% wss://events.%CERTIFICATE_HOST% https://dc.services.visualstudio.com/v2/track blob: https://*.%CERTIFICATE_HOST%";
+      more_set_headers "Content-Security-Policy: default-src 'none'; manifest-src 'self'; img-src 'self' data:; object-src 'self'; script-src 'self' 'nonce-${request_id}'; style-src 'self' https://*.%CERTIFICATE_HOST% 'nonce-${request_id}'; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; font-src 'self' data:; connect-src https://*.%CERTIFICATE_HOST% blob: https://*.%CERTIFICATE_HOST%";
       more_set_headers "Permissions-Policy: accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), display-capture=(), document-domain=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=(self), gamepad=(), geolocation=(), gyroscope=(), layout-animations=(), legacy-image-formats=(), magnetometer=(), microphone=(), midi=(), navigation-override=(self), oversized-images=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), speaker-selection=(), sync-xhr=(), unoptimized-images=(), unsized-media=(), usb=(), screen-wake-lock=(), web-share=(), xr-spatial-tracking=()";
       proxy_set_header Accept-Encoding "";
       sub_filter_once off;
@@ -50,6 +50,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: api
+            name: %SERVICE_NAME%
             port:
               number: 8080
