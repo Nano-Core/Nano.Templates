@@ -15,8 +15,8 @@ using Nano.Security.Extensions;
 using Nano.Security.Models;
 using Nano.Template.Api.Controllers.Requests.Users;
 using Nano.Template.Api.Controllers.Responses.Users;
-using Nano.Template.Web.Models.Api;
-using Nano.Template.Web.Models.Data;
+using Nano.Template.Service.Models.Api;
+using Nano.Template.Service.Models.Data;
 using Nano.Web.Controllers;
 using AccessTokenResponse = Nano.Template.Api.Controllers.Responses.Users.AccessTokenResponse;
 using ResetPasswordRequest = Nano.App.Api.Requests.Identity.ResetPasswordRequest;
@@ -29,13 +29,13 @@ public class UsersController : BaseController
     /// <summary>
     /// Web Api.
     /// </summary>
-    protected virtual WebApi WebApi { get; }
+    protected virtual ServiceApi ServiceApi { get; }
 
     /// <inheritdoc />
-    public UsersController(ILogger logger, WebApi webApi)
+    public UsersController(ILogger logger, ServiceApi serviceApi)
         : base(logger)
     {
-        this.WebApi = webApi ?? throw new ArgumentNullException(nameof(webApi));
+        this.ServiceApi = serviceApi ?? throw new ArgumentNullException(nameof(serviceApi));
     }
 
     /// <summary>
@@ -58,7 +58,7 @@ public class UsersController : BaseController
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
     public virtual async Task<IActionResult> GetUserAsync(CancellationToken cancellationToken = default)
     {
-        var user = await this.WebApi
+        var user = await this.ServiceApi
             .GetAsync<User>(this.UserId.GetValueOrDefault(), cancellationToken);
 
         if (user == null)
@@ -93,7 +93,7 @@ public class UsersController : BaseController
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
     public virtual async Task<IActionResult> GetPasswordOptionsAsync(CancellationToken cancellationToken = default)
     {
-        var passwordOptions = await this.WebApi
+        var passwordOptions = await this.ServiceApi
             .GetPasswordOptionsAsync(new GetPasswordOptionsRequest(), cancellationToken);
 
         if (passwordOptions == null)
@@ -129,7 +129,7 @@ public class UsersController : BaseController
     {
         try
         {
-            var accessToken = await this.WebApi
+            var accessToken = await this.ServiceApi
                 .LogInAsync(new LogInRequest
                 {
                     LogIn = new LogIn
@@ -188,7 +188,7 @@ public class UsersController : BaseController
             this.Unauthorized();
         }
 
-        var accessToken = await this.WebApi
+        var accessToken = await this.ServiceApi
             .LogInRefreshAsync(new LogInRefreshRequest
             {
                 LogInRefresh =
@@ -222,7 +222,7 @@ public class UsersController : BaseController
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
     public virtual async Task<IActionResult> SignUpAsync([FromBody][Required]UserSignUpRequest request, CancellationToken cancellationToken = default)
     {
-        var user = await this.WebApi
+        var user = await this.ServiceApi
             .SignUpAsync(new SignUpRequest<User>
             {
                 SignUp = new SignUp<User>
@@ -269,7 +269,7 @@ public class UsersController : BaseController
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
     public virtual async Task<IActionResult> ForgotPasswordAsync([FromBody][Required]UserForgotPasswordRequest request, CancellationToken cancellationToken = default)
     {
-        var passwordResetToken = await this.WebApi
+        var passwordResetToken = await this.ServiceApi
             .GetResetPasswordTokenAsync(new GenerateResetPasswordTokenRequest
             {
                 ResetPasswordToken =
@@ -304,7 +304,7 @@ public class UsersController : BaseController
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
     public virtual async Task<IActionResult> ResetPasswordAsync([FromBody][Required]UserResetPasswordRequest request, CancellationToken cancellationToken = default)
     {
-        await this.WebApi
+        await this.ServiceApi
             .ResetPasswordAsync(new ResetPasswordRequest
             {
                 ResetPassword =
@@ -346,7 +346,7 @@ public class UsersController : BaseController
             return this.NotFound();
         }
 
-        await this.WebApi
+        await this.ServiceApi
             .ChangePasswordAsync(new ChangePasswordRequest
             {
                 ChangePassword =
@@ -387,7 +387,7 @@ public class UsersController : BaseController
             return this.NotFound();
         }
 
-        var confirmEmailToken = await this.WebApi
+        var confirmEmailToken = await this.ServiceApi
             .GetConfirmEmailTokenAsync(new GenerateConfirmEmailTokenRequest
             {
                 ConfirmEmailToken =
@@ -422,7 +422,7 @@ public class UsersController : BaseController
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
     public virtual async Task<IActionResult> ConfirmEmailAsync([FromBody][Required]UserConfirmEmailRequest request, CancellationToken cancellationToken = default)
     {
-        await this.WebApi
+        await this.ServiceApi
             .ConfirmEmailAsync(new ConfirmEmailRequest
             {
                 ConfirmEmail = 
@@ -462,7 +462,7 @@ public class UsersController : BaseController
             return this.NotFound();
         }
 
-        var changeEmailToken = await this.WebApi
+        var changeEmailToken = await this.ServiceApi
             .GetChangeEmailTokenAsync(new GenerateChangeEmailTokenRequest
             {
                 ChangeEmailToken =
@@ -498,7 +498,7 @@ public class UsersController : BaseController
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
     public virtual async Task<IActionResult> ChangeEmailAsync([FromBody][Required]UserChangeEmailRequest request, CancellationToken cancellationToken = default)
     {
-        await this.WebApi
+        await this.ServiceApi
             .ChangeEmailAsync(new ChangeEmailRequest
             {
                 ChangeEmail =
@@ -538,7 +538,7 @@ public class UsersController : BaseController
             return this.NotFound();
         }
 
-        var confirmEmailToken = await this.WebApi
+        var confirmEmailToken = await this.ServiceApi
             .GetConfirmPhoneTokenAsync(new GenerateConfirmPhoneTokenRequest
             {
                 ConfirmPhoneToken =
@@ -572,7 +572,7 @@ public class UsersController : BaseController
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
     public virtual async Task<IActionResult> ConfirmPhoneAsync([FromBody][Required]UserConfirmPhoneRequest request, CancellationToken cancellationToken = default)
     {
-        await this.WebApi
+        await this.ServiceApi
             .ConfirmPhoneAsync(new ConfirmPhoneRequest
             {
                 ConfirmPhone = 
@@ -612,7 +612,7 @@ public class UsersController : BaseController
             return this.NotFound();
         }
 
-        var changeEmailToken = await this.WebApi
+        var changeEmailToken = await this.ServiceApi
             .GetChangePhoneTokenAsync(new GenerateChangePhoneTokenRequest
             {
                 ChangePhoneToken = 
@@ -648,7 +648,7 @@ public class UsersController : BaseController
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
     public virtual async Task<IActionResult> ChangePhoneAsync([FromBody][Required]UserChangePhoneRequest request, CancellationToken cancellationToken = default)
     {
-        await this.WebApi
+        await this.ServiceApi
             .ChangePhoneAsync(new ChangePhoneRequest
             {
                 ChangePhone = 

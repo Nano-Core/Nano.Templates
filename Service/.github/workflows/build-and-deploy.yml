@@ -1,0 +1,192 @@
+name: Build And Deploy
+on:
+  push
+env:
+  APP_NAME: Nano.Template.Service
+  IMAGE_NAME: nano.template.service
+  SERVICE_NAME: nano-template-service
+  VERSION: '${{ vars.VERSION }}.${{ github.run_number }}.${{ github.run_attempt }}'
+  DOTNET_SDK_VERSION: 8.0-jammy
+  DOTNET_ASPNET_VERSION: 8.0-jammy
+  DOTNET_EF_TOOLS_VERSION: 8.0.8
+  MYSQL_DATABASE_NAME: serviceDb
+  MYSQL_DATABASE_USER: nano-template-service-user
+  AZURE_GROUP: Kubernetes
+  KUBERNETES_NAMESPACE: default
+  KUBERNETES_REPLICA_COUNT: ${{ github.ref == 'refs/heads/master' && 3 || 2 }}
+  KUBERNETES_REPLICA_COUNT_MAX: ${{ github.ref == 'refs/heads/master' && 8 || 5 }}
+  KUBERNETES_REPLICA_HISTORY_COUNT: 0
+  KUBERNETES_MEMORY_REQUEST: 512Mi   
+  KUBERNETES_MEMORY_LIMIT: 1536Mi
+  KUBERNETES_MEMORY_SCALING: 180
+  KUBERNETES_CPU_REQUEST: 200m
+  KUBERNETES_CPU_LIMIT: 600m
+  KUBERNETES_CPU_SCALING: 180
+  STORAGE_SHARE_NAME: nano-template-service-storage
+  STORAGE_SIZE: 1000
+  ASPNETCORE_ENVIRONMENT: ${{ github.ref == 'refs/heads/master' && 'Production' || 'Staging' }}
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    concurrency:
+      group: ${{ github.repository }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set Environmental Variables
+        id: set-variables
+        shell: pwsh
+        run: |
+          if ('${{ github.ref }}' -eq 'refs/heads/master') {
+              echo "AZURE_SUBSCRIPTION_ID=${{ secrets.PRODUCTION_AZURE_SUBSCRIPTION_ID }}" >> $env:GITHUB_ENV;
+              echo "AZURE_ACR_HOST=${{ secrets.PRODUCTION_AZURE_ACR_HOST }}" >> $env:GITHUB_ENV;
+              echo "AZURE_ACR_USERNAME=${{ secrets.PRODUCTION_AZURE_ACR_USERNAME }}" >> $env:GITHUB_ENV;
+              echo "AZURE_ACR_PASSWORD=${{ secrets.PRODUCTION_AZURE_ACR_PASSWORD }}" >> $env:GITHUB_ENV;
+              echo "KUBERNETES_CLUSTER=${{ secrets.PRODUCTION_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
+              echo "NANO_AUTH_JWT_PUBLIC_KEY=${{ secrets.PRODUCTION_NANO_AUTH_JWT_PUBLIC_KEY }}" >> $env:GITHUB_ENV;
+              echo "NANO_AUTH_JWT_PRIVATE_KEY=${{ secrets.PRODUCTION_NANO_AUTH_JWT_PRIVATE_KEY }}" >> $env:GITHUB_ENV;
+              echo "MYSQL_CONNECTIONSTRING=Server=${{ secrets.PRODUCTION_MYSQL_HOST }};Port=${{ vars.MYSQL_PORT }};Database=$env:MYSQL_DATABASE_NAME;Uid=$env:MYSQL_DATABASE_USER;Pwd=${{ secrets.PRODUCTION_MYSQL_SERVICE_DB_PASSWORD }};SslMode=Preferred;" >> $env:GITHUB_ENV;
+              echo "MYSQL_MIGRATION_CONNECTIONSTRING=Server=${{ secrets.PRODUCTION_MYSQL_HOST }};Port=${{ vars.MYSQL_PORT }};Database=$env:MYSQL_DATABASE_NAME;Uid=${{ secrets.PRODUCTION_MYSQL_ADMIN_USER }};Pwd=${{ secrets.PRODUCTION_MYSQL_ADMIN_PASSWORD }};SslMode=Preferred;" >> $env:GITHUB_ENV;
+              echo "STORAGE_ACCOUNT_NAME=${{ secrets.PRODUCTION_STORAGE_ACCOUNT_NAME }}" >> $env:GITHUB_ENV;
+              echo "STORAGE_ACCOUNT_KEY=${{ secrets.PRODUCTION_STORAGE_ACCOUNT_KEY }}" >> $env:GITHUB_ENV;
+          }
+          else {
+              echo "AZURE_SUBSCRIPTION_ID=${{ secrets.STAGING_AZURE_SUBSCRIPTION_ID }}" >> $env:GITHUB_ENV;
+              echo "AZURE_ACR_HOST=${{ secrets.STAGING_AZURE_ACR_HOST }}" >> $env:GITHUB_ENV;
+              echo "AZURE_ACR_USERNAME=${{ secrets.STAGING_AZURE_ACR_USERNAME }}" >> $env:GITHUB_ENV;
+              echo "AZURE_ACR_PASSWORD=${{ secrets.STAGING_AZURE_ACR_PASSWORD }}" >> $env:GITHUB_ENV;
+              echo "KUBERNETES_CLUSTER=${{ secrets.STAGING_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
+              echo "NANO_AUTH_JWT_PUBLIC_KEY=${{ secrets.STAGING_NANO_AUTH_JWT_PUBLIC_KEY }}" >> $env:GITHUB_ENV;
+              echo "NANO_AUTH_JWT_PRIVATE_KEY=${{ secrets.STAGING_NANO_AUTH_JWT_PRIVATE_KEY }}" >> $env:GITHUB_ENV;
+              echo "MYSQL_CONNECTIONSTRING=Server=${{ secrets.STAGING_MYSQL_HOST }};Port=${{ vars.MYSQL_PORT }};Database=$env:MYSQL_DATABASE_NAME;Uid=$env:MYSQL_DATABASE_USER;Pwd=${{ secrets.STAGING_MYSQL_SERVICE_DB_PASSWORD }};SslMode=Preferred;" >> $env:GITHUB_ENV;
+              echo "MYSQL_MIGRATION_CONNECTIONSTRING=Server=${{ secrets.STAGING_MYSQL_HOST }};Port=${{ vars.MYSQL_PORT }};Database=$env:MYSQL_DATABASE_NAME;Uid=${{ secrets.STAGING_MYSQL_ADMIN_USER }};Pwd=${{ secrets.STAGING_MYSQL_ADMIN_PASSWORD }};SslMode=Preferred;" >> $env:GITHUB_ENV;
+              echo "STORAGE_ACCOUNT_NAME=${{ secrets.STAGING_STORAGE_ACCOUNT_NAME }}" >> $env:GITHUB_ENV;
+              echo "STORAGE_ACCOUNT_KEY=${{ secrets.STAGING_STORAGE_ACCOUNT_KEY }}" >> $env:GITHUB_ENV;
+          }
+
+      - name: Build and Deploy
+        shell: pwsh
+        run: |
+          dotnet nuget add source ${{ secrets.NUGET_HOST }} -n private -u ${{ secrets.NUGET_USERNAME }} -p ${{ secrets.NUGET_PASSWORD }} --store-password-in-clear-text;
+
+          dotnet build -c Release .\$env:APP_NAME.sln;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+          dotnet test .\.tests\Tests.$env:APP_NAME\Tests.$env:APP_NAME.csproj;
+          if ($LastExitCode -ne 0)
+          { 
+            throw "error";
+          };
+
+          $env:DATA__CONNECTIONSTRING=$env:MYSQL_MIGRATION_CONNECTIONSTRING;
+          $env:DOTNET_HOST_FACTORY_RESOLVER_DEFAULT_TIMEOUT_IN_SECONDS=0;
+          dotnet new tool-manifest;
+          dotnet tool install --local dotnet-ef --version $env:DOTNET_EF_TOOLS_VERSION;
+          dotnet ef database update --no-build --startup-project $env:APP_NAME -- --environment $env:ASPNETCORE_ENVIRONMENT;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+          sudo docker build `
+              -t $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":latest" `
+              -t $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":"$env:VERSION `
+              --build-arg DOTNET_SDK_VERSION=$env:DOTNET_SDK_VERSION `
+              --build-arg DOTNET_ASPNET_VERSION=$env:DOTNET_ASPNET_VERSION `
+              --build-arg NUGET_HOST=${{ secrets.NUGET_HOST }} `
+              --build-arg NUGET_USERNAME=${{ secrets.NUGET_USERNAME }} `
+              --build-arg NUGET_PASSWORD=${{ secrets.NUGET_PASSWORD }} `
+              ./;
+
+          if ($LastExitCode -ne 0) 
+          { 
+              throw "error";
+          };
+
+          sudo docker login -u="$env:AZURE_ACR_USERNAME" -p="$env:AZURE_ACR_PASSWORD" $env:AZURE_ACR_HOST;
+          sudo docker push $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":latest";
+          sudo docker push $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":"$env:VERSION;
+          if ($LastExitCode -ne 0) 
+          { 
+              throw "error";
+          };  
+
+          $nugetProjectModels=$env:APP_NAME + ".Models/" + $env:APP_NAME + ".Models.csproj";
+          dotnet pack $nugetProjectModels -c Release --output nupkgs /p:PackageVersion=$env:VERSION --include-symbols --no-build;
+          dotnet nuget push nupkgs/$env:APP_NAME".Models."$env:VERSION.nupkg -s ${{ secrets.NUGET_HOST }} -k ${{ secrets.NUGET_APIKEY }};
+          if ($LastExitCode -ne 0) 
+          { 
+              throw "error";
+          };  
+
+          $nugetProjectEvents=$env:APP_NAME + ".Events/" + $env:APP_NAME + ".Events.csproj";
+          dotnet pack $nugetProjectEvents -c Release --output nupkgs /p:PackageVersion=$env:VERSION --include-symbols --no-build;
+          dotnet nuget push nupkgs/$env:APP_NAME".Events."$env:VERSION.nupkg -s ${{ secrets.NUGET_HOST }} -k ${{ secrets.NUGET_APIKEY }};
+          if ($LastExitCode -ne 0) 
+          { 
+              throw "error";
+          };  
+
+          sudo az login --service-principal -u "${{ secrets.AZURE_CLIENT_ID }}" -p "${{ secrets.AZURE_CLIENT_SECRET }}" --tenant "${{ secrets.AZURE_TENANT_ID }}" -o none;
+          sudo az account set -s $env:AZURE_SUBSCRIPTION_ID -o none;
+          sudo az aks get-credentials -g "${{ vars.AZURE_KUBERNETES_RESOURCE_GROUP }}" -n $env:KUBERNETES_CLUSTER --overwrite -o none;
+
+          $env:EXISTING_FILE_SHARE = sudo az storage share list --account-name $env:STORAGE_ACCOUNT_NAME --account-key $env:STORAGE_ACCOUNT_KEY --query "[?contains(name, '$env:STORAGE_SHARE_NAME')].[name]" -o tsv;
+          if ([string]::IsNullOrEmpty($env:EXISTING_FILE_SHARE))
+          { 
+              sudo az storage share create -n $env:STORAGE_SHARE_NAME --account-name $env:STORAGE_ACCOUNT_NAME --account-key $env:STORAGE_ACCOUNT_KEY --quota $env:STORAGE_SIZE;
+          }
+          if ($LastExitCode -ne 0) 
+          { 
+              throw "error";
+          };  
+
+          sudo kubectl create secret generic auth-jwt-keys-secret --from-literal=jwt-public-key=$env:NANO_AUTH_JWT_PUBLIC_KEY --from-literal=jwt-private-key=$env:NANO_AUTH_JWT_PRIVATE_KEY --save-config --dry-run=client -o yaml | sudo kubectl apply -f -;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+          Get-Content .kubernetes/service.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/service.tmp.yaml;
+          sudo kubectl apply -f .kubernetes/service.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+          Get-Content .kubernetes/configmap.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/configmap.tmp.yaml;
+          sudo kubectl apply -f .kubernetes/configmap.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+          Get-Content .kubernetes/deployment.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/deployment.tmp.yaml;
+          sudo kubectl apply -f .kubernetes/deployment.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+          Get-Content .kubernetes/autoscaler.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/autoscaler.tmp.yaml;
+          sudo kubectl apply -f .kubernetes/autoscaler.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+      - name: Slack Notification
+        if: always()
+        uses: act10ns/slack@v2
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK }}
+          config: .github/config/slack.yml
+          status: ${{ job.status }}
+          channel: ${{ vars.SLACK_CHANNEL }}

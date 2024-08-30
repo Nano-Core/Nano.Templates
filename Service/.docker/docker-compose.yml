@@ -1,0 +1,61 @@
+services:
+  nano.template.service:
+    image: nano.template.service
+    hostname: nano-template-service
+    restart: on-failure
+    env_file:
+      - .env
+    ports:
+      - 8080:8080
+      - 4443:4443
+    build:
+      context: .
+      dockerfile: ../Nano.Template.Service/Dockerfile
+    depends_on:
+      - database
+      - eventing
+      #- redis-cluster
+    networks:
+      - network
+    volumes:
+      - ../:/root/.dotnet/https
+      - C:\nano\nano-template-service:/mnt/nano-template-service
+
+  database:
+    image: mysql/mysql-server:latest
+    ports:
+      - 3306:3306
+    networks:
+      - network
+    environment:
+      MYSQL_USER: "sa"
+      MYSQL_PASSWORD: "myPassword_123"
+      MYSQL_ROOT_PASSWORD: "myPassword_123"
+      MYSQL_DATABASE: "serviceDb"
+
+  eventing: 
+    image: rabbitmq:latest
+    hostname: rabbitmq
+    ports:
+      - 5671:5671
+      - 5672:5672
+    networks:
+      - network
+    environment: 
+      RABBITMQ_DEFAULT_USER: "myUser"
+      RABBITMQ_DEFAULT_PASS: "myPassword"
+      RABBITMQ_DEFAULT_VHOST: "/"
+
+  # redis-cluster:
+  #   image: bitnami/redis:latest
+  #   hostname: redis-cluster
+  #   ports:
+  #     - 6379:6379
+  #   environment:
+  #     - REDIS_PASSWORD=redis_password
+  #   networks:
+  #     - network
+
+networks:
+  network:
+    name: network

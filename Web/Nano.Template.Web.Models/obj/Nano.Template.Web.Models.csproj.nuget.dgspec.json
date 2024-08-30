@@ -1,0 +1,998 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Development\\Nano\\Nano.Templates\\Web\\Nano.Template.Web.Models\\Nano.Template.Web.Models.csproj": {}
+  },
+  "projects": {
+    "C:\\Development\\Nano\\Nano.Library\\Nano.App\\Nano.App.csproj": {
+      "version": "8.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Development\\Nano\\Nano.Library\\Nano.App\\Nano.App.csproj",
+        "projectName": "Nano.App",
+        "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.App\\Nano.App.csproj",
+        "packagesPath": "C:\\Users\\Michael Vivet\\.nuget\\packages\\",
+        "outputPath": "C:\\Development\\Nano\\Nano.Library\\Nano.App\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Michael Vivet\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.pkg.github.com/VutalSoft/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Config\\Nano.Config.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Config\\Nano.Config.csproj"
+              },
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Data\\Nano.Data.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Data\\Nano.Data.csproj"
+              },
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Eventing\\Nano.Eventing.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Eventing\\Nano.Eventing.csproj"
+              },
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Logging\\Nano.Logging.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Logging\\Nano.Logging.csproj"
+              },
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Models\\Nano.Models.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Models\\Nano.Models.csproj"
+              },
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Repository\\Nano.Repository.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Repository\\Nano.Repository.csproj"
+              },
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Security\\Nano.Security.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Security\\Nano.Security.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "allWarningsAsErrors": true
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "AspNetCore.HealthChecks.Network": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "Microsoft.SourceLink.GitHub": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Vivet.AspNetCore.RequestTimeZone": {
+              "target": "Package",
+              "version": "[8.1.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Development\\Nano\\Nano.Library\\Nano.Config\\Nano.Config.csproj": {
+      "version": "8.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Development\\Nano\\Nano.Library\\Nano.Config\\Nano.Config.csproj",
+        "projectName": "Nano.Config",
+        "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Config\\Nano.Config.csproj",
+        "packagesPath": "C:\\Users\\Michael Vivet\\.nuget\\packages\\",
+        "outputPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Config\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Michael Vivet\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.pkg.github.com/VutalSoft/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "allWarningsAsErrors": true
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.SourceLink.GitHub": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Development\\Nano\\Nano.Library\\Nano.Console\\Nano.Console.csproj": {
+      "version": "8.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Development\\Nano\\Nano.Library\\Nano.Console\\Nano.Console.csproj",
+        "projectName": "Nano.Console",
+        "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Console\\Nano.Console.csproj",
+        "packagesPath": "C:\\Users\\Michael Vivet\\.nuget\\packages\\",
+        "outputPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Console\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Michael Vivet\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.pkg.github.com/VutalSoft/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Development\\Nano\\Nano.Library\\Nano.App\\Nano.App.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.App\\Nano.App.csproj"
+              },
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Web\\Nano.Web.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Web\\Nano.Web.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "allWarningsAsErrors": true
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.SourceLink.GitHub": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Development\\Nano\\Nano.Library\\Nano.Data\\Nano.Data.csproj": {
+      "version": "8.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Development\\Nano\\Nano.Library\\Nano.Data\\Nano.Data.csproj",
+        "projectName": "Nano.Data",
+        "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Data\\Nano.Data.csproj",
+        "packagesPath": "C:\\Users\\Michael Vivet\\.nuget\\packages\\",
+        "outputPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Data\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Michael Vivet\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.pkg.github.com/VutalSoft/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Models\\Nano.Models.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Models\\Nano.Models.csproj"
+              },
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Security\\Nano.Security.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Security\\Nano.Security.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "allWarningsAsErrors": true
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "AspNetCore.HealthChecks.MySql": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "AspNetCore.HealthChecks.SqlServer": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
+            "AspNetCore.HealthChecks.Sqlite": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "Azure.Identity": {
+              "target": "Package",
+              "version": "[1.12.0, )"
+            },
+            "EFCoreSecondLevelCacheInterceptor": {
+              "target": "Package",
+              "version": "[4.7.1, )"
+            },
+            "EntityFrameworkCore.Triggers": {
+              "target": "Package",
+              "version": "[1.2.3, )"
+            },
+            "Microsoft.AspNetCore.DataProtection.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.Data.SqlClient": {
+              "target": "Package",
+              "version": "[5.2.2, )"
+            },
+            "Microsoft.EntityFrameworkCore.InMemory": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.Proxies": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.Relational": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite.NetTopologySuite": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.SourceLink.GitHub": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql.NetTopologySuite": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
+            "Z.EntityFramework.Plus.EFCore": {
+              "target": "Package",
+              "version": "[8.103.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Development\\Nano\\Nano.Library\\Nano.Eventing\\Nano.Eventing.csproj": {
+      "version": "8.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Development\\Nano\\Nano.Library\\Nano.Eventing\\Nano.Eventing.csproj",
+        "projectName": "Nano.Eventing",
+        "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Eventing\\Nano.Eventing.csproj",
+        "packagesPath": "C:\\Users\\Michael Vivet\\.nuget\\packages\\",
+        "outputPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Eventing\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Michael Vivet\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.pkg.github.com/VutalSoft/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Config\\Nano.Config.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Config\\Nano.Config.csproj"
+              },
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Data\\Nano.Data.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Data\\Nano.Data.csproj"
+              },
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Models\\Nano.Models.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Models\\Nano.Models.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "allWarningsAsErrors": true
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "AspNetCore.HealthChecks.Rabbitmq": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "EasyNetQ": {
+              "target": "Package",
+              "version": "[7.8.0, )"
+            },
+            "EasyNetQ.DI.Microsoft": {
+              "target": "Package",
+              "version": "[7.8.0, )"
+            },
+            "Microsoft.SourceLink.GitHub": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Development\\Nano\\Nano.Library\\Nano.Logging\\Nano.Logging.csproj": {
+      "version": "8.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Development\\Nano\\Nano.Library\\Nano.Logging\\Nano.Logging.csproj",
+        "projectName": "Nano.Logging",
+        "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Logging\\Nano.Logging.csproj",
+        "packagesPath": "C:\\Users\\Michael Vivet\\.nuget\\packages\\",
+        "outputPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Logging\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Michael Vivet\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.pkg.github.com/VutalSoft/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Config\\Nano.Config.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Config\\Nano.Config.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "allWarningsAsErrors": true
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.Extensions.Logging.Log4Net.AspNetCore": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.SourceLink.GitHub": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Serilog": {
+              "target": "Package",
+              "version": "[4.0.1, )"
+            },
+            "Serilog.Extensions.Logging": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Serilog.Sinks.Console": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Development\\Nano\\Nano.Library\\Nano.Models\\Nano.Models.csproj": {
+      "version": "8.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Development\\Nano\\Nano.Library\\Nano.Models\\Nano.Models.csproj",
+        "projectName": "Nano.Models",
+        "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Models\\Nano.Models.csproj",
+        "packagesPath": "C:\\Users\\Michael Vivet\\.nuget\\packages\\",
+        "outputPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Models\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Michael Vivet\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.pkg.github.com/VutalSoft/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "allWarningsAsErrors": true
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "DynamicExpression": {
+              "target": "Package",
+              "version": "[8.0.9, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.Extensions.Identity.Stores": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.SourceLink.GitHub": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "NetTopologySuite": {
+              "target": "Package",
+              "version": "[2.5.0, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Development\\Nano\\Nano.Library\\Nano.Repository\\Nano.Repository.csproj": {
+      "version": "8.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Development\\Nano\\Nano.Library\\Nano.Repository\\Nano.Repository.csproj",
+        "projectName": "Nano.Repository",
+        "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Repository\\Nano.Repository.csproj",
+        "packagesPath": "C:\\Users\\Michael Vivet\\.nuget\\packages\\",
+        "outputPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Repository\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Michael Vivet\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.pkg.github.com/VutalSoft/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Data\\Nano.Data.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Data\\Nano.Data.csproj"
+              },
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Models\\Nano.Models.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Models\\Nano.Models.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "allWarningsAsErrors": true
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.SourceLink.GitHub": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Development\\Nano\\Nano.Library\\Nano.Security\\Nano.Security.csproj": {
+      "version": "8.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Development\\Nano\\Nano.Library\\Nano.Security\\Nano.Security.csproj",
+        "projectName": "Nano.Security",
+        "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Security\\Nano.Security.csproj",
+        "packagesPath": "C:\\Users\\Michael Vivet\\.nuget\\packages\\",
+        "outputPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Security\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Michael Vivet\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.pkg.github.com/VutalSoft/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Logging\\Nano.Logging.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Logging\\Nano.Logging.csproj"
+              },
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Models\\Nano.Models.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Models\\Nano.Models.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "allWarningsAsErrors": true
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Google.Apis.Auth": {
+              "target": "Package",
+              "version": "[1.68.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.SourceLink.GitHub": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Development\\Nano\\Nano.Library\\Nano.Web\\Nano.Web.csproj": {
+      "version": "8.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Development\\Nano\\Nano.Library\\Nano.Web\\Nano.Web.csproj",
+        "projectName": "Nano.Web",
+        "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Web\\Nano.Web.csproj",
+        "packagesPath": "C:\\Users\\Michael Vivet\\.nuget\\packages\\",
+        "outputPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Web\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Michael Vivet\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.pkg.github.com/VutalSoft/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Development\\Nano\\Nano.Library\\Nano.App\\Nano.App.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.App\\Nano.App.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "allWarningsAsErrors": true
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Asp.Versioning.Mvc.ApiExplorer": {
+              "target": "Package",
+              "version": "[8.1.0, )"
+            },
+            "AspNetCore.HealthChecks.System": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "AspNetCore.HealthChecks.UI": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "AspNetCore.HealthChecks.UI.Client": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "AspNetCore.HealthChecks.UI.InMemory.Storage": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "Microsoft.AspNetCore.Authentication.Facebook": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.AspNetCore.Authentication.Google": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.AspNetCore.Authentication.MicrosoftAccount": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.SourceLink.GitHub": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "NWebsec.AspNetCore.Middleware": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
+            "NWebsec.AspNetCore.Mvc": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.7.3, )"
+            },
+            "Swashbuckle.AspNetCore.Annotations": {
+              "target": "Package",
+              "version": "[6.7.3, )"
+            },
+            "Swashbuckle.AspNetCore.Newtonsoft": {
+              "target": "Package",
+              "version": "[6.7.3, )"
+            },
+            "Vivet.AspNetCore.RequestVirusScan": {
+              "target": "Package",
+              "version": "[0.1.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Development\\Nano\\Nano.Templates\\Web\\Nano.Template.Web.Models\\Nano.Template.Web.Models.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Development\\Nano\\Nano.Templates\\Web\\Nano.Template.Web.Models\\Nano.Template.Web.Models.csproj",
+        "projectName": "Nano.Template.Web.Models",
+        "projectPath": "C:\\Development\\Nano\\Nano.Templates\\Web\\Nano.Template.Web.Models\\Nano.Template.Web.Models.csproj",
+        "packagesPath": "C:\\Users\\Michael Vivet\\.nuget\\packages\\",
+        "outputPath": "C:\\Development\\Nano\\Nano.Templates\\Web\\Nano.Template.Web.Models\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Michael Vivet\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.pkg.github.com/VutalSoft/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Development\\Nano\\Nano.Library\\Nano.App\\Nano.App.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.App\\Nano.App.csproj"
+              },
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Config\\Nano.Config.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Config\\Nano.Config.csproj"
+              },
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Console\\Nano.Console.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Console\\Nano.Console.csproj"
+              },
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Data\\Nano.Data.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Data\\Nano.Data.csproj"
+              },
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Eventing\\Nano.Eventing.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Eventing\\Nano.Eventing.csproj"
+              },
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Logging\\Nano.Logging.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Logging\\Nano.Logging.csproj"
+              },
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Models\\Nano.Models.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Models\\Nano.Models.csproj"
+              },
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Repository\\Nano.Repository.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Repository\\Nano.Repository.csproj"
+              },
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Security\\Nano.Security.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Security\\Nano.Security.csproj"
+              },
+              "C:\\Development\\Nano\\Nano.Library\\Nano.Web\\Nano.Web.csproj": {
+                "projectPath": "C:\\Development\\Nano\\Nano.Library\\Nano.Web\\Nano.Web.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "allWarningsAsErrors": true
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

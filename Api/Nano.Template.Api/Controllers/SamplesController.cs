@@ -12,9 +12,9 @@ using Nano.Models;
 using Nano.Models.Const;
 using Nano.Template.Api.Controllers.Requests.Samples;
 using Nano.Template.Api.Controllers.Responses.Samples;
-using Nano.Template.Web.Models.Api;
-using Nano.Template.Web.Models.Criterias;
-using Nano.Template.Web.Models.Data;
+using Nano.Template.Service.Models.Api;
+using Nano.Template.Service.Models.Criterias;
+using Nano.Template.Service.Models.Data;
 using Nano.Web.Controllers;
 
 namespace Nano.Template.Api.Controllers;
@@ -25,13 +25,13 @@ public class SamplesController : BaseController
     /// <summary>
     /// Web Api.
     /// </summary>
-    protected virtual WebApi WebApi { get; }
+    protected virtual ServiceApi ServiceApi { get; }
 
     /// <inheritdoc />
-    public SamplesController(ILogger logger, WebApi webApi)
+    public SamplesController(ILogger logger, ServiceApi serviceApi)
         : base(logger)
     {
-        this.WebApi = webApi ?? throw new ArgumentNullException(nameof(webApi));
+        this.ServiceApi = serviceApi ?? throw new ArgumentNullException(nameof(serviceApi));
     }
 
     /// <summary>
@@ -55,7 +55,7 @@ public class SamplesController : BaseController
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
     public virtual async Task<IActionResult> GetSampleAsync([FromRoute][Required]Guid id, CancellationToken cancellationToken = default)
     {
-        var sample = await this.WebApi
+        var sample = await this.ServiceApi
             .GetAsync<Sample>(id, cancellationToken);
 
         if (sample == null)
@@ -87,7 +87,7 @@ public class SamplesController : BaseController
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
     public virtual async Task<IActionResult> GetSamplesAsync([FromBody][Required]QuerySampleRequest request, CancellationToken cancellationToken = default)
     {
-        var samples = await this.WebApi
+        var samples = await this.ServiceApi
             .QueryAsync<Sample, SampleQueryCriteria>(new QueryRequest<SampleQueryCriteria>
             {
                 Query =
@@ -132,7 +132,7 @@ public class SamplesController : BaseController
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
     public virtual async Task<IActionResult> CreateSampleAsync([FromBody][Required]CreateSampleRequest request, CancellationToken cancellationToken = default)
     {
-        var provider = await this.WebApi
+        var provider = await this.ServiceApi
             .CreateAsync<Sample>(new CreateRequest
             {
                 Entity = new Sample

@@ -29,6 +29,6 @@
     <ProjectReference Include="..\..\..\Nano.Library\Nano.Repository\Nano.Repository.csproj" />
     <ProjectReference Include="..\..\..\Nano.Library\Nano.Security\Nano.Security.csproj" />
     <ProjectReference Include="..\..\..\Nano.Library\Nano.Web\Nano.Web.csproj" />
-    <ProjectReference Include="..\..\Web\Nano.Template.Web.Models\Nano.Template.Web.Models.csproj" />
+    <ProjectReference Include="..\..\Service\Nano.Template.Service.Models\Nano.Template.Service.Models.csproj" />
   </ItemGroup>
 </Project>

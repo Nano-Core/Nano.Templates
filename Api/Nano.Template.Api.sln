@@ -32,8 +32,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".tests", ".tests", "{391AA8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Nano.Template.Api", ".tests\Tests.Nano.Template.Api\Tests.Nano.Template.Api.csproj", "{36C47A9A-B83E-44F5-A712-89D401F66A0F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nano.Template.Web.Models", "..\Web\Nano.Template.Web.Models\Nano.Template.Web.Models.csproj", "{96051E91-A211-4B16-B6C7-4DDFD1B78696}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nano", ".nano", "{A7A47F2F-CDE5-4033-BB4B-BFB1675F8A64}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nano.App", "..\..\Nano.Library\Nano.App\Nano.App.csproj", "{3EE09DD3-7894-4FF9-9534-026485FA38D8}"
@@ -73,6 +71,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".postman", ".postman", "{E1
 		.postman\Nano.Template.Api.postman_collection.json = .postman\Nano.Template.Api.postman_collection.json
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nano.Template.Service.Models", "..\Service\Nano.Template.Service.Models\Nano.Template.Service.Models.csproj", "{8F55515E-BCE8-434D-8B8C-24C76A98922F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,10 +91,6 @@ Global
 		{36C47A9A-B83E-44F5-A712-89D401F66A0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36C47A9A-B83E-44F5-A712-89D401F66A0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36C47A9A-B83E-44F5-A712-89D401F66A0F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{96051E91-A211-4B16-B6C7-4DDFD1B78696}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{96051E91-A211-4B16-B6C7-4DDFD1B78696}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{96051E91-A211-4B16-B6C7-4DDFD1B78696}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{96051E91-A211-4B16-B6C7-4DDFD1B78696}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3EE09DD3-7894-4FF9-9534-026485FA38D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3EE09DD3-7894-4FF9-9534-026485FA38D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3EE09DD3-7894-4FF9-9534-026485FA38D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -135,6 +131,10 @@ Global
 		{6059FB91-B7D4-4497-9457-6934B46688D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6059FB91-B7D4-4497-9457-6934B46688D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6059FB91-B7D4-4497-9457-6934B46688D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F55515E-BCE8-434D-8B8C-24C76A98922F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F55515E-BCE8-434D-8B8C-24C76A98922F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F55515E-BCE8-434D-8B8C-24C76A98922F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F55515E-BCE8-434D-8B8C-24C76A98922F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

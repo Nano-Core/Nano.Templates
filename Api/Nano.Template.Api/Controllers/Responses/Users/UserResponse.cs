@@ -1,5 +1,5 @@
 ﻿using System;
-using Nano.Template.Web.Models.Data;
+using Nano.Template.Service.Models.Data;
 
 namespace Nano.Template.Api.Controllers.Responses.Users;
 
