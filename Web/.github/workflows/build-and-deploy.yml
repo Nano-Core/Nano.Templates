@@ -1,0 +1,145 @@
+name: Build and Deploy
+on:
+  push
+env:
+  NODE_JS_VERSION: 20.16.0
+  APP_NAME: nano.template.web
+  IMAGE_NAME: nano.template.web
+  SERVICE_NAME: nano-template-web
+  VERSION: '${{ vars.VERSION }}.${{ github.run_number }}.${{ github.run_attempt }}'
+  AZURE_GROUP: Kubernetes
+  AZURE_LOCATION: North Europe
+  KUBERNETES_NAMESPACE: default
+  KUBERNETES_REPLICA_COUNT: ${{ github.ref == 'refs/heads/master' && 2 || 1 }}
+  KUBERNETES_REPLICA_COUNT_MAX: ${{ github.ref == 'refs/heads/master' && 2 || 1 }}
+  KUBERNETES_REPLICA_HISTORY_COUNT: 0
+  KUBERNETES_MEMORY_REQUEST: 372Mi   
+  KUBERNETES_MEMORY_LIMIT: 1152Mi
+  KUBERNETES_MEMORY_SCALING: 180
+  KUBERNETES_CPU_REQUEST: 150m
+  KUBERNETES_CPU_LIMIT: 450m
+  KUBERNETES_CPU_SCALING: 180
+  CERTIFICATE_ISSUER: letsencrypt-prod
+  ENVIRONMENT: ${{ github.ref == 'refs/heads/master' && 'production' || 'staging' }}
+  ENVIRONMENT_RUNTIME_VAR_FILE: ${{ github.ref == 'refs/heads/master' && '.env.live' || '.env.staging' }}
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    concurrency:
+      group: ${{ github.repository }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set Environmental Variables
+        id: set-variables
+        shell: pwsh
+        run: |
+          echo "CERTIFICATE_ORGANIZATION=${{ vars.CERTIFICATE_ORGANIZATION }}" >> $env:GITHUB_ENV;
+
+          if ('${{ github.ref }}' -eq 'refs/heads/master') {
+              echo "AZURE_SUBSCRIPTION_ID=${{ secrets.LIVE_AZURE_SUBSCRIPTION_ID }}" >> $env:GITHUB_ENV;
+              echo "AZURE_ACR_HOST=${{ secrets.LIVE_AZURE_ACR_HOST }}" >> $env:GITHUB_ENV;
+              echo "AZURE_ACR_USERNAME=${{ secrets.LIVE_AZURE_ACR_USERNAME }}" >> $env:GITHUB_ENV;
+              echo "AZURE_ACR_PASSWORD=${{ secrets.LIVE_AZURE_ACR_PASSWORD }}" >> $env:GITHUB_ENV;
+              echo "KUBERNETES_CLUSTER=${{ vars.PRODUCTION_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
+              echo "CERTIFICATE_HOST=${{ vars.HOST_WEB_SUBDOMAIN }}.${{ vars.PRODUCTION_HOST }}" >> $env:GITHUB_ENV;
+              echo "API_URL=${{ vars.HOST_API_SUBDOMAIN }}.${{ vars.PRODUCTION_HOST }}" >> $env:GITHUB_ENV;
+              echo "NONCE_TOKEN=${{ vars.PRODUCTION_WEB_NONCE_TOKEN }}" >> $env:GITHUB_ENV;
+          }
+          elseif ('${{ github.ref }}' -eq 'refs/heads/staging') {
+              echo "AZURE_SUBSCRIPTION_ID=${{ secrets.STAGING_AZURE_SUBSCRIPTION_ID }}" >> $env:GITHUB_ENV;
+              echo "AZURE_ACR_HOST=${{ secrets.STAGING_AZURE_ACR_HOST }}" >> $env:GITHUB_ENV;
+              echo "AZURE_ACR_USERNAME=${{ secrets.STAGING_AZURE_ACR_USERNAME }}" >> $env:GITHUB_ENV;
+              echo "AZURE_ACR_PASSWORD=${{ secrets.STAGING_AZURE_ACR_PASSWORD }}" >> $env:GITHUB_ENV;
+              echo "KUBERNETES_CLUSTER=${{ vars.STAGING_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
+              echo "CERTIFICATE_HOST=${{ vars.HOST_WEB_SUBDOMAIN }}.${{ vars.STAGING_HOST }}" >> $env:GITHUB_ENV;
+              echo "API_URL=${{ vars.HOST_API_SUBDOMAIN }}.${{ vars.STAGING_HOST }}" >> $env:GITHUB_ENV;
+              echo "NONCE_TOKEN=${{ vars.STAGING_WEB_NONCE_TOKEN }}" >> $env:GITHUB_ENV;
+          }
+
+      - name: Build and Deploy
+        shell: pwsh
+        run: |
+          sudo az login --service-principal -u "${{ secrets.AZURE_CLIENT_ID }}" -p "${{ secrets.AZURE_CLIENT_SECRET }}" --tenant "${{ secrets.AZURE_TENANT_ID }}" -o none;
+          sudo az account set -s $env:AZURE_SUBSCRIPTION_ID -o none;
+          sudo az aks get-credentials -g "${{ vars.AZURE_KUBERNETES_RESOURCE_GROUP }}" -n $env:KUBERNETES_CLUSTER --overwrite -o none;
+        
+          Add-Content -Path $env:ENVIRONMENT_RUNTIME_VAR_FILE -Value `n;
+          Add-Content -Path $env:ENVIRONMENT_RUNTIME_VAR_FILE -Value NEXT_PUBLIC_VERSION=$env:VERSION;
+          Add-Content -Path $env:ENVIRONMENT_RUNTIME_VAR_FILE -Value NEXT_PUBLIC_API_URL=$env:API_URL;
+          Add-Content -Path $env:ENVIRONMENT_RUNTIME_VAR_FILE -Value NEXT_PUBLIC_NONCE_TOKEN=$env:NONCE_TOKEN;
+
+          sudo docker build `
+              -t $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":latest" `
+              -t $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":"$env:VERSION `
+              --build-arg ENVIRONMENT=$env:ENVIRONMENT `
+              --build-arg NODE_JS_VERSION=$env:NODE_JS_VERSION `
+              ./;
+
+          if ($LastExitCode -ne 0)
+          {
+              throw "error";
+          };
+
+          sudo docker login -u="$env:AZURE_ACR_USERNAME" -p="$env:AZURE_ACR_PASSWORD" $env:AZURE_ACR_HOST;
+          sudo docker push $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":latest";
+          sudo docker push $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":"$env:VERSION;
+          if ($LastExitCode -ne 0)
+          {
+              throw "error";
+          };  
+
+          Get-Content .kubernetes/certificate.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/certificate.tmp.yaml;
+          sudo kubectl apply -f .kubernetes/certificate.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+          Get-Content .kubernetes/service.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/service.tmp.yaml;
+          sudo kubectl apply -f .kubernetes/service.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          {
+              throw "error";
+          };
+
+          Get-Content .kubernetes/configmap.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/configmap.tmp.yaml;
+          sudo kubectl apply -f .kubernetes/configmap.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          {
+              throw "error";
+          }; 
+
+          Get-Content .kubernetes/deployment.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/deployment.tmp.yaml;
+          sudo kubectl apply -f .kubernetes/deployment.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          {
+              throw "error";
+          };
+
+          Get-Content .kubernetes/autoscaler.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/autoscaler.tmp.yaml;
+          sudo kubectl apply -f .kubernetes/autoscaler.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+          Get-Content .kubernetes/ingress.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/ingress.tmp.yaml;
+          sudo kubectl apply -f .kubernetes/ingress.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+      - name: Slack Notification
+        if: always()
+        uses: act10ns/slack@v2
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK }}
+          config: .github/config/slack.yml
+          status: ${{ job.status }}
+          channel: ${{ vars.SLACK_CHANNEL }}

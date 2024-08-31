@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: %SERVICE_NAME%
+  namespace: %KUBERNETES_NAMESPACE%
+  labels:
+    app: %SERVICE_NAME%
+spec:
+  replicas: %KUBERNETES_REPLICA_COUNT%
+  revisionHistoryLimit: %KUBERNETES_REPLICA_HISTORY_COUNT%
+  selector:
+    matchLabels:
+      app: %SERVICE_NAME%
+  template:
+    metadata:
+      labels:
+        app: %SERVICE_NAME%
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 2000 
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: %SERVICE_NAME%  
+      automountServiceAccountToken: false
+      containers:
+      - name: %SERVICE_NAME%
+        image: %AZURE_ACR_HOST%/%IMAGE_NAME%:%VERSION%
+        ports:
+        - containerPort: 8080
+        - containerPort: 4443
+        imagePullPolicy: Always 
+        envFrom:
+        - configMapRef:
+            name: %SERVICE_NAME%-config
+        resources:
+          requests:
+            memory: %KUBERNETES_MEMORY_REQUEST%
+            cpu: %KUBERNETES_CPU_REQUEST%
+          limits:
+            memory: %KUBERNETES_MEMORY_LIMIT%
+            cpu: %KUBERNETES_CPU_LIMIT%
+        securityContext:
+          privileged: false
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 2000
+          capabilities:
+            drop:
+            - ALL
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+            scheme: HTTP
+          periodSeconds: 20
+          initialDelaySeconds: 25
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+            scheme: HTTP
+          periodSeconds: 5
+          initialDelaySeconds: 20
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: npm-logs
+          mountPath: /home/node/.npm/_logs
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: npm-logs
+        emptyDir: {}
+  

@@ -1,0 +1,19 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: %SERVICE_NAME%-nginx-tls
+  namespace: %KUBERNETES_NAMESPACE%
+spec:
+  secretName: %CERTIFICATE_HOST%-tls
+  duration: 2160h
+  renewBefore: 720h
+  subject:
+    organizations:
+    - %CERTIFICATE_ORGANIZATION%
+  dnsNames:
+    - %CERTIFICATE_HOST%
+  privateKey:
+    rotationPolicy: Always  
+  issuerRef:
+    name: %CERTIFICATE_ISSUER%
+    kind: ClusterIssuer
