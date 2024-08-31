@@ -4,7 +4,7 @@ A basic api application, implemented using Nano Library.
 #### DNS
 | Type | Host                                  | IP Address                  |
 |------|---------------------------------------|-----------------------------|
-| A    | api.{{environment}}.{{domain-name}}   | {{ingress-controller-ip}}   |
+| A    | {{sub-domain}}.{{environment}}.{{domain-name}}   | {{ingress-controller-ip}}   |
 
 #### Certificate
 * https://crt.sh/?q={domain-name}
