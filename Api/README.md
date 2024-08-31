@@ -11,3 +11,7 @@ A basic api application, implemented using Nano Library.
 * https://www.ssllabs.com/ssltest/analyze.html?d={domain-name}&hideResults=on
 
 ***
+
+### Dependencies
+
+***
