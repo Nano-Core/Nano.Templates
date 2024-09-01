@@ -51,6 +51,16 @@ spec:
             secretKeyRef:
               name: auth-jwt-keys-secret
               key: jwt-private-key
+        - name: Storage__AccountName
+          valueFrom:
+            secretKeyRef:
+              name: storage-account-secret
+              key: azurestorageaccountname
+        - name: Storage__AccountKey
+          valueFrom:
+            secretKeyRef:
+              name: storage-account-secret
+              key: azurestorageaccountkey
         envFrom:
         - configMapRef:
             name: %SERVICE_NAME%-config
