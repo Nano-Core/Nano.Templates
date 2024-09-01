@@ -47,7 +47,7 @@ jobs:
               echo "AZURE_ACR_PASSWORD=${{ secrets.LIVE_AZURE_ACR_PASSWORD }}" >> $env:GITHUB_ENV;
               echo "KUBERNETES_CLUSTER=${{ vars.PRODUCTION_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
               echo "CERTIFICATE_HOST=${{ vars.HOST_WEB_SUBDOMAIN }}.${{ vars.PRODUCTION_HOST }}" >> $env:GITHUB_ENV;
-              echo "API_URL=${{ vars.HOST_API_SUBDOMAIN }}.${{ vars.PRODUCTION_HOST }}" >> $env:GITHUB_ENV;
+              echo "API_HOST=${{ vars.HOST_API_SUBDOMAIN }}.${{ vars.PRODUCTION_HOST }}" >> $env:GITHUB_ENV;
               echo "NONCE_TOKEN=${{ vars.PRODUCTION_WEB_NONCE_TOKEN }}" >> $env:GITHUB_ENV;
           }
           elseif ('${{ github.ref }}' -eq 'refs/heads/staging') {
@@ -57,7 +57,7 @@ jobs:
               echo "AZURE_ACR_PASSWORD=${{ secrets.STAGING_AZURE_ACR_PASSWORD }}" >> $env:GITHUB_ENV;
               echo "KUBERNETES_CLUSTER=${{ vars.STAGING_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
               echo "CERTIFICATE_HOST=${{ vars.HOST_WEB_SUBDOMAIN }}.${{ vars.STAGING_HOST }}" >> $env:GITHUB_ENV;
-              echo "API_URL=${{ vars.HOST_API_SUBDOMAIN }}.${{ vars.STAGING_HOST }}" >> $env:GITHUB_ENV;
+              echo "API_HOST=${{ vars.HOST_API_SUBDOMAIN }}.${{ vars.STAGING_HOST }}" >> $env:GITHUB_ENV;
               echo "NONCE_TOKEN=${{ vars.STAGING_WEB_NONCE_TOKEN }}" >> $env:GITHUB_ENV;
           }
 
@@ -70,7 +70,7 @@ jobs:
         
           Add-Content -Path $env:ENVIRONMENT_RUNTIME_VAR_FILE -Value `n;
           Add-Content -Path $env:ENVIRONMENT_RUNTIME_VAR_FILE -Value NEXT_PUBLIC_VERSION=$env:VERSION;
-          Add-Content -Path $env:ENVIRONMENT_RUNTIME_VAR_FILE -Value NEXT_PUBLIC_API_URL=$env:API_URL;
+          Add-Content -Path $env:ENVIRONMENT_RUNTIME_VAR_FILE -Value NEXT_PUBLIC_API_HOST=$env:API_HOST;
           Add-Content -Path $env:ENVIRONMENT_RUNTIME_VAR_FILE -Value NEXT_PUBLIC_NONCE_TOKEN=$env:NONCE_TOKEN;
 
           sudo docker build `
