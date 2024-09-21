@@ -12,6 +12,7 @@ env:
   MYSQL_DATABASE_NAME: serviceDb
   MYSQL_DATABASE_USER: nano-template-service-user
   AZURE_GROUP: Kubernetes
+  KUBERNETES_NODEPOOL_COMPUTE: cpu
   KUBERNETES_NAMESPACE: default
   KUBERNETES_REPLICA_COUNT: ${{ github.ref == 'refs/heads/master' && 3 || 2 }}
   KUBERNETES_REPLICA_COUNT_MAX: ${{ github.ref == 'refs/heads/master' && 8 || 5 }}

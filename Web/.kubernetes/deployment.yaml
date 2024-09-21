@@ -28,6 +28,9 @@ spec:
             matchLabels:
               app: %SERVICE_NAME%  
       automountServiceAccountToken: false
+      nodeSelector:
+        nodepool.compute: %KUBERNETES_NODEPOOL_COMPUTE%
+        kubernetes.io/os: linux
       containers:
       - name: %SERVICE_NAME%
         image: %AZURE_ACR_HOST%/%IMAGE_NAME%:%VERSION%

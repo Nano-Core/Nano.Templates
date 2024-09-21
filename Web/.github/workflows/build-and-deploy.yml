@@ -9,6 +9,7 @@ env:
   VERSION: '${{ vars.VERSION }}.${{ github.run_number }}.${{ github.run_attempt }}'
   AZURE_GROUP: Kubernetes
   AZURE_LOCATION: North Europe
+  KUBERNETES_NODEPOOL_COMPUTE: cpu
   KUBERNETES_NAMESPACE: default
   KUBERNETES_REPLICA_COUNT: ${{ github.ref == 'refs/heads/master' && 2 || 1 }}
   KUBERNETES_REPLICA_COUNT_MAX: ${{ github.ref == 'refs/heads/master' && 2 || 1 }}
