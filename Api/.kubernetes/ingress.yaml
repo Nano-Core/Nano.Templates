@@ -20,7 +20,7 @@ metadata:
     nginx.ingress.kubernetes.io/sub-filter-order: last
     nginx.ingress.kubernetes.io/sub-filter-exclude-content-type: "text/event-stream"
     nginx.ingress.kubernetes.io/sub-filter-ignore-content-type: "text/html"
-    nginx.ingress.kubernetes.io/custom-http-errors: "400"
+    nginx.ingress.kubernetes.io/custom-http-errors: "418"
     nginx.ingress.kubernetes.io/configuration-snippet: | 
       more_set_headers "X-Frame-Options: Deny"
       more_set_headers "Referrer-Policy: same-origin"
