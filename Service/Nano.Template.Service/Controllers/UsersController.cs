@@ -9,7 +9,7 @@ using Nano.Web.Controllers;
 namespace Nano.Template.Service.Controllers;
 
 /// <inheritdoc />
-public class UsersController : DefaultIdentityController<User, UserQueryCriteria>
+public class UsersController : BaseDefaultIdentityController<User, UserQueryCriteria>
 {
     /// <inheritdoc />
     public UsersController(ILogger logger, IRepository repository, IEventing eventing, DefaultIdentityManager identityManager)

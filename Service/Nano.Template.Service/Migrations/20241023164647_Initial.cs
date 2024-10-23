@@ -419,9 +419,10 @@ namespace Nano.Template.Service.Migrations
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sample_Name",
+                name: "UX_Sample_Name_IsDeleted",
                 table: "Sample",
-                column: "Name");
+                columns: new[] { "Name", "IsDeleted" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_CreatedAt",

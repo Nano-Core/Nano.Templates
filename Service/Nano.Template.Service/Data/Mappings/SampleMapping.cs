@@ -27,7 +27,8 @@ public class SampleMapping : DefaultEntityMapping<Sample>
             .IsRequired();
 
         builder
-            .HasIndex(x => x.Name);
+            .HasIndex(x => x.Name)
+            .IsUnique();
 
         builder
             .Ignore(x => x.HasName);

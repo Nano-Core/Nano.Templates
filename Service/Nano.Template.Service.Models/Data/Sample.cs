@@ -1,12 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Nano.Models;
+using Nano.Models.Attributes;
 
 namespace Nano.Template.Service.Models.Data;
 
 /// <summary>
 /// Sample.
 /// </summary>
+[UxException("UX Sample Exception", [nameof(Name)])]
 public class Sample : DefaultEntity
 {
     /// <summary>

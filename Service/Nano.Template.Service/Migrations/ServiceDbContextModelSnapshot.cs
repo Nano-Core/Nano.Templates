@@ -382,7 +382,9 @@ namespace Nano.Template.Service.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.HasIndex("Name");
+                    b.HasIndex("Name", "IsDeleted")
+                        .IsUnique()
+                        .HasDatabaseName("UX_Sample_Name_IsDeleted");
 
                     b.ToTable("Sample");
 

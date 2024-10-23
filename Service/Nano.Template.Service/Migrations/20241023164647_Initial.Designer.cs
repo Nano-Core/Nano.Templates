@@ -12,7 +12,7 @@ using Nano.Template.Service.Data;
 namespace Nano.Template.Service.Migrations
 {
     [DbContext(typeof(ServiceDbContext))]
-    [Migration("20240830051353_Initial")]
+    [Migration("20241023164647_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -385,7 +385,9 @@ namespace Nano.Template.Service.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.HasIndex("Name");
+                    b.HasIndex("Name", "IsDeleted")
+                        .IsUnique()
+                        .HasDatabaseName("UX_Sample_Name_IsDeleted");
 
                     b.ToTable("Sample");
 
