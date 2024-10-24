@@ -8,7 +8,6 @@ env:
   VERSION: '${{ vars.VERSION }}.${{ github.run_number }}.${{ github.run_attempt }}'
   DOTNET_SDK_VERSION: 8.0-jammy
   DOTNET_ASPNET_VERSION: 8.0-jammy
-  DOTNET_EF_TOOLS_VERSION: 8.0.8
   MYSQL_DATABASE_NAME: serviceDb
   MYSQL_DATABASE_USER: nano-template-service-user
   AZURE_GROUP: Kubernetes
@@ -89,7 +88,7 @@ jobs:
           $env:DATA__CONNECTIONSTRING=$env:MYSQL_MIGRATION_CONNECTIONSTRING;
           $env:DOTNET_HOST_FACTORY_RESOLVER_DEFAULT_TIMEOUT_IN_SECONDS=0;
           dotnet new tool-manifest;
-          dotnet tool install --local dotnet-ef --version $env:DOTNET_EF_TOOLS_VERSION;
+          dotnet tool install --local dotnet-ef;
           dotnet ef database update --no-build --startup-project $env:APP_NAME -- --environment $env:ASPNETCORE_ENVIRONMENT;
           if ($LastExitCode -ne 0)
           { 
