@@ -6,8 +6,8 @@ env:
   IMAGE_NAME: nano.template.service
   SERVICE_NAME: nano-template-service
   VERSION: '${{ vars.VERSION }}.${{ github.run_number }}.${{ github.run_attempt }}'
-  DOTNET_SDK_VERSION: 8.0-jammy
-  DOTNET_ASPNET_VERSION: 8.0-jammy
+  DOTNET_SDK_VERSION: 9.0-noble
+  DOTNET_ASPNET_VERSION: 9.0-noble
   MYSQL_DATABASE_NAME: serviceDb
   MYSQL_DATABASE_USER: nano-template-service-user
   AZURE_GROUP: Kubernetes

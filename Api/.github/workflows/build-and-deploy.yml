@@ -6,8 +6,8 @@ env:
   IMAGE_NAME: nano.template.api
   SERVICE_NAME: nano-template-api
   VERSION: '${{ vars.VERSION }}.${{ github.run_number }}.${{ github.run_attempt }}'
-  DOTNET_SDK_VERSION: 8.0-jammy
-  DOTNET_ASPNET_VERSION: 8.0-jammy
+  DOTNET_SDK_VERSION: 9.0-noble
+  DOTNET_ASPNET_VERSION: 9.0-noble
   ASPNETCORE_ENVIRONMENT: ${{ github.ref == 'refs/heads/master' && 'Production' || 'Staging' }}
   AZURE_GROUP: Kubernetes
   AZURE_LOCATION: North Europe

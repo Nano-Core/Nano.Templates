@@ -5,16 +5,19 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Nano.App.Api.Requests;
 using Nano.Models;
 using Nano.Models.Const;
+using Nano.Security.Extensions;
 using Nano.Template.Api.Controllers.Requests.Samples;
 using Nano.Template.Api.Controllers.Responses.Samples;
 using Nano.Template.Service.Models.Api;
 using Nano.Template.Service.Models.Criterias;
 using Nano.Template.Service.Models.Data;
+using Nano.Web.Attributes;
 using Nano.Web.Controllers;
 
 namespace Nano.Template.Api.Controllers;
@@ -144,5 +147,31 @@ public class SamplesController : BaseController
         var response = new GetSampleResponse(provider);
 
         return this.Created("create", response);
+    }
+
+    /// <summary>
+    /// Upload file.
+    /// </summary>
+    /// <param name="file">The file.</param>
+    /// <param name="cancellationToken">The token used when request is cancelled.</param>
+    /// <returns>The uploaded file.</returns>
+    /// <response code="200">OK.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="401">Unauthorized.</response>
+    /// <response code="500">Error occurred.</response>
+    [HttpPost]
+    [Route("upload")]
+    [RequestSizeLimit(1024 * 1024 * 5)]
+    [Consumes(HttpContentType.FORM)]
+    [Produces(HttpContentType.JSON)]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+    public async Task<IActionResult> UploadAsync([Required]IFormFile file, CancellationToken cancellationToken = default)
+    {
+        await Task.CompletedTask;
+
+        return this.Ok();
     }
 }

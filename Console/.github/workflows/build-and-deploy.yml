@@ -6,8 +6,8 @@ env:
   IMAGE_NAME: nano.template.console
   SERVICE_NAME: nano-template-console
   VERSION: '${{ vars.VERSION }}.${{ github.run_number }}.${{ github.run_attempt }}'
-  DOTNET_SDK_VERSION: 8.0-jammy
-  DOTNET_ASPNET_VERSION: 8.0-jammy
+  DOTNET_SDK_VERSION: 9.0-noble
+  DOTNET_ASPNET_VERSION: 9.0-noble
   AZURE_GROUP: Kubernetes
   KUBERNETES_NODEPOOL_COMPUTE: cpu
   KUBERNETES_NAMESPACE: default
