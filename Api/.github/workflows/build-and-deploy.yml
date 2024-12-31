@@ -11,6 +11,17 @@ env:
   ASPNETCORE_ENVIRONMENT: ${{ github.ref == 'refs/heads/master' && 'Production' || 'Staging' }}
   AZURE_GROUP: Kubernetes
   AZURE_LOCATION: North Europe
+  AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+  NUGET_HOST: ${{ secrets.NUGET_HOST }}
+  NUGET_USERNAME: ${{ secrets.NUGET_USERNAME }}
+  NUGET_PASSWORD: ${{ secrets.NUGET_APIKEY }}
+  NUGET_APIKEY: ${{ secrets.NUGET_APIKEY }}
+  CONTAINER_REGISTRY_HOST: 'ghcr.io/${{ github.repository_owner }}'
+  CONTAINER_REGISTRY_USERNAME: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
+  CONTAINER_REGISTRY_PASSWORD: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
+  CONTAINER_REGISTRY_SOURCE_LABEL: https://github.com/Nano-Core/Nano.Template.Api
   KUBERNETES_NODEPOOL_COMPUTE: cpu
   KUBERNETES_NAMESPACE: default
   KUBERNETES_REPLICA_COUNT: ${{ github.ref == 'refs/heads/master' && 3 || 2 }}
@@ -23,7 +34,6 @@ env:
   KUBERNETES_CPU_LIMIT: 600m
   KUBERNETES_CPU_SCALING: 180
   CERTIFICATE_ISSUER: letsencrypt-prod
-  ASPNETCORE_ENVIRONMENT: ${{ github.ref == 'refs/heads/master' && 'Production' || 'Staging' }}
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -44,9 +54,6 @@ jobs:
 
           if ('${{ github.ref }}' -eq 'refs/heads/master') {
               echo "AZURE_SUBSCRIPTION_ID=${{ secrets.PRODUCTION_AZURE_SUBSCRIPTION_ID }}" >> $env:GITHUB_ENV;
-              echo "AZURE_ACR_HOST=${{ secrets.PRODUCTION_AZURE_ACR_HOST }}" >> $env:GITHUB_ENV;
-              echo "AZURE_ACR_USERNAME=${{ secrets.PRODUCTION_AZURE_ACR_USERNAME }}" >> $env:GITHUB_ENV;
-              echo "AZURE_ACR_PASSWORD=${{ secrets.PRODUCTION_AZURE_ACR_PASSWORD }}" >> $env:GITHUB_ENV;
               echo "KUBERNETES_CLUSTER=${{ secrets.PRODUCTION_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
               echo "CERTIFICATE_HOST=${{ vars.HOST_API_SUBDOMAIN }}.${{ vars.PRODUCTION_HOST }}" >> $env:GITHUB_ENV;
               echo "NONCE_TOKEN=${{ secrets.PRODUCTION_WEB_NONCE_TOKEN }}" >> $env:GITHUB_ENV;
@@ -55,9 +62,6 @@ jobs:
           }
           else {
               echo "AZURE_SUBSCRIPTION_ID=${{ secrets.STAGING_AZURE_SUBSCRIPTION_ID }}" >> $env:GITHUB_ENV;
-              echo "AZURE_ACR_HOST=${{ secrets.STAGING_AZURE_ACR_HOST }}" >> $env:GITHUB_ENV;
-              echo "AZURE_ACR_USERNAME=${{ secrets.STAGING_AZURE_ACR_USERNAME }}" >> $env:GITHUB_ENV;
-              echo "AZURE_ACR_PASSWORD=${{ secrets.STAGING_AZURE_ACR_PASSWORD }}" >> $env:GITHUB_ENV;
               echo "KUBERNETES_CLUSTER=${{ secrets.STAGING_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
               echo "CERTIFICATE_HOST=${{ vars.HOST_API_SUBDOMAIN }}.${{ vars.STAGING_HOST }}" >> $env:GITHUB_ENV;
               echo "NONCE_TOKEN=${{ secrets.STAGING_WEB_NONCE_TOKEN }}" >> $env:GITHUB_ENV;
@@ -68,7 +72,7 @@ jobs:
       - name: Build and Deploy
         shell: pwsh
         run: |
-          dotnet nuget add source ${{ secrets.NUGET_HOST }} -n private -u ${{ secrets.NUGET_USERNAME }} -p ${{ secrets.NUGET_PASSWORD }} --store-password-in-clear-text;
+          dotnet nuget add source $env:NUGET_HOST -n private -u $env:NUGET_USERNAME -p $env:NUGET_PASSWORD --store-password-in-clear-text;
 
           dotnet build -c Release .\$env:APP_NAME.sln;
           if ($LastExitCode -ne 0)
@@ -82,18 +86,19 @@ jobs:
               throw "error";
           };
 
-          sudo az login --service-principal -u "${{ secrets.AZURE_CLIENT_ID }}" -p "${{ secrets.AZURE_CLIENT_SECRET }}" --tenant "${{ secrets.AZURE_TENANT_ID }}" -o none;
-          sudo az account set -s $env:AZURE_SUBSCRIPTION_ID -o none;
-          sudo az aks get-credentials -g "${{ vars.AZURE_KUBERNETES_RESOURCE_GROUP }}" -n $env:KUBERNETES_CLUSTER --overwrite -o none;
-          
+          $registryHost = $env:CONTAINER_REGISTRY_HOST.ToLower()
+          $imageLatestTag = $registryHost + "/" + $env:IMAGE_NAME + ":latest";
+          $imageVersionTag = $registryHost + "/" + $env:IMAGE_NAME + ":" + $env:VERSION
+
           sudo docker build `
-              -t $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":latest" `
-              -t $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":"$env:VERSION `
+              -t $imageLatestTag `
+              -t $imageVersionTag `
               --build-arg DOTNET_SDK_VERSION=$env:DOTNET_SDK_VERSION `
               --build-arg DOTNET_ASPNET_VERSION=$env:DOTNET_ASPNET_VERSION `
-              --build-arg NUGET_HOST=${{ secrets.NUGET_HOST }} `
-              --build-arg NUGET_USERNAME=${{ secrets.NUGET_USERNAME }} `
-              --build-arg NUGET_PASSWORD=${{ secrets.NUGET_PASSWORD }} `
+              --build-arg CONTAINER_REGISTRY_SOURCE_LABEL=$env:CONTAINER_REGISTRY_SOURCE_LABEL `
+              --build-arg NUGET_HOST=$env:NUGET_HOST `
+              --build-arg NUGET_USERNAME=$env:NUGET_USERNAME `
+              --build-arg NUGET_PASSWORD=$env:NUGET_PASSWORD `
               ./;
 
           if ($LastExitCode -ne 0) 
@@ -101,14 +106,18 @@ jobs:
               throw "error";
           };
 
-          sudo docker login -u="$env:AZURE_ACR_USERNAME" -p="$env:AZURE_ACR_PASSWORD" $env:AZURE_ACR_HOST;
-          sudo docker push $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":latest";
-          sudo docker push $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":"$env:VERSION;
+          sudo docker login -u="$env:CONTAINER_REGISTRY_USERNAME" -p="$env:CONTAINER_REGISTRY_PASSWORD" $env:CONTAINER_REGISTRY_HOST;
+          sudo docker push $imageLatestTag;
+          sudo docker push $imageVersionTag;
           if ($LastExitCode -ne 0) 
           { 
               throw "error";
           };  
 
+          sudo az login --service-principal -u $env:AZURE_CLIENT_ID -p $env:AZURE_CLIENT_SECRET --tenant $env:AZURE_TENANT_ID -o none;
+          sudo az account set -s $env:AZURE_SUBSCRIPTION_ID -o none;
+          sudo az aks get-credentials -g $env:AZURE_GROUP -n $env:KUBERNETES_CLUSTER --overwrite -o none;
+          
           Get-Content .kubernetes/certificate.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/certificate.tmp.yaml;
           sudo kubectl apply -f .kubernetes/certificate.tmp.yaml;
           if ($LastExitCode -ne 0)

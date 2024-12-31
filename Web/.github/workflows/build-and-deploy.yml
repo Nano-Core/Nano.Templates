@@ -9,6 +9,17 @@ env:
   VERSION: '${{ vars.VERSION }}.${{ github.run_number }}.${{ github.run_attempt }}'
   AZURE_GROUP: Kubernetes
   AZURE_LOCATION: North Europe
+  AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+  NUGET_HOST: ${{ secrets.NUGET_HOST }}
+  NUGET_USERNAME: ${{ secrets.NUGET_USERNAME }}
+  NUGET_PASSWORD: ${{ secrets.NUGET_APIKEY }}
+  NUGET_APIKEY: ${{ secrets.NUGET_APIKEY }}
+  CONTAINER_REGISTRY_HOST: 'ghcr.io/${{ github.repository_owner }}'
+  CONTAINER_REGISTRY_USERNAME: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
+  CONTAINER_REGISTRY_PASSWORD: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
+  CONTAINER_REGISTRY_SOURCE_LABEL: https://github.com/Nano-Core/Nano.Template.Web
   KUBERNETES_NODEPOOL_COMPUTE: cpu
   KUBERNETES_NAMESPACE: default
   KUBERNETES_REPLICA_COUNT: ${{ github.ref == 'refs/heads/master' && 2 || 1 }}
@@ -43,9 +54,6 @@ jobs:
 
           if ('${{ github.ref }}' -eq 'refs/heads/master') {
               echo "AZURE_SUBSCRIPTION_ID=${{ secrets.LIVE_AZURE_SUBSCRIPTION_ID }}" >> $env:GITHUB_ENV;
-              echo "AZURE_ACR_HOST=${{ secrets.LIVE_AZURE_ACR_HOST }}" >> $env:GITHUB_ENV;
-              echo "AZURE_ACR_USERNAME=${{ secrets.LIVE_AZURE_ACR_USERNAME }}" >> $env:GITHUB_ENV;
-              echo "AZURE_ACR_PASSWORD=${{ secrets.LIVE_AZURE_ACR_PASSWORD }}" >> $env:GITHUB_ENV;
               echo "KUBERNETES_CLUSTER=${{ vars.PRODUCTION_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
               echo "CERTIFICATE_HOST=${{ vars.HOST_WEB_SUBDOMAIN }}.${{ vars.PRODUCTION_HOST }}" >> $env:GITHUB_ENV;
               echo "API_HOST=${{ vars.HOST_API_SUBDOMAIN }}.${{ vars.PRODUCTION_HOST }}" >> $env:GITHUB_ENV;
@@ -53,9 +61,6 @@ jobs:
           }
           elseif ('${{ github.ref }}' -eq 'refs/heads/staging') {
               echo "AZURE_SUBSCRIPTION_ID=${{ secrets.STAGING_AZURE_SUBSCRIPTION_ID }}" >> $env:GITHUB_ENV;
-              echo "AZURE_ACR_HOST=${{ secrets.STAGING_AZURE_ACR_HOST }}" >> $env:GITHUB_ENV;
-              echo "AZURE_ACR_USERNAME=${{ secrets.STAGING_AZURE_ACR_USERNAME }}" >> $env:GITHUB_ENV;
-              echo "AZURE_ACR_PASSWORD=${{ secrets.STAGING_AZURE_ACR_PASSWORD }}" >> $env:GITHUB_ENV;
               echo "KUBERNETES_CLUSTER=${{ vars.STAGING_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
               echo "CERTIFICATE_HOST=${{ vars.HOST_WEB_SUBDOMAIN }}.${{ vars.STAGING_HOST }}" >> $env:GITHUB_ENV;
               echo "API_HOST=${{ vars.HOST_API_SUBDOMAIN }}.${{ vars.STAGING_HOST }}" >> $env:GITHUB_ENV;
@@ -65,18 +70,18 @@ jobs:
       - name: Build and Deploy
         shell: pwsh
         run: |
-          sudo az login --service-principal -u "${{ secrets.AZURE_CLIENT_ID }}" -p "${{ secrets.AZURE_CLIENT_SECRET }}" --tenant "${{ secrets.AZURE_TENANT_ID }}" -o none;
-          sudo az account set -s $env:AZURE_SUBSCRIPTION_ID -o none;
-          sudo az aks get-credentials -g "${{ vars.AZURE_KUBERNETES_RESOURCE_GROUP }}" -n $env:KUBERNETES_CLUSTER --overwrite -o none;
-        
           Add-Content -Path $env:ENVIRONMENT_RUNTIME_VAR_FILE -Value `n;
           Add-Content -Path $env:ENVIRONMENT_RUNTIME_VAR_FILE -Value NEXT_PUBLIC_VERSION=$env:VERSION;
           Add-Content -Path $env:ENVIRONMENT_RUNTIME_VAR_FILE -Value NEXT_PUBLIC_API_HOST=$env:API_HOST;
           Add-Content -Path $env:ENVIRONMENT_RUNTIME_VAR_FILE -Value NEXT_PUBLIC_NONCE_TOKEN=$env:NONCE_TOKEN;
 
+          $registryHost = $env:CONTAINER_REGISTRY_HOST.ToLower()
+          $imageLatestTag = $registryHost + "/" + $env:IMAGE_NAME + ":latest";
+          $imageVersionTag = $registryHost + "/" + $env:IMAGE_NAME + ":" + $env:VERSION
+
           sudo docker build `
-              -t $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":latest" `
-              -t $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":"$env:VERSION `
+              -t $imageLatestTag `
+              -t $imageVersionTag `
               --build-arg ENVIRONMENT=$env:ENVIRONMENT `
               --build-arg NODE_JS_VERSION=$env:NODE_JS_VERSION `
               ./;
@@ -86,13 +91,17 @@ jobs:
               throw "error";
           };
 
-          sudo docker login -u="$env:AZURE_ACR_USERNAME" -p="$env:AZURE_ACR_PASSWORD" $env:AZURE_ACR_HOST;
-          sudo docker push $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":latest";
-          sudo docker push $env:AZURE_ACR_HOST"/"$env:IMAGE_NAME":"$env:VERSION;
+          sudo docker login -u="$env:CONTAINER_REGISTRY_USERNAME" -p="$env:CONTAINER_REGISTRY_PASSWORD" $env:CONTAINER_REGISTRY_HOST;
+          sudo docker push $imageLatestTag;
+          sudo docker push $imageVersionTag;
           if ($LastExitCode -ne 0)
           {
               throw "error";
           };  
+
+          sudo az login --service-principal -u $env:AZURE_CLIENT_ID -p $env:AZURE_CLIENT_SECRET --tenant $env:AZURE_TENANT_ID -o none;
+          sudo az account set -s $env:AZURE_SUBSCRIPTION_ID -o none;
+          sudo az aks get-credentials -g $env:AZURE_GROUP -n $env:KUBERNETES_CLUSTER --overwrite -o none;
 
           Get-Content .kubernetes/certificate.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/certificate.tmp.yaml;
           sudo kubectl apply -f .kubernetes/certificate.tmp.yaml;

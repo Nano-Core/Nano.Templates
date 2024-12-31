@@ -33,7 +33,7 @@ spec:
         kubernetes.io/os: linux
       containers:
       - name: %SERVICE_NAME%
-        image: %AZURE_ACR_HOST%/%IMAGE_NAME%:%VERSION%
+        image: %CONTAINER_REGISTRY_HOST%/%IMAGE_NAME%:%VERSION%
         ports:
         - containerPort: 8080
         - containerPort: 4443
