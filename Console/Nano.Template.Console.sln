@@ -10,7 +10,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".solution", ".solution", "{F9091FFF-8BDF-4447-A4CC-19ACF2F783A3}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		localhost.pfx = localhost.pfx
 		README.md = README.md
 	EndProjectSection
 EndProject

@@ -27,6 +27,7 @@ env:
   KUBERNETES_MEMORY_LIMIT: 768Mi
   KUBERNETES_CPU_REQUEST: 50m
   KUBERNETES_CPU_LIMIT: 150m
+  KUBERNETES_CRONJOB_SCHEDULE: "0 * * * *"
   ASPNETCORE_ENVIRONMENT: ${{ github.ref == 'refs/heads/master' && 'Production' || 'Staging' }}
 jobs:
   build-and-deploy:

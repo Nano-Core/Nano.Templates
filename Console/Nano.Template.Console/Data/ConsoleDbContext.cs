@@ -14,7 +14,6 @@ public class ConsoleDbContext : DefaultDbContext
     public ConsoleDbContext(DbContextOptions dbContextOptions, DataOptions dataOptions)
         : base(dbContextOptions, dataOptions)
     {
-
     }
 
     /// <inheritdoc />
