@@ -11,7 +11,7 @@ using Nano.Template.Console.Services.Interfaces;
 namespace Nano.Template.Console;
 
 /// <inheritdoc />
-public class Worker : DefaultWorker
+public class Worker : BaseDefaultWorker
 {
     /// <summary>
     /// Sample Service.
@@ -34,7 +34,7 @@ public class Worker : DefaultWorker
 
         Thread.Sleep(2000);
 
-        this.Logger.LogInformation("Cmd::Completed...");
+        this.Logger.LogWarning("Cmd::Completed...");
 
         await this.StopAsync(cancellationToken);
     }

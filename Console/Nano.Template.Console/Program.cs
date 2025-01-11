@@ -35,7 +35,6 @@ public class Program
                 x.AddSingleton<ISampleService, SampleService>();
             })
             .Build()
-            .RunAsync()
-            .ConfigureAwait(false);
+            .Run();
     }
 }
