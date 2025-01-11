@@ -34,11 +34,13 @@ services:
       MYSQL_DATABASE: "serviceDb"
 
   eventing: 
-    image: rabbitmq:latest
+    image: rabbitmq:management
     hostname: rabbitmq
     ports:
       - 5671:5671
       - 5672:5672
+      - 15671:15671
+      - 15672:15672
     networks:
       - network
     environment: 
@@ -59,3 +61,4 @@ services:
 networks:
   network:
     name: network
+    driver: bridge
