@@ -32,6 +32,7 @@ services:
       MYSQL_PASSWORD: "myPassword_123"
       MYSQL_ROOT_PASSWORD: "myPassword_123"
       MYSQL_DATABASE: "serviceDb"
+    command: --transaction-isolation=READ-UNCOMMITTED
 
   eventing: 
     image: rabbitmq:management
