@@ -10,7 +10,7 @@ env:
   DOTNET_ASPNET_VERSION: 9.0-noble
   MYSQL_DATABASE_NAME: serviceDb
   MYSQL_DATABASE_USER: nano-template-service-user
-  AZURE_GROUP: Kubernetes
+  AZURE_GROUP: ${{ vars.AZURE_KUBERNETES_RESOURCE_GROUP }}
   AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
   AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
@@ -55,7 +55,7 @@ jobs:
         run: |
           if ('${{ github.ref }}' -eq 'refs/heads/master') {
               echo "AZURE_SUBSCRIPTION_ID=${{ secrets.PRODUCTION_AZURE_SUBSCRIPTION_ID }}" >> $env:GITHUB_ENV;
-              echo "KUBERNETES_CLUSTER=${{ secrets.PRODUCTION_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
+              echo "KUBERNETES_CLUSTER=${{ vars.PRODUCTION_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
               echo "NANO_AUTH_JWT_PUBLIC_KEY=${{ secrets.PRODUCTION_NANO_AUTH_JWT_PUBLIC_KEY }}" >> $env:GITHUB_ENV;
               echo "NANO_AUTH_JWT_PRIVATE_KEY=${{ secrets.PRODUCTION_NANO_AUTH_JWT_PRIVATE_KEY }}" >> $env:GITHUB_ENV;
               echo "MYSQL_CONNECTIONSTRING=Server=${{ secrets.PRODUCTION_MYSQL_HOST }};Port=${{ vars.MYSQL_PORT }};Database=$env:MYSQL_DATABASE_NAME;Uid=$env:MYSQL_DATABASE_USER;Pwd=${{ secrets.PRODUCTION_MYSQL_SERVICE_DB_PASSWORD }};SslMode=Preferred;" >> $env:GITHUB_ENV;
@@ -65,7 +65,7 @@ jobs:
           }
           else {
               echo "AZURE_SUBSCRIPTION_ID=${{ secrets.STAGING_AZURE_SUBSCRIPTION_ID }}" >> $env:GITHUB_ENV;
-              echo "KUBERNETES_CLUSTER=${{ secrets.STAGING_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
+              echo "KUBERNETES_CLUSTER=${{ vars.STAGING_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
               echo "NANO_AUTH_JWT_PUBLIC_KEY=${{ secrets.STAGING_NANO_AUTH_JWT_PUBLIC_KEY }}" >> $env:GITHUB_ENV;
               echo "NANO_AUTH_JWT_PRIVATE_KEY=${{ secrets.STAGING_NANO_AUTH_JWT_PRIVATE_KEY }}" >> $env:GITHUB_ENV;
               echo "MYSQL_CONNECTIONSTRING=Server=${{ secrets.STAGING_MYSQL_HOST }};Port=${{ vars.MYSQL_PORT }};Database=$env:MYSQL_DATABASE_NAME;Uid=$env:MYSQL_DATABASE_USER;Pwd=${{ secrets.STAGING_MYSQL_SERVICE_DB_PASSWORD }};SslMode=Preferred;" >> $env:GITHUB_ENV;

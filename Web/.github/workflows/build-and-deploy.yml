@@ -7,7 +7,7 @@ env:
   IMAGE_NAME: nano.template.web
   SERVICE_NAME: nano-template-web
   VERSION: '${{ vars.VERSION }}.${{ github.run_number }}.${{ github.run_attempt }}'
-  AZURE_GROUP: Kubernetes
+  AZURE_GROUP: ${{ vars.AZURE_KUBERNETES_RESOURCE_GROUP }}
   AZURE_LOCATION: North Europe
   AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
