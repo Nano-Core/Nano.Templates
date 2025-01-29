@@ -111,4 +111,6 @@ spec:
           secretName: storage-account-secret
           shareName: %STORAGE_SHARE_NAME%
           readOnly: false
+      imagePullSecrets:
+        - name: ghcr-pull-secret
 

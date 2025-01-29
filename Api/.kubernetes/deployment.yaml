@@ -84,3 +84,5 @@ spec:
       volumes:
       - name: tmp
         emptyDir: {}
+      imagePullSecrets:
+        - name: ghcr-pull-secret

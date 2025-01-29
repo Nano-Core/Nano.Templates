@@ -82,4 +82,6 @@ spec:
         emptyDir: {}
       - name: npm-logs
         emptyDir: {}
+      imagePullSecrets:
+        - name: ghcr-pull-secret
   
