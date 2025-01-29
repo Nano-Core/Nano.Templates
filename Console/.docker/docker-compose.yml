@@ -25,6 +25,7 @@ services:
 
   # eventing: 
   #   image: rabbitmq:management
+  #   hostname: rabbitmq
   #   ports:
   #     - 5671:5671
   #     - 5672:5672
