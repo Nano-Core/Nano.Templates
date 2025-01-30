@@ -4,7 +4,6 @@ metadata:
   name: ingress-%SERVICE_NAME%
   namespace: %KUBERNETES_NAMESPACE%
   annotations:
-    kubernetes.io/ingress.class: nginx
     kubernetes.io/ingress.allow-http: "false"
     nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
@@ -38,6 +37,7 @@ metadata:
       sub_filter '(<body[^>]*>)(.*?)%NONCE_TOKEN%(.*?<\/body>)' '$1$2"$request_id"$3';
     nginx.org/client-max-body-size: "128m"
 spec:
+  ingressClassName: nginx
   tls:
   - hosts:
     - %CERTIFICATE_HOST%
