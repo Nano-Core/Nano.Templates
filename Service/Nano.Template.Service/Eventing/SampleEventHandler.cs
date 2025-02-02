@@ -22,6 +22,9 @@ public class SampleEventHandler : IEventingHandler<SampleEvent>
     /// </summary>
     protected virtual ISampleService SampleService { get; }
 
+    /// <inheritdoc />
+    public virtual ushort? OverridePrefetchCount { get; } = 12;
+
     /// <summary>
     /// Constructor.
     /// </summary>
