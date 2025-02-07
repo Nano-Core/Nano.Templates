@@ -122,48 +122,6 @@ jobs:
           sudo az login --service-principal -u $env:AZURE_CLIENT_ID -p $env:AZURE_CLIENT_SECRET --tenant $env:AZURE_TENANT_ID -o none;
           sudo az account set -s $env:AZURE_SUBSCRIPTION_ID -o none;
           sudo az aks get-credentials -g $env:AZURE_GROUP -n $env:KUBERNETES_CLUSTER --overwrite -o none;
-          
-          Get-Content .kubernetes/certificate.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/certificate.tmp.yaml;
-          sudo kubectl apply -f .kubernetes/certificate.tmp.yaml;
-          if ($LastExitCode -ne 0)
-          { 
-              throw "error";
-          };
-
-          Get-Content .kubernetes/service.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/service.tmp.yaml;
-          sudo kubectl apply -f .kubernetes/service.tmp.yaml;
-          if ($LastExitCode -ne 0)
-          { 
-              throw "error";
-          };
-
-          Get-Content .kubernetes/configmap.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/configmap.tmp.yaml;
-          sudo kubectl apply -f .kubernetes/configmap.tmp.yaml;
-          if ($LastExitCode -ne 0)
-          { 
-              throw "error";
-          };
-
-          Get-Content .kubernetes/deployment.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/deployment.tmp.yaml;
-          sudo kubectl apply -f .kubernetes/deployment.tmp.yaml;
-          if ($LastExitCode -ne 0)
-          { 
-              throw "error";
-          };
-
-          Get-Content .kubernetes/autoscaler.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/autoscaler.tmp.yaml;
-          sudo kubectl apply -f .kubernetes/autoscaler.tmp.yaml;
-          if ($LastExitCode -ne 0)
-          { 
-              throw "error";
-          };
-
-          Get-Content .kubernetes/ingress.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/ingress.tmp.yaml;
-          sudo kubectl apply -f .kubernetes/ingress.tmp.yaml;
-          if ($LastExitCode -ne 0)
-          { 
-              throw "error";
-          };
 
           sudo az extension add -n application-insights;
 
@@ -219,6 +177,48 @@ jobs:
                   --locations Id='emea-nl-ams-azr' `
                   --locations Id='apac-hk-hkn-azr';
           };
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+          
+          Get-Content .kubernetes/certificate.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/certificate.tmp.yaml;
+          sudo kubectl apply -f .kubernetes/certificate.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+          Get-Content .kubernetes/service.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/service.tmp.yaml;
+          sudo kubectl apply -f .kubernetes/service.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+          Get-Content .kubernetes/configmap.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/configmap.tmp.yaml;
+          sudo kubectl apply -f .kubernetes/configmap.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+          Get-Content .kubernetes/deployment.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/deployment.tmp.yaml;
+          sudo kubectl apply -f .kubernetes/deployment.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+          Get-Content .kubernetes/autoscaler.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/autoscaler.tmp.yaml;
+          sudo kubectl apply -f .kubernetes/autoscaler.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+          Get-Content .kubernetes/ingress.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/ingress.tmp.yaml;
+          sudo kubectl apply -f .kubernetes/ingress.tmp.yaml;
           if ($LastExitCode -ne 0)
           { 
               throw "error";
