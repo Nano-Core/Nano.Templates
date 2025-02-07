@@ -34,6 +34,8 @@ env:
   KUBERNETES_CPU_LIMIT: 600m
   KUBERNETES_CPU_SCALING: 180
   CERTIFICATE_ISSUER: letsencrypt-prod
+  CERTIFICATE_ORGANIZATION: ${{ vars.CERTIFICATE_ORGANIZATION }}
+  AVAILABILITY_CHECK_FREQUENCY: 300
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -60,6 +62,7 @@ jobs:
               echo "NONCE_TOKEN=${{ secrets.PRODUCTION_WEB_NONCE_TOKEN }}" >> $env:GITHUB_ENV;
               echo "NANO_WEB_HOSTING_CORS_ALLOWED_ORIGINS_0=https://${{ vars.HOST_WEB_SUBDOMAIN }}.${{ secrets.PRODUCTION_HOST }}" >> $env:GITHUB_ENV;
               echo "NANO_WEB_HOSTING_CORS_ALLOWED_ORIGINS_1=" >> $env:GITHUB_ENV;
+              echo "APPLICATION_INSIGHT_AVAILABILITY_URI=https://${{ secrets.PRODUCTION_HOST }}/healthz" >> $env:GITHUB_ENV;
           }
           else {
               echo "AZURE_SUBSCRIPTION_ID=${{ secrets.STAGING_AZURE_SUBSCRIPTION_ID }}" >> $env:GITHUB_ENV;
@@ -68,6 +71,7 @@ jobs:
               echo "NONCE_TOKEN=${{ secrets.STAGING_WEB_NONCE_TOKEN }}" >> $env:GITHUB_ENV;
               echo "NANO_WEB_HOSTING_CORS_ALLOWED_ORIGINS_0=https://${{ vars.HOST_WEB_SUBDOMAIN }}.${{ secrets.STAGING_HOST }}" >> $env:GITHUB_ENV;
               echo "NANO_WEB_HOSTING_CORS_ALLOWED_ORIGINS_1=http://localhost" >> $env:GITHUB_ENV;
+              echo "APPLICATION_INSIGHT_AVAILABILITY_URI=https://${{ secrets.STAGING_HOST }}/healthz" >> $env:GITHUB_ENV;
           }
 
       - name: Build and Deploy
@@ -156,6 +160,65 @@ jobs:
 
           Get-Content .kubernetes/ingress.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/ingress.tmp.yaml;
           sudo kubectl apply -f .kubernetes/ingress.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+          sudo az extension add -n application-insights;
+
+          $env:SERVICE_NAME_INSIGTHS = $env:SERVICE_NAME + "-insights";
+          $env:APPLICATION_INSIGHT_ID = sudo az monitor app-insights component show --query "[?contains(name, '$env:SERVICE_NAME_INSIGTHS')].[id]" -o tsv;
+          if ([string]::IsNullOrEmpty($env:APPLICATION_INSIGHT_ID))
+          {
+              $env:WORKSPACE_ID = sudo az monitor log-analytics workspace list --query "[?contains(name, 'log-analytics')].[id]" -o tsv;
+
+              if (-not [string]::IsNullOrEmpty($env:WORKSPACE_ID))
+              {
+                  $env:APPLICATION_INSIGHT_ID = sudo az monitor app-insights component create `
+                      -a $env:SERVICE_NAME_INSIGTHS `
+                      -l $env:AZURE_LOCATION `
+                      -g $env:AZURE_GROUP `
+                      --workspace $env:WORKSPACE_ID `
+                      --query "[id]" -o tsv;
+
+                  if ($LastExitCode -ne 0)
+                  { 
+                      throw "error";
+                  };
+              }
+          };
+
+          $env:APPLICATION_INSIGHT_CONNECTIONSTRING = sudo az monitor app-insights component show -g $env:AZURE_GROUP --query "[?contains(id, '$env:APPLICATION_INSIGHT_ID')].[connectionString]" -o tsv;
+
+          $env:SERVICE_NAME_AVAILABILITY = $env:SERVICE_NAME +'-availability-' + $env:ENVIRONMENT;
+          $env:APPLICATION_INSIGHT_AVAILABILITY_ID = sudo az monitor app-insights web-test list -g $env:AZURE_GROUP --query "[?contains(name, '$env:SERVICE_NAME_AVAILABILITY')].[id]" -o tsv;
+          if ([string]::IsNullOrEmpty($env:APPLICATION_INSIGHT_AVAILABILITY_ID))
+          {
+              $env:APPLICATION_INSIGHT_HIDDEN_LINK = 'hidden-link:' + $env:APPLICATION_INSIGHT_ID + '=Resource';
+              sudo az monitor app-insights web-test create `
+                  -n $env:SERVICE_NAME_AVAILABILITY `
+                  --defined-web-test-name $env:SERVICE_NAME_AVAILABILITY `
+                  -g $env:AZURE_GROUP `
+                  -l $env:AZURE_LOCATION `
+                  --kind multistep `
+                  --web-test-kind standard `
+                  --frequency $env:AVAILABILITY_CHECK_FREQUENCY `
+                  --enabled true `
+                  --retry-enabled true `
+                  --ssl-check true `
+                  --ssl-lifetime-check 30 `
+                  --http-verb GET `
+                  --request-url $env:APPLICATION_INSIGHT_AVAILABILITY_URI `
+                  --expected-status-code 200 `
+                  --content-validation content-match='\"status\":\"unhealthy\"' ignore-case=true pass-if-text-found=false `
+                  --tags $env:APPLICATION_INSIGHT_HIDDEN_LINK `
+                  --locations Id='us-ca-sjc-azr' `
+                  --locations Id='us-va-ash-azr' `
+                  --locations Id='emea-gb-db3-azr' `
+                  --locations Id='emea-nl-ams-azr' `
+                  --locations Id='apac-hk-hkn-azr';
+          };
           if ($LastExitCode -ne 0)
           { 
               throw "error";
