@@ -6,4 +6,3 @@ metadata:
 data:
   App__Version: %VERSION%
   ASPNETCORE_ENVIRONMENT: %ASPNETCORE_ENVIRONMENT%
-  Data__ConnectionString: %MYSQL_CONNECTIONSTRING%

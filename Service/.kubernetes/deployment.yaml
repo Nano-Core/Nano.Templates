@@ -44,6 +44,11 @@ spec:
             secretKeyRef:
               name: rabbitmq
               key: rabbitmq-password
+        - name: Data__ConnectionString
+          valueFrom:
+            secretKeyRef:
+              name: svc-users-secret
+              key: data-connectionstring
         - name: Security__Jwt__PublicKey
           valueFrom:
             secretKeyRef:
