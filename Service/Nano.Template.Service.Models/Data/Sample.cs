@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Nano.Models;
 using Nano.Models.Attributes;
@@ -23,4 +24,9 @@ public class Sample : DefaultEntity
     /// </summary>
     [NotMapped]
     public virtual bool HasName => this.Name != null;
+
+    /// <summary>
+    /// Json Mapped.
+    /// </summary>
+    public virtual IEnumerable<string> JsonMapped { get; set; }
 }

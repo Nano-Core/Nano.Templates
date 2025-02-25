@@ -1,7 +1,11 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Nano.Data.Models.Mappings;
+using Nano.Models.Serialization.Json.Const;
 using Nano.Template.Service.Models.Data;
+using Newtonsoft.Json;
 
 namespace Nano.Template.Service.Data.Mappings;
 
@@ -32,5 +36,14 @@ public class SampleMapping : DefaultEntityMapping<Sample>
 
         builder
             .Ignore(x => x.HasName);
+
+        var jsonSerializerSettings = Globals.GetDefaultJsonSerializerSettings();
+
+        builder
+            .Property(x => x.JsonMapped)
+            .HasConversion(
+                x => JsonConvert.SerializeObject(x, jsonSerializerSettings),
+                x => JsonConvert.DeserializeObject<IEnumerable<string>>(x, jsonSerializerSettings),
+                ValueComparer.CreateDefault<IEnumerable<string>>(false));
     }
 }
