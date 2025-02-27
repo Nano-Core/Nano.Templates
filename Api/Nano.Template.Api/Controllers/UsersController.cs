@@ -3,6 +3,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Lib.Emailing.Const;
+using Lib.Emailing.Interfaces;
+using Lib.Emailing.Models;
+using Lib.Sms.Interfaces;
+using Lib.Sms.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -15,6 +20,7 @@ using Nano.Security.Extensions;
 using Nano.Security.Models;
 using Nano.Template.Api.Controllers.Requests.Users;
 using Nano.Template.Api.Controllers.Responses.Users;
+using Nano.Template.Api.Extensions;
 using Nano.Template.Service.Models.Api;
 using Nano.Template.Service.Models.Data;
 using Nano.Web.Controllers;
@@ -26,15 +32,31 @@ namespace Nano.Template.Api.Controllers;
 /// <inheritdoc />
 public class UsersController : BaseController
 {
+    private const string RESET_PASSWORD_LINK_TEMPLATE = "auth/password/reset?userId={0}&token={1}";
+    private const string CONFIRM_EMAIL_LINK_TEMPLATE = "auth/email/confirm?token={0}";
+    private const string VERIFY_CHANGE_EMAIL_LINK_TEMPLATE = "auth/email/change?token={0}";
+
+    /// <summary>
+    /// Sms Service.
+    /// </summary>
+    protected virtual ISmsService SmsService { get; }
+
+    /// <summary>
+    /// Emailing Service.
+    /// </summary>
+    protected virtual IEmailingService EmailingService { get; }
+
     /// <summary>
     /// Web Api.
     /// </summary>
     protected virtual ServiceApi ServiceApi { get; }
 
     /// <inheritdoc />
-    public UsersController(ILogger logger, ServiceApi serviceApi)
+    public UsersController(ILogger logger, ISmsService smsService, IEmailingService emailingService, ServiceApi serviceApi)
         : base(logger)
     {
+        this.SmsService = smsService ?? throw new ArgumentNullException(nameof(smsService));
+        this.EmailingService = emailingService ?? throw new ArgumentNullException(nameof(emailingService));
         this.ServiceApi = serviceApi ?? throw new ArgumentNullException(nameof(serviceApi));
     }
 
@@ -267,7 +289,7 @@ public class UsersController : BaseController
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
-    public virtual async Task<IActionResult> ForgotPasswordAsync([FromBody][Required]UserForgotPasswordRequest request, CancellationToken cancellationToken = default)
+    public virtual async Task<IActionResult> ForgotPasswordAsync([FromBody][Required] UserForgotPasswordRequest request, CancellationToken cancellationToken = default)
     {
         var passwordResetToken = await this.ServiceApi
             .GetResetPasswordTokenAsync(new GenerateResetPasswordTokenRequest
@@ -278,8 +300,21 @@ public class UsersController : BaseController
                 }
             }, cancellationToken);
 
-        // TODO: Send email with link containing UserId and Password Reset Token.
-        this.Logger.LogDebug(passwordResetToken.Token);
+        var resetPasswordLink = this.GetResetPasswordLink(passwordResetToken.UserId, passwordResetToken.Token);
+
+        await this.EmailingService
+            .SendEmailTemplateAsync(new EmailTemplate
+            {
+                TemplateId = TemplateIds.ForgotPassword,
+                Receiver =
+                {
+                    EmailAddress = request.EmailAddress
+                },
+                Data = new
+                {
+                    ResetPasswordLink = resetPasswordLink
+                }
+            }, cancellationToken);
 
         return this.Ok();
     }
@@ -302,7 +337,7 @@ public class UsersController : BaseController
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
-    public virtual async Task<IActionResult> ResetPasswordAsync([FromBody][Required]UserResetPasswordRequest request, CancellationToken cancellationToken = default)
+    public virtual async Task<IActionResult> ResetPasswordAsync([FromBody][Required] UserResetPasswordRequest request, CancellationToken cancellationToken = default)
     {
         await this.ServiceApi
             .ResetPasswordAsync(new ResetPasswordRequest
@@ -336,7 +371,7 @@ public class UsersController : BaseController
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
-    public virtual async Task<IActionResult> ChangePasswordAsync([FromBody][Required]UserChangePasswordRequest request, CancellationToken cancellationToken = default)
+    public virtual async Task<IActionResult> ChangePasswordAsync([FromBody][Required] UserChangePasswordRequest request, CancellationToken cancellationToken = default)
     {
         var userId = this.HttpContext
             .GetJwtUserId();
@@ -387,6 +422,14 @@ public class UsersController : BaseController
             return this.NotFound();
         }
 
+        var userEmail = this.HttpContext
+            .GetJwtUserEmail();
+
+        if (userEmail == null)
+        {
+            return this.NotFound();
+        }
+
         var confirmEmailToken = await this.ServiceApi
             .GetConfirmEmailTokenAsync(new GenerateConfirmEmailTokenRequest
             {
@@ -396,8 +439,21 @@ public class UsersController : BaseController
                 }
             }, cancellationToken);
 
-        // TODO: Send email with link containing UserId and Token.
-        this.Logger.LogDebug(confirmEmailToken.Token);
+        var confirmEmailLink = this.GetConfirmEmailLink(confirmEmailToken.Token);
+
+        await this.EmailingService
+            .SendEmailTemplateAsync(new EmailTemplate
+            {
+                TemplateId = TemplateIds.ConfirmEmail,
+                Receiver =
+                {
+                    EmailAddress = userEmail
+                },
+                Data = new
+                {
+                    ConfirmEmailLink = confirmEmailLink
+                }
+            }, cancellationToken);
 
         return this.Ok();
     }
@@ -420,12 +476,12 @@ public class UsersController : BaseController
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
-    public virtual async Task<IActionResult> ConfirmEmailAsync([FromBody][Required]UserConfirmEmailRequest request, CancellationToken cancellationToken = default)
+    public virtual async Task<IActionResult> ConfirmEmailAsync([FromBody][Required] UserConfirmEmailRequest request, CancellationToken cancellationToken = default)
     {
         await this.ServiceApi
             .ConfirmEmailAsync(new ConfirmEmailRequest
             {
-                ConfirmEmail = 
+                ConfirmEmail =
                 {
                     UserId = request.UserId,
                     Token = request.Token
@@ -452,7 +508,7 @@ public class UsersController : BaseController
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
-    public virtual async Task<IActionResult> GetChangeEmailTokenAsync([FromBody][Required]UserChangeEmailTokenRequest request, CancellationToken cancellationToken = default)
+    public virtual async Task<IActionResult> GetChangeEmailTokenAsync([FromBody][Required] UserChangeEmailTokenRequest request, CancellationToken cancellationToken = default)
     {
         var userId = this.HttpContext
             .GetJwtUserId();
@@ -460,6 +516,14 @@ public class UsersController : BaseController
         if (userId == null)
         {
             return this.NotFound();
+        }
+
+        var userEmail = this.HttpContext
+            .GetJwtUserEmail();
+
+        if (userEmail == null)
+        {
+            throw new NullReferenceException(nameof(userEmail));
         }
 
         var changeEmailToken = await this.ServiceApi
@@ -472,8 +536,22 @@ public class UsersController : BaseController
                 }
             }, cancellationToken);
 
-        // TODO: Send email with link containing UserId, NewEmailAddress and Token.
-        this.Logger.LogDebug(changeEmailToken.Token);
+
+        var verifyChangeEmailLink = this.GetVerifyChangeEmailLink(changeEmailToken.Token);
+
+        await this.EmailingService
+            .SendEmailTemplateAsync(new EmailTemplate
+            {
+                TemplateId = TemplateIds.ChangeEmail,
+                Receiver =
+                {
+                    EmailAddress = userEmail
+                },
+                Data = new
+                {
+                    VerifyChangeEmailLink = verifyChangeEmailLink
+                }
+            }, cancellationToken);
 
         return this.Ok();
     }
@@ -496,7 +574,7 @@ public class UsersController : BaseController
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
-    public virtual async Task<IActionResult> ChangeEmailAsync([FromBody][Required]UserChangeEmailRequest request, CancellationToken cancellationToken = default)
+    public virtual async Task<IActionResult> ChangeEmailAsync([FromBody][Required] UserChangeEmailRequest request, CancellationToken cancellationToken = default)
     {
         await this.ServiceApi
             .ChangeEmailAsync(new ChangeEmailRequest
@@ -538,7 +616,10 @@ public class UsersController : BaseController
             return this.NotFound();
         }
 
-        var confirmEmailToken = await this.ServiceApi
+        var user = await this.ServiceApi
+            .GetAsync<User>(userId.Value, cancellationToken);
+
+        var confirmPhoneNumberToken = await this.ServiceApi
             .GetConfirmPhoneTokenAsync(new GenerateConfirmPhoneTokenRequest
             {
                 ConfirmPhoneToken =
@@ -547,9 +628,15 @@ public class UsersController : BaseController
                 }
             }, cancellationToken);
 
-        // TODO: Send sms with link containing UserId and Token.
-        this.Logger.LogDebug(confirmEmailToken.Token);
-
+        await this.SmsService
+            .SendSmsAsync(new Sms
+            {
+                Text = confirmPhoneNumberToken.Token,
+                Receiver =
+                {
+                    PhoneNumber = user.IdentityUser.PhoneNumber
+                }
+            }, cancellationToken);
         return this.Ok();
     }
 
@@ -570,14 +657,22 @@ public class UsersController : BaseController
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
-    public virtual async Task<IActionResult> ConfirmPhoneAsync([FromBody][Required]UserConfirmPhoneRequest request, CancellationToken cancellationToken = default)
+    public virtual async Task<IActionResult> ConfirmPhoneAsync([FromBody][Required] UserConfirmPhoneRequest request, CancellationToken cancellationToken = default)
     {
+        var userId = this.HttpContext
+            .GetJwtUserId();
+
+        if (userId == null)
+        {
+            return this.NotFound();
+        }
+
         await this.ServiceApi
             .ConfirmPhoneAsync(new ConfirmPhoneRequest
             {
-                ConfirmPhone = 
+                ConfirmPhone =
                 {
-                    UserId = request.UserId,
+                    UserId = userId.Value,
                     Token = request.Token
                 }
             }, cancellationToken);
@@ -602,7 +697,7 @@ public class UsersController : BaseController
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
-    public virtual async Task<IActionResult> GetChangePhoneTokenAsync([FromBody][Required]UserChangePhoneTokenRequest request, CancellationToken cancellationToken = default)
+    public virtual async Task<IActionResult> GetChangePhoneTokenAsync([FromBody][Required] UserChangePhoneTokenRequest request, CancellationToken cancellationToken = default)
     {
         var userId = this.HttpContext
             .GetJwtUserId();
@@ -612,18 +707,28 @@ public class UsersController : BaseController
             return this.NotFound();
         }
 
-        var changeEmailToken = await this.ServiceApi
+        var user = await this.ServiceApi
+            .GetAsync<User>(userId.Value, cancellationToken);
+
+        var changePhoneNumberToken = await this.ServiceApi
             .GetChangePhoneTokenAsync(new GenerateChangePhoneTokenRequest
             {
-                ChangePhoneToken = 
+                ChangePhoneToken =
                 {
                     UserId = userId.Value,
                     NewPhoneNumber = request.NewPhoneNumber
                 }
             }, cancellationToken);
 
-        // TODO: Send sms with link containing UserId, NewEmailAddress and Token.
-        this.Logger.LogDebug(changeEmailToken.Token);
+        await this.SmsService
+            .SendSmsAsync(new Sms
+            {
+                Text = changePhoneNumberToken.Token,
+                Receiver =
+                {
+                    PhoneNumber = user.IdentityUser.PhoneNumber
+                }
+            }, cancellationToken);
 
         return this.Ok();
     }
@@ -640,25 +745,55 @@ public class UsersController : BaseController
     /// <response code="500">Error occurred.</response>
     [HttpPost]
     [Route("phone/change")]
-    [AllowAnonymous]
     [Consumes(HttpContentType.JSON)]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
-    public virtual async Task<IActionResult> ChangePhoneAsync([FromBody][Required]UserChangePhoneRequest request, CancellationToken cancellationToken = default)
+    public virtual async Task<IActionResult> ChangePhoneAsync([FromBody][Required] UserChangePhoneRequest request, CancellationToken cancellationToken = default)
     {
+        var userId = this.HttpContext
+            .GetJwtUserId();
+
+        if (userId == null)
+        {
+            return this.NotFound();
+        }
+
         await this.ServiceApi
             .ChangePhoneAsync(new ChangePhoneRequest
             {
-                ChangePhone = 
+                ChangePhone =
                 {
-                    UserId = request.UserId,
+                    UserId = userId.Value,
                     Token = request.Token,
                     NewPhoneNumber = request.NewPhoneNumber
                 }
             }, cancellationToken);
 
         return this.Ok();
+    }
+
+
+    private string GetResetPasswordLink(Guid userId, string token)
+    {
+        var webUri = this.HttpContext
+            .GetBaseWebUri();
+
+        return string.Concat(webUri.AbsoluteUri, string.Format(UsersController.RESET_PASSWORD_LINK_TEMPLATE, userId, token));
+    }
+    private string GetConfirmEmailLink(string token)
+    {
+        var webUri = this.HttpContext
+            .GetBaseWebUri();
+
+        return string.Concat(webUri.AbsoluteUri, string.Format(UsersController.CONFIRM_EMAIL_LINK_TEMPLATE, token));
+    }
+    private string GetVerifyChangeEmailLink(string token)
+    {
+        var webUri = this.HttpContext
+            .GetBaseWebUri();
+
+        return string.Concat(webUri.AbsoluteUri, string.Format(UsersController.VERIFY_CHANGE_EMAIL_LINK_TEMPLATE, token));
     }
 }

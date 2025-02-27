@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Nano.Template.Api.Controllers.Requests.Users;
 
@@ -8,12 +7,6 @@ namespace Nano.Template.Api.Controllers.Requests.Users;
 /// </summary>
 public class UserChangePhoneRequest
 {
-    /// <summary>
-    /// User Id.
-    /// </summary>
-    [Required]
-    public virtual Guid UserId { get; set; }
-
     /// <summary>
     /// Token.
     /// </summary>
