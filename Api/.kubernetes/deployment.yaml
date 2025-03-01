@@ -44,6 +44,16 @@ spec:
             secretKeyRef:
               name: auth-jwt-keys-secret
               key: jwt-public-key
+        - name: Sms__ApiKey
+          valueFrom:
+            secretKeyRef:
+              name: twilio-secret
+              key: apikey
+        - name: Emailing__ApiKey
+          valueFrom:
+            secretKeyRef:
+              name: sendgrid-secret
+              key: apikey
         envFrom:
         - configMapRef:
             name: %SERVICE_NAME%-config
