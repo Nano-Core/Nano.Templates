@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Nano.Models;
 using Nano.Models.Attributes;
+using Nano.Template.Service.Models.Data.Types;
 
 namespace Nano.Template.Service.Models.Data;
 
@@ -29,4 +30,9 @@ public class Sample : DefaultEntity
     /// Json Mapped.
     /// </summary>
     public virtual IEnumerable<string> JsonMapped { get; set; }
+
+    /// <summary>
+    /// City.
+    /// </summary>
+    public virtual City City { get; set; } = new();
 }

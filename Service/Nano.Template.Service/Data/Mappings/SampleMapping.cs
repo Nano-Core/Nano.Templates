@@ -6,6 +6,7 @@ using Nano.Data.Models.Mappings;
 using Nano.Models.Serialization.Json.Const;
 using Nano.Template.Service.Models.Data;
 using Newtonsoft.Json;
+using System.Net;
 
 namespace Nano.Template.Service.Data.Mappings;
 
@@ -45,5 +46,8 @@ public class SampleMapping : DefaultEntityMapping<Sample>
                 x => JsonConvert.SerializeObject(x, jsonSerializerSettings),
                 x => JsonConvert.DeserializeObject<IEnumerable<string>>(x, jsonSerializerSettings),
                 ValueComparer.CreateDefault<IEnumerable<string>>(false));
+
+        builder
+            .MapType(x => x.City);
     }
 }
