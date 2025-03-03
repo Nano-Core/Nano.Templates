@@ -29,22 +29,6 @@ public static class OwnedNavigationBuilderExtensions
 
         builder
             .OwnsOne(expression)
-            .Property(x => x.Country)
-            .HasMaxLength(5);
-
-        builder
-            .OwnsOne(expression)
-            .Property(x => x.City)
-            .HasMaxLength(128);
-
-        builder
-            .OwnsOne(expression)
-            .Property(x => x.ZipCode)
-            .HasMaxLength(32);
-
-        builder
-            .OwnsOne(expression)
-            .Property(x => x.StreetName)
-            .HasMaxLength(512);
+            .Property(x => x.Code);
     }
 }
