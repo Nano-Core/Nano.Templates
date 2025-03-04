@@ -8,7 +8,7 @@ namespace Lib.Sms.Models.Structs;
 public class Receiver
 {
     /// <summary>
-    /// Phone NUmber.
+    /// Phone Number.
     /// </summary>
     [Required]
     [Phone]

@@ -1,22 +1,29 @@
 ﻿namespace Lib.Emailing.Const;
 
+// TODO: USER STORY: Setup SendGrid, add Template Ids.
+
 /// <summary>
 /// Template Ids.
 /// </summary>
 public static class TemplateIds
 {
     /// <summary>
-    /// Forgot Password.
-    /// </summary>0
-    public static string ForgotPassword => "";
+    /// User Welcome.
+    /// </summary>
+    public static string UserWelcome => "";
 
     /// <summary>
-    /// Confirm Email.
-    /// </summary>0
-    public static string ConfirmEmail => "";
+    /// User Forgot Password.
+    /// </summary>
+    public static string UserForgotPassword => "";
 
     /// <summary>
-    /// Change Email.
-    /// </summary>0
-    public static string ChangeEmail => "";
+    /// User Confirm Email.
+    /// </summary>
+    public static string UserConfirmEmail => "";
+
+    /// <summary>
+    /// User Change Email.
+    /// </summary>
+    public static string UserChangeEmail => "";
 }

@@ -1,7 +1,7 @@
 ﻿namespace Lib.Sms;
 
 /// <summary>
-/// Emailing Options.
+/// Sms Options.
 /// </summary>
 public class SmsOptions
 {
@@ -11,12 +11,17 @@ public class SmsOptions
     internal static string SectionName => "Sms";
 
     /// <summary>
-    /// Api Key.
+    /// Account Id.
     /// </summary>
-    public virtual string ApiKey { get; set; }
+    public virtual string AccountId { get; set; }
 
     /// <summary>
-    /// Phone Number.
+    /// Auth Token.
+    /// </summary>
+    public virtual string AuthToken { get; set; }
+
+    /// <summary>
+    /// Sender Phone Number.
     /// </summary>
     public virtual string SenderPhoneNumber { get; set; }
 }

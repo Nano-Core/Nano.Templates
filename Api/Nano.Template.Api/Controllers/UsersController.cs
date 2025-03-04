@@ -305,7 +305,7 @@ public class UsersController : BaseController
         await this.EmailingService
             .SendEmailTemplateAsync(new EmailTemplate
             {
-                TemplateId = TemplateIds.ForgotPassword,
+                TemplateId = TemplateIds.UserForgotPassword,
                 Receiver =
                 {
                     EmailAddress = request.EmailAddress
@@ -444,7 +444,7 @@ public class UsersController : BaseController
         await this.EmailingService
             .SendEmailTemplateAsync(new EmailTemplate
             {
-                TemplateId = TemplateIds.ConfirmEmail,
+                TemplateId = TemplateIds.UserConfirmEmail,
                 Receiver =
                 {
                     EmailAddress = userEmail
@@ -542,7 +542,7 @@ public class UsersController : BaseController
         await this.EmailingService
             .SendEmailTemplateAsync(new EmailTemplate
             {
-                TemplateId = TemplateIds.ChangeEmail,
+                TemplateId = TemplateIds.UserChangeEmail,
                 Receiver =
                 {
                     EmailAddress = userEmail
@@ -574,7 +574,7 @@ public class UsersController : BaseController
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
-    public virtual async Task<IActionResult> ChangeEmailAsync([FromBody][Required] UserChangeEmailRequest request, CancellationToken cancellationToken = default)
+    public virtual async Task<IActionResult> ChangeEmailAsync([FromBody][Required]UserChangeEmailRequest request, CancellationToken cancellationToken = default)
     {
         await this.ServiceApi
             .ChangeEmailAsync(new ChangeEmailRequest
@@ -582,8 +582,7 @@ public class UsersController : BaseController
                 ChangeEmail =
                 {
                     UserId = request.UserId,
-                    Token = request.Token,
-                    NewEmailAddress = request.NewEmailAddress
+                    Token = request.Token
                 }
             }, cancellationToken);
 
@@ -629,7 +628,7 @@ public class UsersController : BaseController
             }, cancellationToken);
 
         await this.SmsService
-            .SendSmsAsync(new Sms
+            .SendSmsAsync(new Message
             {
                 Text = confirmPhoneNumberToken.Token,
                 Receiver =
@@ -657,7 +656,7 @@ public class UsersController : BaseController
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
-    public virtual async Task<IActionResult> ConfirmPhoneAsync([FromBody][Required] UserConfirmPhoneRequest request, CancellationToken cancellationToken = default)
+    public virtual async Task<IActionResult> ConfirmPhoneAsync([FromBody][Required]UserConfirmPhoneRequest request, CancellationToken cancellationToken = default)
     {
         var userId = this.HttpContext
             .GetJwtUserId();
@@ -697,7 +696,7 @@ public class UsersController : BaseController
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
-    public virtual async Task<IActionResult> GetChangePhoneTokenAsync([FromBody][Required] UserChangePhoneTokenRequest request, CancellationToken cancellationToken = default)
+    public virtual async Task<IActionResult> GetChangePhoneTokenAsync([FromBody][Required]UserChangePhoneTokenRequest request, CancellationToken cancellationToken = default)
     {
         var userId = this.HttpContext
             .GetJwtUserId();
@@ -721,7 +720,7 @@ public class UsersController : BaseController
             }, cancellationToken);
 
         await this.SmsService
-            .SendSmsAsync(new Sms
+            .SendSmsAsync(new Message
             {
                 Text = changePhoneNumberToken.Token,
                 Receiver =
@@ -750,7 +749,7 @@ public class UsersController : BaseController
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
-    public virtual async Task<IActionResult> ChangePhoneAsync([FromBody][Required] UserChangePhoneRequest request, CancellationToken cancellationToken = default)
+    public virtual async Task<IActionResult> ChangePhoneAsync([FromBody][Required]UserChangePhoneRequest request, CancellationToken cancellationToken = default)
     {
         var userId = this.HttpContext
             .GetJwtUserId();
@@ -766,8 +765,7 @@ public class UsersController : BaseController
                 ChangePhone =
                 {
                     UserId = userId.Value,
-                    Token = request.Token,
-                    NewPhoneNumber = request.NewPhoneNumber
+                    Token = request.Token
                 }
             }, cancellationToken);
 

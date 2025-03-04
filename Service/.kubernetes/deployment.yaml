@@ -47,7 +47,7 @@ spec:
         - name: Data__ConnectionString
           valueFrom:
             secretKeyRef:
-              name: svc-users-secret
+              name: %SERVICE_NAME%-secret
               key: data-connectionstring
         - name: Security__Jwt__PublicKey
           valueFrom:

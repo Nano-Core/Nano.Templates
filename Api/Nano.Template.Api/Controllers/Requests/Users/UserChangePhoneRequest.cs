@@ -12,11 +12,4 @@ public class UserChangePhoneRequest
     /// </summary>
     [Required]
     public virtual string Token { get; set; }
-
-    /// <summary>
-    /// New Phone Number.
-    /// </summary>
-    [Required]
-    [Phone]
-    public virtual string NewPhoneNumber { get; set; }
 }

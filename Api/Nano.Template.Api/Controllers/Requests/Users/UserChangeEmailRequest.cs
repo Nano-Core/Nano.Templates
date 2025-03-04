@@ -19,11 +19,4 @@ public class UserChangeEmailRequest
     /// </summary>
     [Required]
     public virtual string Token { get; set; }
-
-    /// <summary>
-    /// New Email Address.
-    /// </summary>
-    [Required]
-    [EmailAddress]
-    public virtual string NewEmailAddress { get; set; }
 }

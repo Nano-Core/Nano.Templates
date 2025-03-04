@@ -4,9 +4,9 @@ using Lib.Sms.Models.Structs;
 namespace Lib.Sms.Models;
 
 /// <summary>
-/// Sms. 
+/// Message. 
 /// </summary>
-public class Sms
+public class Message
 {
     /// <summary>
     /// Receiver.

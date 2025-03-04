@@ -2,6 +2,7 @@
 using Lib.Sms.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Twilio.Clients;
 
 namespace Lib.Sms.Extensions;
 
@@ -11,7 +12,7 @@ namespace Lib.Sms.Extensions;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Add Emailing to the <see cref="IServiceCollection"/>.
+    /// Add Sms to the <see cref="IServiceCollection"/>.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/>.</param>
     /// <returns>The <see cref="IServiceCollection"/>.</returns>
@@ -22,6 +23,9 @@ public static class ServiceCollectionExtensions
 
         services
             .AddConfigOptions<SmsOptions>(SmsOptions.SectionName, out var options);
+
+        services
+            .AddSingleton<ITwilioRestClient>(new TwilioRestClient(options.AccountId, options.AuthToken));
 
         services
             .AddSingleton<ISmsService, SmsService>();

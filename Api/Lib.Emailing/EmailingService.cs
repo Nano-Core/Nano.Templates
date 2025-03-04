@@ -12,18 +12,18 @@ namespace Lib.Emailing;
 /// Emailing Service.
 /// </summary>
 /// <param name="sendGridClient">The <see cref="ISendGridClient"/>.</param>
-/// <param name="emailingOptions">The <see cref="Options"/>.</param>
+/// <param name="emailingOptions">The <see cref="EmailingOptions"/>.</param>
 public class EmailingService(ISendGridClient sendGridClient, EmailingOptions emailingOptions) : IEmailingService
 {
     /// <summary>
     /// Client.
     /// </summary>
-    protected ISendGridClient Client { get; } = sendGridClient ?? throw new ArgumentNullException(nameof(sendGridClient));
+    protected virtual ISendGridClient Client { get; } = sendGridClient ?? throw new ArgumentNullException(nameof(sendGridClient));
 
     /// <summary>
     /// Options.
     /// </summary>
-    protected EmailingOptions Options { get; } = emailingOptions ?? throw new ArgumentNullException(nameof(emailingOptions));
+    protected virtual EmailingOptions Options { get; } = emailingOptions ?? throw new ArgumentNullException(nameof(emailingOptions));
 
     /// <inheritdoc />
     public virtual async Task SendEmailAsync(Email email, CancellationToken cancellationToken = default)

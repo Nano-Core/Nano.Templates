@@ -12,8 +12,8 @@ public interface ISmsService
     /// <summary>
     /// Send Sms Async.
     /// </summary>
-    /// <param name="sms">The <see cref="Sms"/>.</param>
+    /// <param name="message">The <see cref="Message"/>.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/>.</param>
     /// <returns>Void.</returns>
-    Task SendSmsAsync(Models.Sms sms, CancellationToken cancellationToken = default);
+    Task SendSmsAsync(Message message, CancellationToken cancellationToken = default);
 }

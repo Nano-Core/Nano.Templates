@@ -6,8 +6,8 @@
 		<Version>1.0.0</Version>
 		<Description>SendGrid email implementation.</Description>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<PackageProjectUrl>https://github.com/BizApiSoft/Lib.Emailing</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/BizApiSoft/Lib.Emailing.git</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/vivet/Nano.Templates</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/vivet/Nano.Templates.git</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>sendgrid, email</PackageTags>
 		<IncludeSymbols>true</IncludeSymbols>

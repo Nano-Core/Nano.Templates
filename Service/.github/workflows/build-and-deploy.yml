@@ -33,7 +33,7 @@ env:
   KUBERNETES_CPU_REQUEST: 200m
   KUBERNETES_CPU_LIMIT: 600m
   KUBERNETES_CPU_SCALING: 180
-  STORAGE_SHARE_NAME: nano-template-service-storage
+  STORAGE_SHARE_NAME: nano-template-service
   STORAGE_SIZE: 1000
   ASPNETCORE_ENVIRONMENT: ${{ github.ref == 'refs/heads/master' && 'Production' || 'Staging' }}
 jobs:
@@ -159,13 +159,13 @@ jobs:
               throw "error";
           };  
 
-          sudo kubectl create secret generic nano-template-service-secret --from-literal=data-connectionstring=$env:MYSQL_CONNECTIONSTRING --save-config --dry-run=client -o yaml | sudo kubectl apply -f -;
+          sudo kubectl create secret generic auth-jwt-keys-secret --from-literal=jwt-public-key=$env:NANO_AUTH_JWT_PUBLIC_KEY --from-literal=jwt-private-key=$env:NANO_AUTH_JWT_PRIVATE_KEY --save-config --dry-run=client -o yaml | sudo kubectl apply -f -;
           if ($LastExitCode -ne 0)
           { 
               throw "error";
           };
 
-          sudo kubectl create secret generic auth-jwt-keys-secret --from-literal=jwt-public-key=$env:NANO_AUTH_JWT_PUBLIC_KEY --from-literal=jwt-private-key=$env:NANO_AUTH_JWT_PRIVATE_KEY --save-config --dry-run=client -o yaml | sudo kubectl apply -f -;
+          sudo kubectl create secret generic $env:SERVICE_NAME-secret --from-literal=data-connectionstring=$env:MYSQL_CONNECTIONSTRING --save-config --dry-run=client -o yaml | sudo kubectl apply -f -;
           if ($LastExitCode -ne 0)
           { 
               throw "error";

@@ -49,11 +49,26 @@ spec:
             secretKeyRef:
               name: twilio-secret
               key: apikey
+        - name: Sms__SenderPhoneNumber
+          valueFrom:
+            secretKeyRef:
+              name: twilio-secret
+              key: sender
         - name: Emailing__ApiKey
           valueFrom:
             secretKeyRef:
               name: sendgrid-secret
               key: apikey
+        - name: Emailing__SenderName
+          valueFrom:
+            secretKeyRef:
+              name: sendgrid-secret
+              key: sender-name
+        - name: Emailing__SenderEmailAddress
+          valueFrom:
+            secretKeyRef:
+              name: sendgrid-secret
+              key: sender-email
         envFrom:
         - configMapRef:
             name: %SERVICE_NAME%-config
