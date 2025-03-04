@@ -30,7 +30,7 @@
     <ProjectReference Include="..\..\..\Nano.Library\Nano.Security\Nano.Security.csproj" />
     <ProjectReference Include="..\..\..\Nano.Library\Nano.Web\Nano.Web.csproj" />
     <ProjectReference Include="..\..\Service\Nano.Template.Service.Models\Nano.Template.Service.Models.csproj" />
-    <ProjectReference Include="..\Lib.Emailing\Lib.Emailing.csproj" />
-    <ProjectReference Include="..\Lib.Sms\Lib.Sms.csproj" />
+    <ProjectReference Include="..\.libs\Lib.Emailing\Lib.Emailing.csproj" />
+    <ProjectReference Include="..\.libs\Lib.Sms\Lib.Sms.csproj" />
   </ItemGroup>
 </Project>
