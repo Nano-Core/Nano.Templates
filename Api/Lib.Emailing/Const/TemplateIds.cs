@@ -1,7 +1,5 @@
 ﻿namespace Lib.Emailing.Const;
 
-// TODO: USER STORY: Setup SendGrid, add Template Ids.
-
 /// <summary>
 /// Template Ids.
 /// </summary>
