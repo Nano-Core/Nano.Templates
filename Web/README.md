@@ -1,2 +1,3 @@
 # Nano.Templates.Web
+[![Build and Deploy](https://github.com/Nano-Core/Nano.Templates.Web/actions/workflows/build-and-deploy.yml/badge.svg)](https://github.com/Nano-Core/Nano.Templates.Web/actions/workflows/build-and-deploy.yml)  
 Coming...  
