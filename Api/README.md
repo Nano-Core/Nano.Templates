@@ -1,4 +1,5 @@
 # Nano.Template.Api 
+[![Build and Deploy](https://github.com/Nano-Core/Nano.Template.Api/actions/workflows/build-and-deploy.yml/badge.svg)](https://github.com/Nano-Core/Nano.Template.Api/actions/workflows/build-and-deploy.yml)  
 A basic api application, implemented using Nano Library.  
 
 **NOTE:** When enabling availability-test, alerts are disabled by default and there is no way to enable them using ```az monitor app-insights web-test create```. To enable the alert rules navigate to the availability-test in the Azure portal, open the context menu of the availability-test and click _Open Rules (Alerts) page, then enable the alerts.  

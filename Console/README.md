@@ -1,4 +1,5 @@
 # Nano.Template.Console
+[![Build and Deploy](https://github.com/Nano-Core/Nano.Template.Console/actions/workflows/build-and-deploy.yml/badge.svg)](https://github.com/Nano-Core/Nano.Template.Console/actions/workflows/build-and-deploy.yml)  
 A basic console application, implemented using Nano Library.  
 
 ***
