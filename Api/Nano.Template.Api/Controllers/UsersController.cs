@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Lib.Emailing.Const;
 using Lib.Emailing.Interfaces;
 using Lib.Emailing.Models;
 using Lib.Sms.Interfaces;
@@ -18,6 +17,7 @@ using Nano.Models.Const;
 using Nano.Security;
 using Nano.Security.Extensions;
 using Nano.Security.Models;
+using Nano.Template.Api.Const;
 using Nano.Template.Api.Controllers.Requests.Users;
 using Nano.Template.Api.Controllers.Responses.Users;
 using Nano.Template.Api.Extensions;
@@ -305,7 +305,7 @@ public class UsersController : BaseController
         await this.EmailingService
             .SendEmailTemplateAsync(new EmailTemplate
             {
-                TemplateId = TemplateIds.UserForgotPassword,
+                TemplateId = EmailTemplateIds.UserForgotPassword,
                 Receiver =
                 {
                     EmailAddress = request.EmailAddress
@@ -444,7 +444,7 @@ public class UsersController : BaseController
         await this.EmailingService
             .SendEmailTemplateAsync(new EmailTemplate
             {
-                TemplateId = TemplateIds.UserConfirmEmail,
+                TemplateId = EmailTemplateIds.UserConfirmEmail,
                 Receiver =
                 {
                     EmailAddress = userEmail
@@ -542,7 +542,7 @@ public class UsersController : BaseController
         await this.EmailingService
             .SendEmailTemplateAsync(new EmailTemplate
             {
-                TemplateId = TemplateIds.UserChangeEmail,
+                TemplateId = EmailTemplateIds.UserChangeEmail,
                 Receiver =
                 {
                     EmailAddress = userEmail

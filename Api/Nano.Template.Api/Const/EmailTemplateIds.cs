@@ -1,9 +1,9 @@
-﻿namespace Lib.Emailing.Const;
+﻿namespace Nano.Template.Api.Const;
 
 /// <summary>
-/// Template Ids.
+/// Email Template Ids.
 /// </summary>
-public static class TemplateIds
+public static class EmailTemplateIds
 {
     /// <summary>
     /// User Welcome.
