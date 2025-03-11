@@ -6,7 +6,7 @@ using Nano.Data.Models.Mappings;
 using Nano.Models.Serialization.Json.Const;
 using Nano.Template.Service.Models.Data;
 using Newtonsoft.Json;
-using System.Net;
+using Nano.Template.Service.Data.Mappings.Extensions;
 
 namespace Nano.Template.Service.Data.Mappings;
 

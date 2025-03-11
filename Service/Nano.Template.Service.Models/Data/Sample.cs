@@ -34,5 +34,6 @@ public class Sample : DefaultEntity
     /// <summary>
     /// City.
     /// </summary>
+    [Required]
     public virtual City City { get; set; } = new();
 }

@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Nano.Template.Service.Models.Data.Types;
 
-namespace Nano.Template.Service.Data.Mappings;
+namespace Nano.Template.Service.Data.Mappings.Extensions;
 
 /// <summary>
 /// Owned Navigation Builder Extensions.
