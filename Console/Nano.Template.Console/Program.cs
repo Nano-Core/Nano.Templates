@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Nano.Console;
 using Nano.Data.Extensions;
@@ -22,9 +23,9 @@ public class Program
     /// Main.
     /// </summary>
     /// <param name="args"></param>
-    public static void Main(string[] args)
+    public static Task Main(string[] args)
     {
-        ConsoleApplication
+        return ConsoleApplication
             .ConfigureApp(args)
             .ConfigureServices(x =>
             {
@@ -35,6 +36,6 @@ public class Program
                 x.AddSingleton<ISampleService, SampleService>();
             })
             .Build()
-            .Run();
+            .RunAsync();
     }
 }

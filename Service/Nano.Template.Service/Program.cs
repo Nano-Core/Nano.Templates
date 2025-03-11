@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Nano.Data.Extensions;
 using Nano.Data.Providers.MySql;
@@ -23,9 +24,9 @@ public class Program
     /// <summary>
     /// Main.
     /// </summary>
-    public static void Main()
+    public static Task Main()
     {
-        WebApplication
+        return WebApplication
             .ConfigureApp()
             .ConfigureServices(x =>
             {
@@ -37,6 +38,6 @@ public class Program
                 x.AddSingleton<ISampleService, SampleService>();
             })
             .Build()
-            .Run();
+            .RunAsync();
     }
 }

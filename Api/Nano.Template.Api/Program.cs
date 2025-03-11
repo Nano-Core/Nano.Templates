@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Nano.Logging.Extensions;
 using Nano.Logging.Providers.Serilog;
 using Nano.Web;
@@ -13,15 +14,15 @@ public class Program
     /// <summary>
     /// Main.
     /// </summary>
-    public static void Main()
+    public static Task Main()
     {
-        WebApplication
+        return WebApplication
             .ConfigureApp()
             .ConfigureServices(x =>
             {
                 x.AddLogging<SerilogProvider>();
             })
             .Build()
-            .Run();
+            .RunAsync();
     }
 }
