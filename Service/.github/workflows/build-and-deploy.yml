@@ -56,8 +56,6 @@ jobs:
           if ('${{ github.ref }}' -eq 'refs/heads/master') {
               echo "AZURE_SUBSCRIPTION_ID=${{ secrets.PRODUCTION_AZURE_SUBSCRIPTION_ID }}" >> $env:GITHUB_ENV;
               echo "KUBERNETES_CLUSTER=${{ vars.PRODUCTION_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
-              echo "NANO_AUTH_JWT_PUBLIC_KEY=${{ secrets.PRODUCTION_NANO_AUTH_JWT_PUBLIC_KEY }}" >> $env:GITHUB_ENV;
-              echo "NANO_AUTH_JWT_PRIVATE_KEY=${{ secrets.PRODUCTION_NANO_AUTH_JWT_PRIVATE_KEY }}" >> $env:GITHUB_ENV;
               echo "MYSQL_CONNECTIONSTRING=Server=${{ secrets.PRODUCTION_MYSQL_HOST }};Port=${{ vars.MYSQL_PORT }};Database=$env:MYSQL_DATABASE_NAME;Uid=$env:MYSQL_DATABASE_USER;Pwd=${{ secrets.PRODUCTION_MYSQL_SERVICE_DB_PASSWORD }};SslMode=Preferred;" >> $env:GITHUB_ENV;
               echo "MYSQL_MIGRATION_CONNECTIONSTRING=Server=${{ secrets.PRODUCTION_MYSQL_HOST }};Port=${{ vars.MYSQL_PORT }};Database=$env:MYSQL_DATABASE_NAME;Uid=${{ secrets.PRODUCTION_MYSQL_ADMIN_USER }};Pwd=${{ secrets.PRODUCTION_MYSQL_ADMIN_PASSWORD }};SslMode=Preferred;" >> $env:GITHUB_ENV;
               echo "STORAGE_ACCOUNT_NAME=${{ secrets.PRODUCTION_STORAGE_ACCOUNT_NAME }}" >> $env:GITHUB_ENV;
@@ -66,8 +64,6 @@ jobs:
           else {
               echo "AZURE_SUBSCRIPTION_ID=${{ secrets.STAGING_AZURE_SUBSCRIPTION_ID }}" >> $env:GITHUB_ENV;
               echo "KUBERNETES_CLUSTER=${{ vars.STAGING_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
-              echo "NANO_AUTH_JWT_PUBLIC_KEY=${{ secrets.STAGING_NANO_AUTH_JWT_PUBLIC_KEY }}" >> $env:GITHUB_ENV;
-              echo "NANO_AUTH_JWT_PRIVATE_KEY=${{ secrets.STAGING_NANO_AUTH_JWT_PRIVATE_KEY }}" >> $env:GITHUB_ENV;
               echo "MYSQL_CONNECTIONSTRING=Server=${{ secrets.STAGING_MYSQL_HOST }};Port=${{ vars.MYSQL_PORT }};Database=$env:MYSQL_DATABASE_NAME;Uid=$env:MYSQL_DATABASE_USER;Pwd=${{ secrets.STAGING_MYSQL_SERVICE_DB_PASSWORD }};SslMode=Preferred;" >> $env:GITHUB_ENV;
               echo "MYSQL_MIGRATION_CONNECTIONSTRING=Server=${{ secrets.STAGING_MYSQL_HOST }};Port=${{ vars.MYSQL_PORT }};Database=$env:MYSQL_DATABASE_NAME;Uid=${{ secrets.STAGING_MYSQL_ADMIN_USER }};Pwd=${{ secrets.STAGING_MYSQL_ADMIN_PASSWORD }};SslMode=Preferred;" >> $env:GITHUB_ENV;
               echo "STORAGE_ACCOUNT_NAME=${{ secrets.STAGING_STORAGE_ACCOUNT_NAME }}" >> $env:GITHUB_ENV;
@@ -158,12 +154,6 @@ jobs:
           { 
               throw "error";
           };  
-
-          sudo kubectl create secret generic auth-jwt-keys-secret --from-literal=jwt-public-key=$env:NANO_AUTH_JWT_PUBLIC_KEY --from-literal=jwt-private-key=$env:NANO_AUTH_JWT_PRIVATE_KEY --save-config --dry-run=client -o yaml | sudo kubectl apply -f -;
-          if ($LastExitCode -ne 0)
-          { 
-              throw "error";
-          };
 
           sudo kubectl create secret generic $env:SERVICE_NAME-secret --from-literal=data-connectionstring=$env:MYSQL_CONNECTIONSTRING --save-config --dry-run=client -o yaml | sudo kubectl apply -f -;
           if ($LastExitCode -ne 0)
