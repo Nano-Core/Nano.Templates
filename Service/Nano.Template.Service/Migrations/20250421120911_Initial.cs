@@ -117,6 +117,10 @@ namespace Nano.Template.Service.Migrations
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Name = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    JsonMapped = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    City_Country_Code = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     type = table.Column<string>(type: "varchar(21)", maxLength: 21, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Description = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
@@ -182,6 +186,54 @@ namespace Nano.Template.Service.Migrations
                         name: "FK___EFAuthRoleClaim___EFAuthRole_RoleId",
                         column: x => x.RoleId,
                         principalTable: "__EFAuthRole",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "__EFAuthApiKey",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    IdentityUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Name = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Hash = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
+                    RevokedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK___EFAuthApiKey", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK___EFAuthApiKey___EFAuthUser_IdentityUserId",
+                        column: x => x.IdentityUserId,
+                        principalTable: "__EFAuthUser",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "__EFAuthUserChangeData",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    IdentityUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    NewEmail = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NewPhoneNumber = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK___EFAuthUserChangeData", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK___EFAuthUserChangeData___EFAuthUser_IdentityUserId",
+                        column: x => x.IdentityUserId,
+                        principalTable: "__EFAuthUser",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -294,6 +346,7 @@ namespace Nano.Template.Service.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IsDeleted = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
                     IdentityUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: true),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
                 },
@@ -360,6 +413,16 @@ namespace Nano.Template.Service.Migrations
                 column: "PropertyName");
 
             migrationBuilder.CreateIndex(
+                name: "IX___EFAuthApiKey_IdentityUserId",
+                table: "__EFAuthApiKey",
+                column: "IdentityUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX___EFAuthApiKey_RevokedAt",
+                table: "__EFAuthApiKey",
+                column: "RevokedAt");
+
+            migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "__EFAuthRole",
                 column: "NormalizedName",
@@ -391,6 +454,12 @@ namespace Nano.Template.Service.Migrations
                 name: "UserNameIndex",
                 table: "__EFAuthUser",
                 column: "NormalizedUserName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "UX___EFAuthUserChangeData_IdentityUserId",
+                table: "__EFAuthUserChangeData",
+                column: "IdentityUserId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -430,6 +499,11 @@ namespace Nano.Template.Service.Migrations
                 column: "CreatedAt");
 
             migrationBuilder.CreateIndex(
+                name: "IX_User_IsActive",
+                table: "User",
+                column: "IsActive");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_User_IsDeleted",
                 table: "User",
                 column: "IsDeleted");
@@ -460,7 +534,13 @@ namespace Nano.Template.Service.Migrations
                 name: "__EFAuditProperties");
 
             migrationBuilder.DropTable(
+                name: "__EFAuthApiKey");
+
+            migrationBuilder.DropTable(
                 name: "__EFAuthRoleClaim");
+
+            migrationBuilder.DropTable(
+                name: "__EFAuthUserChangeData");
 
             migrationBuilder.DropTable(
                 name: "__EFAuthUserClaim");

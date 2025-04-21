@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Nano.Models;
 using Nano.Models.Attributes;
+using Nano.Models.Data;
 
 namespace Nano.Template.Service.Models.Data;
 

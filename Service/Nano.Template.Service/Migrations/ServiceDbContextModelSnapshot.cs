@@ -92,6 +92,77 @@ namespace Nano.Template.Service.Migrations
                     b.ToTable("__EFAuthRoleClaim", (string)null);
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique();
+
+                    b.ToTable("__EFAuthUser", (string)null);
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
@@ -256,7 +327,7 @@ namespace Nano.Template.Service.Migrations
                     b.ToTable("__EFAuditProperties", (string)null);
                 });
 
-            modelBuilder.Entity("Nano.Models.IdentityApiKey<System.Guid>", b =>
+            modelBuilder.Entity("Nano.Models.Data.IdentityApiKey<System.Guid>", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -289,36 +360,14 @@ namespace Nano.Template.Service.Migrations
                     b.ToTable("__EFAuthApiKey", (string)null);
                 });
 
-            modelBuilder.Entity("Nano.Models.IdentityUserExpanded<System.Guid>", b =>
+            modelBuilder.Entity("Nano.Models.Data.IdentityUserChangeData<System.Guid>", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
-                        .HasDefaultValue(true);
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetime(6)");
+                    b.Property<Guid>("IdentityUserId")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("NewEmail")
                         .HasMaxLength(256)
@@ -328,52 +377,16 @@ namespace Nano.Template.Service.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)");
 
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
+                    b.HasIndex("IdentityUserId")
                         .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
+                        .HasDatabaseName("UX___EFAuthUserChangeData_IdentityUserId");
 
-                    b.HasIndex("PhoneNumber")
-                        .IsUnique();
-
-                    b.ToTable("__EFAuthUser", (string)null);
+                    b.ToTable("__EFAuthUserChangeData", (string)null);
                 });
 
-            modelBuilder.Entity("Nano.Models.IdentityUserTokenExpiry<System.Guid>", b =>
+            modelBuilder.Entity("Nano.Models.Data.IdentityUserTokenExpiry<System.Guid>", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
@@ -457,6 +470,11 @@ namespace Nano.Template.Service.Migrations
                     b.Property<Guid>("IdentityUserId")
                         .HasColumnType("char(36)");
 
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(true);
+
                     b.Property<long>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
@@ -474,6 +492,8 @@ namespace Nano.Template.Service.Migrations
                     b.HasIndex("IdentityUserId")
                         .IsUnique()
                         .HasDatabaseName("UX_User_IdentityUserId");
+
+                    b.HasIndex("IsActive");
 
                     b.HasIndex("IsDeleted");
 
@@ -523,7 +543,7 @@ namespace Nano.Template.Service.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.HasOne("Nano.Models.IdentityUserExpanded<System.Guid>", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -532,7 +552,7 @@ namespace Nano.Template.Service.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
-                    b.HasOne("Nano.Models.IdentityUserExpanded<System.Guid>", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -547,7 +567,7 @@ namespace Nano.Template.Service.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Nano.Models.IdentityUserExpanded<System.Guid>", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -565,9 +585,9 @@ namespace Nano.Template.Service.Migrations
                     b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("Nano.Models.IdentityApiKey<System.Guid>", b =>
+            modelBuilder.Entity("Nano.Models.Data.IdentityApiKey<System.Guid>", b =>
                 {
-                    b.HasOne("Nano.Models.IdentityUserExpanded<System.Guid>", "IdentityUser")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", "IdentityUser")
                         .WithMany()
                         .HasForeignKey("IdentityUserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -576,9 +596,20 @@ namespace Nano.Template.Service.Migrations
                     b.Navigation("IdentityUser");
                 });
 
-            modelBuilder.Entity("Nano.Models.IdentityUserTokenExpiry<System.Guid>", b =>
+            modelBuilder.Entity("Nano.Models.Data.IdentityUserChangeData<System.Guid>", b =>
                 {
-                    b.HasOne("Nano.Models.IdentityUserExpanded<System.Guid>", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", "IdentityUser")
+                        .WithOne()
+                        .HasForeignKey("Nano.Models.Data.IdentityUserChangeData<System.Guid>", "IdentityUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("IdentityUser");
+                });
+
+            modelBuilder.Entity("Nano.Models.Data.IdentityUserTokenExpiry<System.Guid>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -625,7 +656,7 @@ namespace Nano.Template.Service.Migrations
 
             modelBuilder.Entity("Nano.Template.Service.Models.Data.User", b =>
                 {
-                    b.HasOne("Nano.Models.IdentityUserExpanded<System.Guid>", "IdentityUser")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", "IdentityUser")
                         .WithOne()
                         .HasForeignKey("Nano.Template.Service.Models.Data.User", "IdentityUserId")
                         .OnDelete(DeleteBehavior.Cascade)

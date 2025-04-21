@@ -12,7 +12,7 @@ using Nano.Template.Service.Data;
 namespace Nano.Template.Service.Migrations
 {
     [DbContext(typeof(ServiceDbContext))]
-    [Migration("20241023164647_Initial")]
+    [Migration("20250421120911_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace Nano.Template.Service.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
@@ -330,7 +330,66 @@ namespace Nano.Template.Service.Migrations
                     b.ToTable("__EFAuditProperties", (string)null);
                 });
 
-            modelBuilder.Entity("Nano.Security.Data.Models.IdentityUserTokenExpiry<System.Guid>", b =>
+            modelBuilder.Entity("Nano.Models.Data.IdentityApiKey<System.Guid>", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Hash")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<Guid>("IdentityUserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTimeOffset?>("RevokedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdentityUserId");
+
+                    b.HasIndex("RevokedAt");
+
+                    b.ToTable("__EFAuthApiKey", (string)null);
+                });
+
+            modelBuilder.Entity("Nano.Models.Data.IdentityUserChangeData<System.Guid>", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("IdentityUserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("NewEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("NewPhoneNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdentityUserId")
+                        .IsUnique()
+                        .HasDatabaseName("UX___EFAuthUserChangeData_IdentityUserId");
+
+                    b.ToTable("__EFAuthUserChangeData", (string)null);
+                });
+
+            modelBuilder.Entity("Nano.Models.Data.IdentityUserTokenExpiry<System.Guid>", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
@@ -368,6 +427,9 @@ namespace Nano.Template.Service.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasDefaultValue(0L);
+
+                    b.Property<string>("JsonMapped")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -411,6 +473,11 @@ namespace Nano.Template.Service.Migrations
                     b.Property<Guid>("IdentityUserId")
                         .HasColumnType("char(36)");
 
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(true);
+
                     b.Property<long>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
@@ -428,6 +495,8 @@ namespace Nano.Template.Service.Migrations
                     b.HasIndex("IdentityUserId")
                         .IsUnique()
                         .HasDatabaseName("UX_User_IdentityUserId");
+
+                    b.HasIndex("IsActive");
 
                     b.HasIndex("IsDeleted");
 
@@ -519,12 +588,72 @@ namespace Nano.Template.Service.Migrations
                     b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("Nano.Security.Data.Models.IdentityUserTokenExpiry<System.Guid>", b =>
+            modelBuilder.Entity("Nano.Models.Data.IdentityApiKey<System.Guid>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", "IdentityUser")
+                        .WithMany()
+                        .HasForeignKey("IdentityUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("IdentityUser");
+                });
+
+            modelBuilder.Entity("Nano.Models.Data.IdentityUserChangeData<System.Guid>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", "IdentityUser")
+                        .WithOne()
+                        .HasForeignKey("Nano.Models.Data.IdentityUserChangeData<System.Guid>", "IdentityUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("IdentityUser");
+                });
+
+            modelBuilder.Entity("Nano.Models.Data.IdentityUserTokenExpiry<System.Guid>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Nano.Template.Service.Models.Data.Sample", b =>
+                {
+                    b.OwnsOne("Nano.Template.Service.Models.Data.Types.City", "City", b1 =>
+                        {
+                            b1.Property<Guid>("SampleId")
+                                .HasColumnType("char(36)");
+
+                            b1.HasKey("SampleId");
+
+                            b1.ToTable("Sample");
+
+                            b1.WithOwner()
+                                .HasForeignKey("SampleId");
+
+                            b1.OwnsOne("Nano.Template.Service.Models.Data.Types.Country", "Country", b2 =>
+                                {
+                                    b2.Property<Guid>("CitySampleId")
+                                        .HasColumnType("char(36)");
+
+                                    b2.Property<string>("Code")
+                                        .HasColumnType("longtext");
+
+                                    b2.HasKey("CitySampleId");
+
+                                    b2.ToTable("Sample");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("CitySampleId");
+                                });
+
+                            b1.Navigation("Country")
+                                .IsRequired();
+                        });
+
+                    b.Navigation("City")
                         .IsRequired();
                 });
 
