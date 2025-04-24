@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Nano.Models;
+using Nano.Models.Data;
 using Nano.Models.Attributes;
 using Nano.Template.Service.Models.Data.Types;
 
