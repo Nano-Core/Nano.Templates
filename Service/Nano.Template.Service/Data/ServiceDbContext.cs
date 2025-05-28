@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Nano.Data;
 using Nano.Data.Models.Mappings.Extensions;
+using Nano.Security;
 using Nano.Template.Service.Data.Mappings;
 using Nano.Template.Service.Models.Data;
 
@@ -11,8 +12,8 @@ namespace Nano.Template.Service.Data;
 public class ServiceDbContext : DefaultDbContext
 {
     /// <inheritdoc />
-    public ServiceDbContext(DbContextOptions dbContextOptions, DataOptions dataOptions)
-        : base(dbContextOptions, dataOptions)
+    public ServiceDbContext(DbContextOptions dbContextOptions, DataOptions dataOptions, SecurityOptions securityOptions)
+        : base(dbContextOptions, dataOptions, securityOptions)
     {
     }
 
