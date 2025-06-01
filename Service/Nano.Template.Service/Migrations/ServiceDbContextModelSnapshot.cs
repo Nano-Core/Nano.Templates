@@ -157,8 +157,7 @@ namespace Nano.Template.Service.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.HasIndex("PhoneNumber")
-                        .IsUnique();
+                    b.HasIndex("PhoneNumber");
 
                     b.ToTable("__EFAuthUser", (string)null);
                 });
@@ -467,9 +466,6 @@ namespace Nano.Template.Service.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<DateTimeOffset>("CreatedAt"));
 
-                    b.Property<Guid>("IdentityUserId")
-                        .HasColumnType("char(36)");
-
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("tinyint(1)")
@@ -489,17 +485,9 @@ namespace Nano.Template.Service.Migrations
 
                     b.HasIndex("CreatedAt");
 
-                    b.HasIndex("IdentityUserId")
-                        .IsUnique()
-                        .HasDatabaseName("UX_User_IdentityUserId");
-
                     b.HasIndex("IsActive");
 
                     b.HasIndex("IsDeleted");
-
-                    b.HasIndex("IdentityUserId", "IsDeleted")
-                        .IsUnique()
-                        .HasDatabaseName("UX_User_IdentityUserId_IsDeleted");
 
                     b.HasIndex("Name", "IsDeleted")
                         .IsUnique()
@@ -658,7 +646,7 @@ namespace Nano.Template.Service.Migrations
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", "IdentityUser")
                         .WithOne()
-                        .HasForeignKey("Nano.Template.Service.Models.Data.User", "IdentityUserId")
+                        .HasForeignKey("Nano.Template.Service.Models.Data.User", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -345,17 +345,16 @@ namespace Nano.Template.Service.Migrations
                     Name = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IsDeleted = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
-                    IdentityUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: true),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_User___EFAuthUser_IdentityUserId",
-                        column: x => x.IdentityUserId,
+                        name: "FK_User___EFAuthUser_Id",
+                        column: x => x.Id,
                         principalTable: "__EFAuthUser",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -447,8 +446,7 @@ namespace Nano.Template.Service.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX___EFAuthUser_PhoneNumber",
                 table: "__EFAuthUser",
-                column: "PhoneNumber",
-                unique: true);
+                column: "PhoneNumber");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -507,18 +505,6 @@ namespace Nano.Template.Service.Migrations
                 name: "IX_User_IsDeleted",
                 table: "User",
                 column: "IsDeleted");
-
-            migrationBuilder.CreateIndex(
-                name: "UX_User_IdentityUserId",
-                table: "User",
-                column: "IdentityUserId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "UX_User_IdentityUserId_IsDeleted",
-                table: "User",
-                columns: new[] { "IdentityUserId", "IsDeleted" },
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "UX_User_Name_IsDeleted",
