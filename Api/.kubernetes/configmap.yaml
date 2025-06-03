@@ -9,5 +9,4 @@ data:
   Web__Documentation__CspNonce: %NONCE_TOKEN%
   Web__Hosting__Cors__AllowedOrigins__0: %NANO_WEB_HOSTING_CORS_ALLOWED_ORIGINS_0%
   Web__Hosting__Cors__AllowedOrigins__1: %NANO_WEB_HOSTING_CORS_ALLOWED_ORIGINS_1%
-  Logging__ConnectionString: %APPLICATION_INSIGHT_CONNECTIONSTRING%
 

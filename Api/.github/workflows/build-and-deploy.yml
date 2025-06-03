@@ -147,8 +147,6 @@ jobs:
               }
           };
 
-          $env:APPLICATION_INSIGHT_CONNECTIONSTRING = sudo az monitor app-insights component show -g $env:AZURE_GROUP --query "[?contains(id, '$env:APPLICATION_INSIGHT_ID')].[connectionString]" -o tsv;
-
           $env:SERVICE_NAME_AVAILABILITY = $env:SERVICE_NAME +'-availability-' + $env:ENVIRONMENT;
           $env:APPLICATION_INSIGHT_AVAILABILITY_ID = sudo az monitor app-insights web-test list -g $env:AZURE_GROUP --query "[?contains(name, '$env:SERVICE_NAME_AVAILABILITY')].[id]" -o tsv;
           if ([string]::IsNullOrEmpty($env:APPLICATION_INSIGHT_AVAILABILITY_ID))
