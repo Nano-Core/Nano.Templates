@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Nano.App.Api;
 using Nano.Template.Service.Models.Api.Requests;
@@ -10,8 +11,8 @@ namespace Nano.Template.Service.Models.Api;
 public class ServiceApi : DefaultIdentityApi<User>
 {
     /// <inheritdoc />
-    public ServiceApi(ApiOptions options)
-        : base(options)
+    public ServiceApi(ApiOptions options, HttpClient httpClient)
+        : base(options, httpClient)
     {
     }
 
