@@ -1,4 +1,4 @@
-ARG DOTNET_ASPNET_VERSION="9.0-noble"
+ARG DOTNET_ASPNET_VERSION="10.0"
 
 FROM mcr.microsoft.com/dotnet/aspnet:$DOTNET_ASPNET_VERSION AS base
 

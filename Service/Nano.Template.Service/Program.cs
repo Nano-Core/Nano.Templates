@@ -1,43 +1,27 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Nano.App.Web;
 using Nano.Data.Extensions;
-using Nano.Data.Providers.MySql;
+using Nano.Data.MySql;
 using Nano.Eventing.Extensions;
-using Nano.Eventing.Providers.EasyNetQ;
+using Nano.Eventing.RabbitMq;
 using Nano.Logging.Extensions;
-using Nano.Logging.Providers.Serilog;
+using Nano.Logging.Serilog;
+using Nano.Storage.Azure;
 using Nano.Storage.Extensions;
-using Nano.Storage.Providers.Azure;
 using Nano.Template.Service.Data;
 using Nano.Template.Service.Services;
 using Nano.Template.Service.Services.Interfaces;
-using Nano.Web;
 
-namespace Nano.Template.Service;
-
-/// <summary>
-/// Program.
-/// </summary>
-public class Program
-{
-    /// <summary>
-    /// Main.
-    /// </summary>
-    public static Task Main()
+NanoWebApplication
+    .ConfigureApp()
+    .ConfigureServices(x =>
     {
-        return WebApplication
-            .ConfigureApp()
-            .ConfigureServices(x =>
-            {
-                x.AddLogging<SerilogProvider>();
-                x.AddDataContext<MySqlProvider, ServiceDbContext>();
-                x.AddEventing<EasyNetQProvider>();
-                x.AddStorage<AzureFileshareProvider>();
+        x.AddNanoLogging<SerilogProvider>();
+        x.AddNanoData<MySqlProvider, ServiceDbContext>();
+        x.AddNanoEventing<EasyNetQProvider>();
+        x.AddNanoStorage<AzureFileshareProvider>();
 
-                x.AddSingleton<ISampleService, SampleService>();
-            })
-            .Build()
-            .RunAsync();
-    }
-}
+        x.AddSingleton<ISampleService, SampleService>();
+    })
+    .Build()
+    .Run();

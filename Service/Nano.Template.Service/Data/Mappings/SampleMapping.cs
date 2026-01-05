@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Nano.Data.Models.Mappings;
-using Nano.Models.Serialization.Json.Const;
+using Nano.Common.Serialization.Json;
+using Nano.Data.Mappings;
 using Nano.Template.Service.Models.Data;
 using Newtonsoft.Json;
 using Nano.Template.Service.Data.Mappings.Extensions;
@@ -38,7 +38,7 @@ public class SampleMapping : DefaultEntityMapping<Sample>
         builder
             .Ignore(x => x.HasName);
 
-        var jsonSerializerSettings = Globals.GetDefaultJsonSerializerSettings();
+        var jsonSerializerSettings = SerializerSettings.GetDefault();
 
         builder
             .Property(x => x.JsonMapped)

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Nano.Eventing.Interfaces;
+using Nano.Eventing.Abstractions;
 using Nano.Template.Service.Events;
 using Nano.Template.Service.Services.Interfaces;
 

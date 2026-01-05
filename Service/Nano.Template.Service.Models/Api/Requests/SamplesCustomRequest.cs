@@ -1,4 +1,4 @@
-﻿using Nano.App.Api.Requests;
+﻿using Nano.App.ApiClient.Requests;
 
 namespace Nano.Template.Service.Models.Api.Requests;
 

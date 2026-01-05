@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DynamicExpression;
-using Nano.Models.Criterias;
+using Nano.App.Web.Controllers.Models;
 
 namespace Nano.Template.Service.Models.Criterias;
 

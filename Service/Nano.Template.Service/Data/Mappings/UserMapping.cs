@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Nano.Data.Models.Mappings;
+using Nano.Data.Identity.Mappings;
 using Nano.Template.Service.Models.Data;
 
 namespace Nano.Template.Service.Data.Mappings;

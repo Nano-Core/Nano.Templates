@@ -1,16 +1,14 @@
 ﻿using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Nano.Models;
-using Nano.Models.Eventing.Interfaces;
-using Nano.Repository.Interfaces;
+using Nano.App.Web.Controllers;
+using Nano.Data.Abstractions;
+using Nano.Eventing.Abstractions;
 using Nano.Template.Service.Events;
 using Nano.Template.Service.Models.Criterias;
 using Nano.Template.Service.Models.Data;
-using Nano.Web.Controllers;
 
 namespace Nano.Template.Service.Controllers;
 
@@ -41,8 +39,8 @@ public class SamplesController : DefaultController<Sample, SampleQueryCriteria>
     [ProducesResponseType((int)HttpStatusCode.Accepted)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     public virtual async Task<IActionResult> CustomV1Async(CancellationToken cancellationToken = default)
     {
         await this.Eventing
@@ -67,8 +65,8 @@ public class SamplesController : DefaultController<Sample, SampleQueryCriteria>
     [ProducesResponseType((int)HttpStatusCode.Accepted)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.InternalServerError)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     public virtual async Task<IActionResult> CustomV2Async(CancellationToken cancellationToken = default)
     {
         await this.Eventing

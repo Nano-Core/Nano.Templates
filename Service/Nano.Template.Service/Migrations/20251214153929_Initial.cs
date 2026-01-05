@@ -64,6 +64,7 @@ namespace Nano.Template.Service.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: true),
                     UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NormalizedUserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
@@ -346,8 +347,7 @@ namespace Nano.Template.Service.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IsDeleted = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: true)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
                 },
                 constraints: table =>
                 {
@@ -444,6 +444,11 @@ namespace Nano.Template.Service.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX___EFAuthUser_IsActive",
+                table: "__EFAuthUser",
+                column: "IsActive");
+
+            migrationBuilder.CreateIndex(
                 name: "IX___EFAuthUser_PhoneNumber",
                 table: "__EFAuthUser",
                 column: "PhoneNumber");
@@ -495,11 +500,6 @@ namespace Nano.Template.Service.Migrations
                 name: "IX_User_CreatedAt",
                 table: "User",
                 column: "CreatedAt");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_User_IsActive",
-                table: "User",
-                column: "IsActive");
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_IsDeleted",

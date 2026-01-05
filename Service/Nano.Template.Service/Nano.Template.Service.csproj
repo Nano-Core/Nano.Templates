@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<ApplicationIcon />
 		<OutputType>Exe</OutputType>
 		<Version>1.0.0.0</Version>
 		<AssemblyVersion>1.0.0.0</AssemblyVersion>
-		<!--<WarningsAsErrors />
-		<NoWarn />
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>-->
+		<WarningsAsErrors />
+		<NoWarn>NU1902</NoWarn>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<UserSecretsId>ea7b387b-00d6-4018-a791-705c74d450ad</UserSecretsId>
 		<DocumentationFile>$(MSBuildThisFileDirectory)\bin\$(Configuration)\Nano.Template.Service.xml</DocumentationFile>
 	</PropertyGroup>

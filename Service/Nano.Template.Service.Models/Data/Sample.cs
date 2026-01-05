@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Nano.Models.Data;
-using Nano.Models.Attributes;
+using Nano.Data.Abstractions.Annotations;
+using Nano.Data.Abstractions.Models;
 using Nano.Template.Service.Models.Data.Types;
 
 namespace Nano.Template.Service.Models.Data;

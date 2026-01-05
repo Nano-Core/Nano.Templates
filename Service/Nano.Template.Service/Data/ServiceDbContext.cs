@@ -1,8 +1,10 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Nano.Data;
-using Nano.Data.Models.Mappings.Extensions;
-using Nano.Security;
+using Nano.Data.Abstractions.Config;
+using Nano.Data.Mappings.Extensions;
+using Nano.Eventing.Abstractions;
 using Nano.Template.Service.Data.Mappings;
 using Nano.Template.Service.Models.Data;
 
@@ -12,8 +14,8 @@ namespace Nano.Template.Service.Data;
 public class ServiceDbContext : DefaultDbContext
 {
     /// <inheritdoc />
-    public ServiceDbContext(DbContextOptions dbContextOptions, DataOptions dataOptions, SecurityOptions securityOptions)
-        : base(dbContextOptions, dataOptions, securityOptions)
+    public ServiceDbContext(DbContextOptions dbContextOptions, IOptionsMonitor<DataOptions> dataOptions, IEventing eventing = null)
+        : base(dbContextOptions, dataOptions, eventing)
     {
     }
 

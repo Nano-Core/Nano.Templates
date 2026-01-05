@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Nano.Models.Interfaces;
+using Nano.Data.Abstractions.Models.Abstractions;
 using Nano.Template.Service.Models.Data.Types;
 
 namespace Nano.Template.Service.Data.Mappings.Extensions;

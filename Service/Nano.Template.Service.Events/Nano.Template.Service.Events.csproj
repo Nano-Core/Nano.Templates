@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<LangVersion>latest</LangVersion>
 		<Authors>Michael Vivet</Authors>
 		<Product>Nano.Template.Service.Events</Product>
@@ -18,7 +18,7 @@
 		<RepositoryType>git</RepositoryType>
 		<NeutralLanguage>en-US</NeutralLanguage>
 		<WarningsAsErrors />
-		<NoWarn />
+		<NoWarn>NU1902</NoWarn>
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<DocumentationFile>$(MSBuildThisFileDirectory)\bin\$(Configuration)\Nano.Template.Service.Events.xml</DocumentationFile>
 	</PropertyGroup>
