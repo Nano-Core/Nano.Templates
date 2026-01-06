@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.1.11312.151 d18.0
+VisualStudioVersion = 18.1.11312.151
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nano.Template.Service", "Nano.Template.Service\Nano.Template.Service.csproj", "{C563A416-5EDD-4228-B8C7-B5AFEC141466}"
 EndProject
@@ -95,6 +95,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nano.Storage.Azure", "..\..\Nano.Library\Nano.Storage.Azure\Nano.Storage.Azure.csproj", "{5DD1307B-16FA-5171-54CA-4F37F2638022}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nano.App.Console", "..\..\Nano.Library\Nano.App.Console\Nano.App.Console.csproj", "{0095379A-0921-C55A-AFC3-64C0445A3E2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nano.Logging.Microsoft", "..\..\Nano.Library\Nano.Logging.Microsoft\Nano.Logging.Microsoft.csproj", "{FBFE42A1-83A4-7281-4D54-7F520A06C20F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nano.Logging.NLog", "..\..\Nano.Library\Nano.Logging.NLog\Nano.Logging.NLog.csproj", "{568FB1B8-8F23-571C-09B9-5FDB67A4E668}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -201,6 +205,14 @@ Global
 		{0095379A-0921-C55A-AFC3-64C0445A3E2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0095379A-0921-C55A-AFC3-64C0445A3E2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0095379A-0921-C55A-AFC3-64C0445A3E2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBFE42A1-83A4-7281-4D54-7F520A06C20F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBFE42A1-83A4-7281-4D54-7F520A06C20F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBFE42A1-83A4-7281-4D54-7F520A06C20F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBFE42A1-83A4-7281-4D54-7F520A06C20F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{568FB1B8-8F23-571C-09B9-5FDB67A4E668}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{568FB1B8-8F23-571C-09B9-5FDB67A4E668}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{568FB1B8-8F23-571C-09B9-5FDB67A4E668}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{568FB1B8-8F23-571C-09B9-5FDB67A4E668}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -230,6 +242,8 @@ Global
 		{F0FA24A3-0F7B-3962-C471-78992174D4B6} = {3339F5B7-AA56-4192-B201-75B2620036B1}
 		{5DD1307B-16FA-5171-54CA-4F37F2638022} = {3339F5B7-AA56-4192-B201-75B2620036B1}
 		{0095379A-0921-C55A-AFC3-64C0445A3E2B} = {3339F5B7-AA56-4192-B201-75B2620036B1}
+		{FBFE42A1-83A4-7281-4D54-7F520A06C20F} = {3339F5B7-AA56-4192-B201-75B2620036B1}
+		{568FB1B8-8F23-571C-09B9-5FDB67A4E668} = {3339F5B7-AA56-4192-B201-75B2620036B1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {72ED70A7-E1BB-4D06-B6FD-E092DA575FBE}

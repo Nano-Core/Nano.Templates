@@ -13,7 +13,7 @@ namespace Nano.Template.Service.Controllers;
 public class UsersController : DefaultIdentityController<User, UserQueryCriteria>
 {
     /// <inheritdoc />
-    public UsersController(ILogger logger, IRepository repository, IEventing eventing, IIdentityRepository identityRepository, IAuthExternalRepository authExternalRepository)
+    public UsersController(ILogger logger, IRepository repository, IEventing eventing, IIdentityRepository identityRepository, IAuthExternalRepository authExternalRepository = null)
         : base(logger, repository, eventing, identityRepository, authExternalRepository)
     {
     }

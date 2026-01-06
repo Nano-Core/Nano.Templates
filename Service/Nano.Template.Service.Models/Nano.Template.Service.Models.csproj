@@ -38,6 +38,7 @@
 	  <ProjectReference Include="..\..\..\Nano.Library\Nano.Eventing\Nano.Eventing.csproj" />
 	  <ProjectReference Include="..\..\..\Nano.Library\Nano.Logging.Abstractions\Nano.Logging.Abstractions.csproj" />
 	  <ProjectReference Include="..\..\..\Nano.Library\Nano.Logging.Log4Net\Nano.Logging.Log4Net.csproj" />
+	  <ProjectReference Include="..\..\..\Nano.Library\Nano.Logging.Microsoft\Nano.Logging.Microsoft.csproj" />
 	  <ProjectReference Include="..\..\..\Nano.Library\Nano.Logging.Serilog\Nano.Logging.Serilog.csproj" />
 	  <ProjectReference Include="..\..\..\Nano.Library\Nano.Logging\Nano.Logging.csproj" />
 	  <ProjectReference Include="..\..\..\Nano.Library\Nano.Storage.Abstractions\Nano.Storage.Abstractions.csproj" />
