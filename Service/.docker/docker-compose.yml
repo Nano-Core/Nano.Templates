@@ -19,7 +19,7 @@ services:
       - network
     volumes:
       - ../:/root/.dotnet/https
-      - C:\nano\nano-template-service:/mnt/nano-template-service
+      - ./bin/nano-template-service:/mnt/nano-template-service
 
   database:
     image: mysql/mysql-server:latest

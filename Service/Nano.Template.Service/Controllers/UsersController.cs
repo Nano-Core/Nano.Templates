@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using Nano.App.Web.Controllers;
+using Nano.App.Api.Controllers;
 using Nano.Data.Abstractions;
 using Nano.Data.Abstractions.Identity;
 using Nano.Data.Abstractions.Identity.Authentication;

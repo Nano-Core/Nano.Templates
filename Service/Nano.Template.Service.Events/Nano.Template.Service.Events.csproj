@@ -18,7 +18,7 @@
 		<RepositoryType>git</RepositoryType>
 		<NeutralLanguage>en-US</NeutralLanguage>
 		<WarningsAsErrors />
-		<NoWarn>NU1902</NoWarn>
+		<NoWarn />
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<DocumentationFile>$(MSBuildThisFileDirectory)\bin\$(Configuration)\Nano.Template.Service.Events.xml</DocumentationFile>
 	</PropertyGroup>

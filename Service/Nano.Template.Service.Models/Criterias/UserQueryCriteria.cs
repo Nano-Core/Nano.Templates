@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using DynamicExpression;
-using Nano.App.Web.Controllers.Models;
+using Nano.App.Api.Controllers.Models;
 
 namespace Nano.Template.Service.Models.Criterias;
 

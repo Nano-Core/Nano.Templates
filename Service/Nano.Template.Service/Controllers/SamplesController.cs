@@ -1,9 +1,10 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Nano.App.Web.Controllers;
+using Nano.App.Api.Controllers;
 using Nano.Data.Abstractions;
 using Nano.Eventing.Abstractions;
 using Nano.Template.Service.Events;
@@ -43,6 +44,11 @@ public class SamplesController : DefaultController<Sample, SampleQueryCriteria>
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     public virtual async Task<IActionResult> CustomV1Async(CancellationToken cancellationToken = default)
     {
+        if (this.Eventing == null)
+        {
+            throw new NullReferenceException(nameof(this.Eventing));
+        }
+
         await this.Eventing
             .PublishAsync(new SampleEvent(), cancellationToken: cancellationToken);
 
@@ -69,6 +75,11 @@ public class SamplesController : DefaultController<Sample, SampleQueryCriteria>
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     public virtual async Task<IActionResult> CustomV2Async(CancellationToken cancellationToken = default)
     {
+        if (this.Eventing == null)
+        {
+            throw new NullReferenceException(nameof(this.Eventing));
+        }
+
         await this.Eventing
             .PublishAsync(new SampleEvent(), cancellationToken: cancellationToken);
 

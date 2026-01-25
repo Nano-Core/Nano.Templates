@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Options;
 using Nano.App.ApiClient;
-using Nano.App.ApiClient.Config;
 using Nano.Template.Service.Models.Api.Requests;
 using Nano.Template.Service.Models.Data;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Nano.App.ApiClient.Config;
 
 namespace Nano.Template.Service.Models.Api;
 
@@ -14,7 +14,7 @@ namespace Nano.Template.Service.Models.Api;
 public class ServiceApi : DefaultIdentityApi<User>
 {
     /// <inheritdoc />
-    public ServiceApi(IOptionsMonitor<ApiOptions> options, HttpClient httpClient, IHttpContextAccessor httpContextAccessor)
+    public ServiceApi(IOptionsMonitor<ApiClientOptions> options, HttpClient httpClient, IHttpContextAccessor httpContextAccessor)
         : base(options, httpClient, httpContextAccessor)
     {
     }

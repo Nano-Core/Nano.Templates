@@ -44,13 +44,15 @@ public class SampleEventHandler : IEventingHandler<SampleEvent>
 
         try
         {
-            this.Logger.LogInformation("Callback");
+            this.Logger
+                .LogInformation("Callback");
 
             await Task.FromResult(0);
         }
         catch (Exception ex)
         {
-            this.Logger.LogError(ex, ex.Message);
+            this.Logger
+                .LogError(ex, "exception");
         }
     }
 }
