@@ -53,8 +53,6 @@ jobs:
         id: set-variables
         shell: pwsh
         run: |
-          echo "CERTIFICATE_ORGANIZATION=${{ vars.CERTIFICATE_ORGANIZATION }}" >> $env:GITHUB_ENV;
-
           if ('${{ github.ref }}' -eq 'refs/heads/master') {
               echo "AZURE_SUBSCRIPTION_ID=${{ secrets.PRODUCTION_AZURE_SUBSCRIPTION_ID }}" >> $env:GITHUB_ENV;
               echo "KUBERNETES_CLUSTER=${{ vars.PRODUCTION_KUBERNETES_CLUSTER }}" >> $env:GITHUB_ENV;
