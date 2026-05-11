@@ -1,11 +1,12 @@
-.vs
+**/*.user
+**/*.userprefs
 *.user
 *.userprefs
 *.suo
+*.tss
+*.vs
 _ReSharper*
 **/bin
 **/obj
 *.DotSettings.User
-packages
-wwwroot
-.env
+**/wwwroot/lib
