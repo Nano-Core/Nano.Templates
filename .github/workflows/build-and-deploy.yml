@@ -7,13 +7,12 @@ on:
     branches:
       - master 
 env:
-  VERSION: 10.0.0
+  VERSION: 10.0.0-rc1
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      id-token: write
     concurrency:
       group: ${{ github.repository }}
       cancel-in-progress: false
