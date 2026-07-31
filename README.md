@@ -1,6 +1,4 @@
 # Nano.Templates
 
 
-
-Coming soon... 
-
+Show the architecture of all services, libraries and both APIs. 
