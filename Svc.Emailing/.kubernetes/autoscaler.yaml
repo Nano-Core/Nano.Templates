@@ -1,0 +1,25 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: %SERVICE_NAME%-hpa
+  namespace: %KUBERNETES_NAMESPACE%
+spec:
+  minReplicas: %KUBERNETES_REPLICA_COUNT%
+  maxReplicas: %KUBERNETES_REPLICA_COUNT_MAX%
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: %SERVICE_NAME%
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: %KUBERNETES_CPU_SCALING%
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: %KUBERNETES_MEMORY_SCALING%

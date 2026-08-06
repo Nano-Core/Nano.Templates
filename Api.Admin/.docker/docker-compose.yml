@@ -1,0 +1,79 @@
+services:
+  api.admin:
+    image: api.admin
+    hostname: api-admin
+    restart: on-failure
+    ports:
+      - 8080:8080
+      - 4443:4443
+    build:
+      context: ../Api.Admin
+      dockerfile: "Dockerfile.Local"
+    depends_on:
+      - clamav
+      - svc.accounts
+    volumes:
+      - ../:/root/.dotnet/https
+    networks:
+      - network
+
+  clamav: 
+    image: clamav/clamav
+    hostname: clamav
+    ports:
+      - 3310:3310
+    networks:
+      - network
+
+  svc.accounts:
+    image: svc-accounts
+    hostname: svc-accounts
+    restart: on-failure
+    ports:
+      - 8181:8080
+    build:
+      context: ../../Svc.Accounts/Svc.Accounts
+      dockerfile_inline: |
+        FROM mcr.microsoft.com/dotnet/aspnet:10.0
+        WORKDIR /app
+        COPY ./bin/publish/. .
+        ENTRYPOINT ["dotnet", "Svc.Accounts.dll"]
+    environment:
+      ASPNETCORE_HTTP_PORTS: ""
+    depends_on:
+      - database
+      - eventing
+    networks:
+      - network
+    volumes:
+      - ./bin/svc-accounts:/mnt/svc-accounts
+
+  database:
+    image: mysql/mysql-server:latest
+    ports:
+      - 3306:3306
+    networks:
+      - network
+    environment:
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: myPassword_123
+
+  eventing: 
+    image: rabbitmq:management
+    hostname: rabbitmq
+    ports:
+      - 5671:5671
+      - 5672:5672
+      - 15671:15671
+      - 15672:15672
+    networks:
+      - network
+    environment: 
+      RABBITMQ_DEFAULT_USER: rabbitmq_user
+      RABBITMQ_DEFAULT_PASS: password
+      RABBITMQ_DEFAULT_VHOST: /
+
+networks:
+  network:
+    name: network
+    driver: bridge

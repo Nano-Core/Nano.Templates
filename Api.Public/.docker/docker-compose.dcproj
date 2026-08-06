@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" Sdk="Microsoft.Docker.Sdk">
+  <PropertyGroup Label="Globals">
+    <ProjectVersion>2.1</ProjectVersion>
+    <DockerTargetOS>Linux</DockerTargetOS>
+    <DockerLaunchBrowser>false</DockerLaunchBrowser>
+    <DockerServiceUrl>http://localhost:{ServicePort}/docs</DockerServiceUrl>
+    <DockerServiceName>$(ProjectName)</DockerServiceName>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="docker-compose.yml" />
+  </ItemGroup>
+  <Target Name="PublishDependentServices" BeforeTargets="DockerPrepareForBuild">
+	<Exec Command='dotnet publish ..\..\Svc.Accounts\Svc.Accounts\Svc.Accounts.csproj -c Release -o ..\..\Svc.Accounts\Svc.Accounts\bin\publish' Condition="!Exists('..\..\Svc.Accounts\Svc.Accounts\bin\publish')" />
+	<Exec Command='dotnet publish ..\..\Svc.Locations\Svc.Locations\Svc.Locations.csproj -c Release -o ..\..\Svc.Locations\Svc.Locations\bin\publish' Condition="!Exists('..\..\Svc.Locations\Svc.Locations\bin\publish')" />
+	<Exec Command='dotnet publish ..\..\Svc.Emailing\Svc.Emailing\Svc.Emailing.csproj -c Release -o ..\..\Svc.Emailing\Svc.Emailing\bin\publish' Condition="!Exists('..\..\Svc.Emailing\Svc.Emailing\bin\publish')" />
+	<Exec Command='dotnet publish ..\..\Svc.Places\Svc.Places\Svc.Places.csproj -c Release -o ..\..\Svc.Places\Svc.Places\bin\publish' Condition="!Exists('..\..\Svc.Places\Svc.Places\bin\publish')" />
+  </Target>
+</Project>

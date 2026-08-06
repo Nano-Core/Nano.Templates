@@ -1,0 +1,45 @@
+services:
+  svc.locations:
+    image: svc.locations
+    hostname: svc-locations
+    restart: on-failure
+    ports:
+      - 8080:8080
+    build:
+      context: ../Svc.Locations
+      dockerfile: "Dockerfile.Local"
+    depends_on:
+      - database
+      - eventing
+    networks:
+      - network
+
+  database:
+    image: mysql/mysql-server:latest
+    ports:
+      - 3306:3306
+    networks:
+      - network
+    environment:
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: myPassword_123
+
+  eventing: 
+    image: rabbitmq:management
+    hostname: rabbitmq
+    ports:
+      - 5671:5671
+      - 5672:5672
+      - 15671:15671
+      - 15672:15672
+    networks:
+      - network
+    environment: 
+      RABBITMQ_DEFAULT_USER: rabbitmq_user
+      RABBITMQ_DEFAULT_PASS: password
+      RABBITMQ_DEFAULT_VHOST: /
+
+networks:
+  network:
+    name: network
+    driver: bridge

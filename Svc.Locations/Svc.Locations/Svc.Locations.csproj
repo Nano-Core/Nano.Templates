@@ -1,0 +1,38 @@
+﻿	<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<NoWarn>NU1903;NU5104</NoWarn>
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<FileVersion>1.0.0.0</FileVersion>
+		<Version>1.0.0.0</Version>
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<Configurations>Debug;Release</Configurations>
+		<LangVersion>latest</LangVersion>
+		<NeutralLanguage>en-US</NeutralLanguage>
+		<nullable>enable</nullable>
+		<License>LICENSE</License>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<WarningsAsErrors />
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<IsPackable>false</IsPackable>
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)'=='RELEASE'">
+		<Optimize>True</Optimize>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	    <ProjectReference Include="..\Svc.Locations.Events\Svc.Locations.Events.csproj" />
+	    <ProjectReference Include="..\Svc.Locations.Models\Svc.Locations.Models.csproj" />
+	</ItemGroup>
+
+</Project>

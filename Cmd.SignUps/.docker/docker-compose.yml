@@ -1,0 +1,86 @@
+services:
+  cmd.signups:
+    image: cmd.signups
+    restart: on-failure
+    build:
+      context: ../Cmd.SignUps
+      dockerfile: "Dockerfile.Local"
+    depends_on:
+      - svc.accounts
+      - svc.emailing
+    networks:
+      - network
+
+  svc.accounts:
+    image: svc-accounts
+    hostname: svc-accounts
+    restart: on-failure
+    ports:
+      - 8181:8080
+    build:
+      context: ../../Svc.Accounts/Svc.Accounts
+      dockerfile_inline: |
+        FROM mcr.microsoft.com/dotnet/aspnet:10.0
+        WORKDIR /app
+        COPY ./bin/publish/. .
+        ENTRYPOINT ["dotnet", "Svc.Accounts.dll"]
+    environment:
+      ASPNETCORE_HTTP_PORTS: ""
+    depends_on:
+      - database
+      - eventing
+    networks:
+      - network
+    volumes:
+      - ./bin/svc-accounts:/mnt/svc-accounts
+
+  svc.emailing:
+    image: svc-emailing
+    hostname: svc-emailing
+    restart: on-failure
+    ports:
+      - 8484:8080
+    build:
+      context: ../../Svc.Emailing/Svc.Emailing
+      dockerfile_inline: |
+        FROM mcr.microsoft.com/dotnet/aspnet:10.0
+        WORKDIR /app
+        COPY ./bin/publish/. .
+        ENTRYPOINT ["dotnet", "Svc.Emailing.dll"]
+    environment:
+      ASPNETCORE_HTTP_PORTS: ""
+    depends_on:
+      - database
+      - eventing
+    networks:
+      - network
+
+  database:
+    image: mysql/mysql-server:latest
+    ports:
+      - 3306:3306
+    networks:
+      - network
+    environment:
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: myPassword_123
+
+  eventing: 
+    image: rabbitmq:management
+    hostname: rabbitmq
+    ports:
+      - 5671:5671
+      - 5672:5672
+      - 15671:15671
+      - 15672:15672
+    networks:
+      - network
+    environment: 
+      RABBITMQ_DEFAULT_USER: rabbitmq_user
+      RABBITMQ_DEFAULT_PASS: password
+      RABBITMQ_DEFAULT_VHOST: /
+
+networks:
+  network:
+    name: network
+    external: true
