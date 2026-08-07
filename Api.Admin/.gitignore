@@ -1,0 +1,11 @@
+.vs
+*.user
+*.userprefs
+*.suo
+_ReSharper*
+**/bin
+**/obj
+*.DotSettings.User
+packages
+.env
+**/Properties/launchSettings.json

@@ -1,0 +1,61 @@
+name: Build and Deploy
+on:
+  pull_request:
+    branches:
+      - main 
+  push:
+    branches:
+      - main 
+  workflow_dispatch:
+env:
+  APP_NAME: Lib.Images
+  VERSION: '${{ vars.VERSION }}.${{ github.run_number }}.${{ github.run_attempt }}'
+  NUGET_HOST: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+  NUGET_USERNAME: ${{ github.actor }}
+  NUGET_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+  NUGET_APIKEY: ${{ secrets.GITHUB_TOKEN }}
+  SENDGRID_APIKEY: ${{ secrets.SENDGRID_APIKEY }}
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    concurrency:
+      group: ${{ github.repository }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Build and Deploy
+        shell: pwsh
+        run: |
+          dotnet nuget add source $env:NUGET_HOST -n private -u $env:NUGET_USERNAME -p $env:NUGET_PASSWORD --store-password-in-clear-text;
+          dotnet build -c Release .\$env:APP_NAME.sln;
+          dotnet test .\.tests\Tests.$env:APP_NAME\Tests.$env:APP_NAME.csproj;
+          dotnet pack --output nupkgs /p:PackageVersion=$env:VERSION;
+          dotnet nuget push nupkgs/$env:APP_NAME"."$env:VERSION.nupkg -s $env:NUGET_HOST -k $env:NUGET_APIKEY;
+
+      - name: GitHub Release
+        if: github.ref == 'refs/heads/main'
+        uses: ncipollo/release-action@v1
+        with:
+          tag: v${{ env.VERSION }}
+          name: "Release ${{ env.VERSION }}"
+          body: |
+            Version: ${{ env.VERSION }}
+            Commit: ${{ github.sha }}
+            Build run: ${{ github.run_number }}
+          artifacts: "nupkgs/*"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          draft: false
+          prerelease: false
+
+      - name: Slack Notification
+        if: always()
+        uses: act10ns/slack@v2
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK }}
+          config: .github/config/slack.yml
+          status: ${{ job.status }}
+          channel: ${{ vars.SLACK_CHANNEL }}

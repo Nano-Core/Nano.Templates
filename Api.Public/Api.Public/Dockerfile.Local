@@ -1,0 +1,8 @@
+ARG DOTNET_ASPNET_VERSION="10.0"
+FROM mcr.microsoft.com/dotnet/aspnet:$DOTNET_ASPNET_VERSION AS base
+
+EXPOSE 8080 4443
+
+ENV ASPNETCORE_HTTP_PORTS=
+
+ENTRYPOINT ["dotnet", "Api.Public.dll"]

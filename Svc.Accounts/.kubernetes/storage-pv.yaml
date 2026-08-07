@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: %SERVICE_NAME%-azurefile-pv-%VOLUME_NAME_SUFFIX%
+spec:
+  capacity:
+    storage: %STORAGE_SIZE%
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: azurefile-static
+  mountOptions:
+    - dir_mode=0777
+    - file_mode=0777
+    - uid=0
+    - gid=0
+  claimRef:
+    name: %SERVICE_NAME%-azurefile-pvc-%VOLUME_NAME_SUFFIX%
+    namespace: %KUBERNETES_NAMESPACE%
+  csi:
+    driver: file.csi.azure.com
+    volumeHandle: %AZURE_GROUP_STORAGE%#%STORAGE_ACCOUNT_NAME%#%STORAGE_SHARE_NAME%-%VOLUME_NAME_SUFFIX%
+    volumeAttributes:
+      shareName: %STORAGE_SHARE_NAME%
+      storageAccount: %STORAGE_ACCOUNT_NAME%
+      resourceGroup: %AZURE_GROUP_STORAGE%
+      clientID: %IDENTITY_CLIENT_ID%
+      mountWithWorkloadIdentityToken: "true"

@@ -1,0 +1,254 @@
+name: Build And Deploy
+on:
+  pull_request:
+    branches:
+      - main 
+  push:
+    branches:
+      - main 
+  workflow_dispatch:
+env:
+  APP_NAME: Svc.Locations
+  IMAGE_NAME: svc.locations
+  SERVICE_NAME: svc-locations
+  VERSION: '${{ vars.VERSION }}.${{ github.run_number }}.${{ github.run_attempt }}'
+  DOTNET_SDK_VERSION: "10.0"
+  DOTNET_ASPNET_VERSION: "10.0"
+  DOTNET_EF_TOOLS_VERSION: "10.0"
+  AZURE_GROUP_KUBERNETES: ${{ vars.AZURE_RESOURCE_GROUP_KUBERNETES }}
+  AZURE_GROUP_DELIVERY: ${{ vars.AZURE_RESOURCE_GROUP_DELIVERY }}
+  AZURE_GROUP_DATABASE : ${{ vars.AZURE_RESOURCE_GROUP_DATABASE }}
+  AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+  AZURE_SUBSCRIPTION_ID: ${{ github.ref == 'refs/heads/main' && secrets.PRODUCTION_AZURE_SUBSCRIPTION_ID || secrets.STAGING_AZURE_SUBSCRIPTION_ID }}
+  NUGET_HOST: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+  NUGET_USERNAME: ${{ github.actor }}
+  NUGET_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+  KUBERNETES_NODEPOOL_COMPUTE: cpu
+  KUBERNETES_NAMESPACE: ${{ vars.KUBERNETES_NAMESPACE }}
+  KUBERNETES_REPLICA_COUNT: ${{ github.ref == 'refs/heads/main' && 3 || 2 }}
+  KUBERNETES_REPLICA_COUNT_MAX: ${{ github.ref == 'refs/heads/main' && 8 || 5 }}
+  KUBERNETES_REPLICA_HISTORY_COUNT: 0
+  KUBERNETES_MEMORY_REQUEST: 512Mi   
+  KUBERNETES_MEMORY_LIMIT: 1536Mi
+  KUBERNETES_MEMORY_SCALING: 180
+  KUBERNETES_CPU_REQUEST: 150m
+  KUBERNETES_CPU_LIMIT: 450m
+  KUBERNETES_CPU_SCALING: 180
+  SQL_NAME: locationsDb
+  SQL_USER: svc-locations-user
+  SQL_PASSWORD: ${{ github.ref == 'refs/heads/main' && secrets.PRODUCTION_SQL_SVC_LOCATIONS_DB_PASSWORD || secrets.STAGING_SQL_SVC_LOCATIONS_DB_PASSWORD }}
+  SQL_ADMIN_PASSWORD: ${{ github.ref == 'refs/heads/main' && secrets.PRODUCTION_SQL_ADMIN_PASSWORD || secrets.STAGING_SQL_ADMIN_PASSWORD }}
+  ASPNETCORE_ENVIRONMENT: ${{ github.ref == 'refs/heads/main' && 'Production' || 'Staging' }}
+concurrency:
+  group: ${{ github.workflow }}-${{ github.repository }}
+  cancel-in-progress: true
+jobs:
+  build-and-deploy:
+    runs-on:
+      - self-hosted
+      - linux 
+      - ${{ github.ref == 'refs/heads/main' && 'Production' || 'Staging' }}
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Azure Login
+        shell: pwsh
+        run: |
+          az login --service-principal -u $env:AZURE_CLIENT_ID -p $env:AZURE_CLIENT_SECRET --tenant $env:AZURE_TENANT_ID -o none;
+          az account set -s $env:AZURE_SUBSCRIPTION_ID -o none;
+
+          $env:KUBERNETES_CLUSTER = az aks list -g $env:AZURE_GROUP_KUBERNETES --query [0].name -o tsv;
+          az aks get-credentials -g $env:AZURE_GROUP_KUBERNETES -n $env:KUBERNETES_CLUSTER --overwrite -o none;
+
+      - name: Build Solution
+        shell: pwsh
+        run: |
+          dotnet nuget add source $env:NUGET_HOST -n private -u $env:NUGET_USERNAME -p $env:NUGET_PASSWORD --store-password-in-clear-text;
+
+          dotnet build -c Release .\$env:APP_NAME.sln;
+
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+      - name: Test Solution
+        shell: pwsh
+        run: |
+          dotnet test .\.tests\Tests.$env:APP_NAME\Tests.$env:APP_NAME.csproj;
+
+          if ($LastExitCode -ne 0)
+          { 
+            throw "error";
+          };
+
+      - name: Publish NuGet
+        shell: pwsh
+        run: |
+          $nugetProjectModels=$env:APP_NAME + ".Models/" + $env:APP_NAME + ".Models.csproj";
+          dotnet pack $nugetProjectModels -c Release --output nupkgs /p:PackageVersion=$env:VERSION --include-symbols --no-build;
+          dotnet nuget push nupkgs/$env:APP_NAME".Models."$env:VERSION.nupkg -s $env:NUGET_HOST -k $env:NUGET_PASSWORD;
+
+          if ($LastExitCode -ne 0) 
+          { 
+              throw "error";
+          };  
+
+          $nugetProjectEvents=$env:APP_NAME + ".Events/" + $env:APP_NAME + ".Events.csproj";
+          dotnet pack $nugetProjectEvents -c Release --output nupkgs /p:PackageVersion=$env:VERSION --include-symbols --no-build;
+          dotnet nuget push nupkgs/$env:APP_NAME".Events."$env:VERSION.nupkg -s $env:NUGET_HOST -k $env:NUGET_PASSWORD;
+
+          if ($LastExitCode -ne 0) 
+          { 
+              throw "error";
+          };  
+
+      - name: Build & Push Image
+        shell: pwsh
+        run: |
+          $env:CONTAINER_REGISTRY_HOST = az acr list -g $env:AZURE_GROUP_DELIVERY --query [0].loginServer -o tsv;
+
+          az acr build `
+              --registry $env:CONTAINER_REGISTRY_HOST `
+              --agent-pool buildpool `
+              -t "$($env:IMAGE_NAME):latest" `
+              -t "$($env:IMAGE_NAME):$($env:VERSION)" `
+              --build-arg DOTNET_SDK_VERSION=$env:DOTNET_SDK_VERSION `
+              --build-arg DOTNET_ASPNET_VERSION=$env:DOTNET_ASPNET_VERSION `
+              --build-arg CONTAINER_REGISTRY_SOURCE_LABEL=https://github.com/$env:GITHUB_REPOSITORY `
+              --build-arg NUGET_HOST=$env:NUGET_HOST `
+              --build-arg NUGET_USERNAME=$env:NUGET_USERNAME `
+              --build-arg NUGET_PASSWORD=$env:NUGET_PASSWORD `
+              ./
+
+          if ($LastExitCode -ne 0) 
+          { 
+              throw "error";
+          };  
+
+          echo "CONTAINER_REGISTRY_HOST=$env:CONTAINER_REGISTRY_HOST" >> $env:GITHUB_ENV;
+
+      - name: Database Migration & User
+        shell: pwsh
+        run: |
+          $env:SQL_HOST = az mysql flexible-server list -g $env:AZURE_GROUP_DATABASE --query [0].fullyQualifiedDomainName -o tsv;
+          $env:SQL_PORT = az mysql flexible-server list -g $env:AZURE_GROUP_DATABASE --query [0].databasePort -o tsv;
+          $env:SQL_ADMIN_USER = az mysql flexible-server list -g $env:AZURE_GROUP_DATABASE --query [0].administratorLogin -o tsv;
+
+          $env:DATA__CONNECTIONSTRING = "Server=$env:SQL_HOST;Port=$env:SQL_PORT;Database=$env:SQL_NAME;Uid=$env:SQL_ADMIN_USER;Pwd=$env:SQL_ADMIN_PASSWORD;SslMode=Required";
+
+          & "/opt/ef-tools/$env:DOTNET_EF_TOOLS_VERSION/dotnet-ef" database update `
+            --no-build `
+            --configuration Release `
+            --startup-project $env:APP_NAME `
+            -- `
+            --environment $env:ASPNETCORE_ENVIRONMENT;
+
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+          
+          $env:MYSQL_PWD = $env:SQL_ADMIN_PASSWORD
+
+          $userExists = mysql `
+              --host $env:SQL_HOST `
+              --port $env:SQL_PORT `
+              --user $env:SQL_ADMIN_USER `
+              --ssl-mode=REQUIRED `
+              -e "SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user = '$env:SQL_USER');";
+
+          if ($userExists -eq 0) 
+          {
+             mysql `
+                 --host $env:SQL_HOST `
+                 --port $env:SQL_PORT `
+                 --user $env:SQL_ADMIN_USER `
+                 --ssl-mode=REQUIRED `
+                 -e "CREATE USER '$env:SQL_USER'@'%' IDENTIFIED BY '$env:SQL_PASSWORD'; GRANT SELECT, INSERT, UPDATE, DELETE ON $env:SQL_NAME.* TO '$env:SQL_USER'@'%'; FLUSH PRIVILEGES;";
+
+              if ($LastExitCode -ne 0)
+              { 
+                  throw "error";
+              };
+          }
+
+          echo "SQL_HOST=$env:SQL_HOST" >> $env:GITHUB_ENV;
+          echo "SQL_PORT=$env:SQL_PORT" >> $env:GITHUB_ENV;
+
+      - name: Kubernetes Deploy
+        shell: pwsh
+        run: |
+          $env:SQL_CONNECTIONSTRING = "Server=$env:SQL_HOST;Port=$env:SQL_PORT;Database=$env:SQL_NAME;Uid=$env:SQL_USER;Pwd=$env:SQL_PASSWORD;SslMode=Required";
+
+          Get-Content .kubernetes/auth-sql-secret.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/auth-sql-secret.tmp.yaml;
+          kubectl apply -f .kubernetes/auth-sql-secret.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+          Get-Content .kubernetes/service.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/service.tmp.yaml;
+          kubectl apply -f .kubernetes/service.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+          Get-Content .kubernetes/configmap.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/configmap.tmp.yaml;
+          kubectl apply -f .kubernetes/configmap.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+          Get-Content .kubernetes/deployment.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/deployment.tmp.yaml;
+          kubectl apply -f .kubernetes/deployment.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+          Get-Content .kubernetes/autoscaler.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/autoscaler.tmp.yaml;
+          kubectl apply -f .kubernetes/autoscaler.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+          Get-Content .kubernetes/service-monitor.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/service-monitor.tmp.yaml;
+          kubectl apply -f .kubernetes/service-monitor.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+      - name: GitHub Release
+        if: github.ref == 'refs/heads/main'
+        uses: ncipollo/release-action@v1
+        with:
+          tag: v${{ env.VERSION }}
+          name: "Release ${{ env.VERSION }}"
+          body: |
+            Version: ${{ env.VERSION }}
+            Commit: ${{ github.sha }}
+            Build run: ${{ github.run_number }}
+            Image: ${{ env.CONTAINER_REGISTRY_HOST }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+          artifacts: "nupkgs/*"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          draft: false
+          prerelease: false
+
+      - name: Slack Notification
+        if: always()
+        uses: act10ns/slack@v2
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK }}
+          config: .github/config/slack.yml
+          status: ${{ job.status }}
+          channel: ${{ vars.SLACK_CHANNEL }}

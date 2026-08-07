@@ -1,0 +1,8 @@
+ARG DOTNET_ASPNET_VERSION="10.0"
+FROM mcr.microsoft.com/dotnet/aspnet:$DOTNET_ASPNET_VERSION AS base
+
+EXPOSE 8080
+
+ENV ASPNETCORE_HTTP_PORTS=
+
+ENTRYPOINT ["dotnet", "Svc.Emailing.dll"]

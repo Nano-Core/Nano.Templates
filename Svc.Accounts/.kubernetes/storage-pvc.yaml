@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: %SERVICE_NAME%-azurefile-pvc-%VOLUME_NAME_SUFFIX%
+  namespace: %KUBERNETES_NAMESPACE%
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: azurefile-static
+  resources:
+    requests:
+      storage: %STORAGE_SIZE%
+  volumeName: %SERVICE_NAME%-azurefile-pv-%VOLUME_NAME_SUFFIX%

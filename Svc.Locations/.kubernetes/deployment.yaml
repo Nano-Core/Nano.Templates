@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: %SERVICE_NAME%
+  namespace: %KUBERNETES_NAMESPACE%
+  labels:
+    app: %SERVICE_NAME%
+spec:
+  replicas: %KUBERNETES_REPLICA_COUNT%
+  revisionHistoryLimit: %KUBERNETES_REPLICA_HISTORY_COUNT%
+  selector:
+    matchLabels:
+      app: %SERVICE_NAME%
+  template:
+    metadata:
+      labels:
+        app: %SERVICE_NAME%
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 2000 
+        fsGroup: 2000
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: %SERVICE_NAME%  
+      nodeSelector:
+        nodepool.compute: %KUBERNETES_NODEPOOL_COMPUTE%
+        kubernetes.io/os: linux
+      containers:
+      - name: %SERVICE_NAME%
+        image: %CONTAINER_REGISTRY_HOST%/%IMAGE_NAME%:%VERSION%
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Always 
+        env:
+        - name: Data__ConnectionString
+          valueFrom:
+            secretKeyRef:
+              name: %SERVICE_NAME%-sql-auth-secret
+              key: data-connectionstring
+        - name: Eventing__Credentials__Host
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq-default-user
+              key: host
+        - name: Eventing__Credentials__Port
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq-default-user
+              key: port
+        - name: Eventing__Credentials__Id
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq-default-user
+              key: username
+        - name: Eventing__Credentials__Secret
+          valueFrom:
+            secretKeyRef:
+              name: rabbitmq-default-user
+              key: password
+        - name: App__Authentication__Jwt__PublicKey
+          valueFrom:
+            secretKeyRef:
+              name: auth-jwt-secret
+              key: jwt-public-key
+        envFrom:
+        - configMapRef:
+            name: %SERVICE_NAME%-config
+        resources:
+          requests:
+            memory: %KUBERNETES_MEMORY_REQUEST%
+            cpu: %KUBERNETES_CPU_REQUEST%
+          limits:
+            memory: %KUBERNETES_MEMORY_LIMIT%
+            cpu: %KUBERNETES_CPU_LIMIT%
+        securityContext:
+          privileged: false
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 2000
+          capabilities:
+            drop:
+            - ALL
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+            scheme: HTTP
+          periodSeconds: 10
+          initialDelaySeconds: 30
+          timeoutSeconds: 2
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+            scheme: HTTP
+          periodSeconds: 5
+          initialDelaySeconds: 20
+          timeoutSeconds: 2
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: tmp
+        emptyDir: {}

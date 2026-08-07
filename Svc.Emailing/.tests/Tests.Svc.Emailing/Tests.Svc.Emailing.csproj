@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<IsPackable>false</IsPackable>
+		<LangVersion>latest</LangVersion>
+		<NoWarn>NU1903;NU5104</NoWarn>
+		<WarningsAsErrors />
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.7.0" />
+		<PackageReference Include="MSTest.TestAdapter" Version="4.2.3" />
+		<PackageReference Include="MSTest.TestFramework" Version="4.2.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Svc.Emailing.Models\Svc.Emailing.Models.csproj" />
+	  <ProjectReference Include="..\..\Svc.Emailing\Svc.Emailing.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,13 @@
+ARG DOTNET_ASPNET_VERSION="10.0"
+FROM mcr.microsoft.com/dotnet/aspnet:$DOTNET_ASPNET_VERSION AS base
+
+EXPOSE 8080
+
+ENV ASPNETCORE_HTTP_PORTS=
+
+RUN apt-get update && apt-get install -y \
+    libfontconfig1 \
+    libfreetype6 \
+    && rm -rf /var/lib/apt/lists/*
+
+ENTRYPOINT ["dotnet", "Svc.Places.dll"]
