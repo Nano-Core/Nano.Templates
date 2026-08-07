@@ -34,4 +34,4 @@ Each application contains its own documentation describing its responsibilities,
 can be used as a foundation for new projects, as learning material for microservice architecture, or as reusable templates for rapidly building production-ready systems.
 
 #### Application Architecture
-![Nano Application Architecture](https://raw.githubusercontent.com/Nano-Core/Nano.Templates/refs/heads/master/.assets/Nano-Template-Architecture.png)
+![Nano Application Architecture](https://raw.githubusercontent.com/Nano-Core/Nano.Templates/refs/heads/master/.assets/Nano-Template-Architecture.jpg)
