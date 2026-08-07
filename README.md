@@ -33,5 +33,5 @@ illustrates how the individual applications integrate to form a complete distrib
 Each application contains its own documentation describing its responsibilities, dependencies, configuration, and available endpoints. Together they provide a reference implementation that 
 can be used as a foundation for new projects, as learning material for microservice architecture, or as reusable templates for rapidly building production-ready systems.
 
-#### Application Architecture
-![Nano Application Architecture](https://raw.githubusercontent.com/Nano-Core/Nano.Templates/refs/heads/master/.assets/Nano-Template-Architecture.jpg)
+#### Applications Architecture
+![Nano Applications Architecture](https://raw.githubusercontent.com/Nano-Core/Nano.Templates/refs/heads/master/.assets/Nano-Template-Architecture.jpg)
