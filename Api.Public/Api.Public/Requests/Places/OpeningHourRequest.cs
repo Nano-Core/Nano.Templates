@@ -26,4 +26,3 @@ public class OpeningHourRequest
     [Required]
     public virtual TimeSpan ClosesAt { get; set; }
 }
-

@@ -42,7 +42,7 @@ public class PlaceQueryCriteria : BaseQueryCriteria
         if (this.Keyword != null)
         {
             expression
-                .StartsWith(nameof(Place.Name), this.Keyword);
+                .StartsWith(nameof(Place.NameNormalized), this.Keyword.ToUpper());
         }
 
         if (this.Viewport != null)
@@ -53,10 +53,13 @@ public class PlaceQueryCriteria : BaseQueryCriteria
                 new Coordinate(this.Viewport.NorthEast.Longitude, this.Viewport.NorthEast.Latitude),
                 new Coordinate(this.Viewport.SouthWest.Longitude, this.Viewport.NorthEast.Latitude),
                 new Coordinate(this.Viewport.SouthWest.Longitude, this.Viewport.SouthWest.Latitude)
-            ]));
+            ])) 
+            { 
+                SRID = 4326 
+            };
 
             expression
-                .Intersects(nameof(Place.Name), polygon);
+                .Intersects(nameof(Place.Area), polygon);
         }
 
         expressions
