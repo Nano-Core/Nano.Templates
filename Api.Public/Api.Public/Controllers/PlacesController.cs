@@ -112,7 +112,7 @@ public class PlacesController(ILogger<PlacesController> logger, PlacesApi places
     /// <summary>
     /// Get Places Within.
     /// </summary>
-    /// <param name="viewport">The viewport.</param>
+    /// <param name="request">The within request.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The place responses.</returns>
     /// <response code="200">Success.</response>
@@ -128,7 +128,7 @@ public class PlacesController(ILogger<PlacesController> logger, PlacesApi places
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-    public virtual async Task<IActionResult> GetPlacesWithinAsync([FromBody][Required] Viewport viewport, CancellationToken cancellationToken = default)
+    public virtual async Task<IActionResult> GetPlacesWithinAsync([FromBody][Required] WithinRequest request, CancellationToken cancellationToken = default)
     {
         var places = await placesApi.Entity
             .QueryAsync<Place, PlaceQueryCriteria>(new QueryRequest<PlaceQueryCriteria>
@@ -137,7 +137,7 @@ public class PlacesController(ILogger<PlacesController> logger, PlacesApi places
                 {
                     Criteria =
                     {
-                        Viewport = viewport
+                        Viewport = request.Viewport
                     },
                     Paging =
                     {
