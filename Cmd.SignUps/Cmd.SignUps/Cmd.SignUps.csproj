@@ -28,7 +28,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
-		<PackageReference Include="NanoCore" Version="10.0.4" />
+		<PackageReference Include="NanoCore" Version="10.0.6" />
 	</ItemGroup>
 
 	<ItemGroup>
