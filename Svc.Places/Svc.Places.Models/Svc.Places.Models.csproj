@@ -53,7 +53,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="NanoCore" Version="10.0.4" />
+	  <PackageReference Include="NanoCore" Version="10.0.6" />
 	</ItemGroup>
 
 	<ItemGroup>
