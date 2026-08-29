@@ -5,5 +5,6 @@ metadata:
   namespace: %KUBERNETES_NAMESPACE%
 data:
   App__Version: %VERSION%
+  Data__AuthenticationType: %SQL_AUTH_TYPE%
   Storage__ShareName: %STORAGE_SHARE_NAME%
   ASPNETCORE_ENVIRONMENT: %ASPNETCORE_ENVIRONMENT%
