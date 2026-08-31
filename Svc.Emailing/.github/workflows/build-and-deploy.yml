@@ -187,7 +187,7 @@ jobs:
               throw "error";
           };
 
-          $env:APP_USER_SQL_PATH = Join-Path $env:USERPROFILE "app-database-user.sql";
+          $env:APP_USER_SQL_PATH = "app-database-user.sql";
 
           $sql = @"
             CREATE AADUSER IF NOT EXISTS '$env:IDENTITY_NAME' IDENTIFIED BY '$env:IDENTITY_CLIENT_ID';
@@ -235,8 +235,8 @@ jobs:
               throw "error";
           };
 
-          $env:PRINCIPAL_SQL_PATH = Join-Path $env:USERPROFILE "app-database-principal.sql";
-          $env:GRANTS_SQL_PATH = Join-Path $env:USERPROFILE "app-database-grants.sql";
+          $env:PRINCIPAL_SQL_PATH = "app-database-principal.sql";
+          $env:GRANTS_SQL_PATH = "app-database-grants.sql";
 
           $principalSql = @"
             DO `$`$
@@ -284,73 +284,6 @@ jobs:
           };
 
           $env:SQL_CONNECTIONSTRING = "Host=$env:SQL_HOST;Port=$env:SQL_PORT;Database=$env:SQL_NAME;Username=$env:IDENTITY_NAME;SSL Mode=Require;Trust Server Certificate=true";
-          echo "SQL_CONNECTIONSTRING=$env:SQL_CONNECTIONSTRING" >> $env:GITHUB_ENV;
-
-      - name: SQL Server Database Migration
-        if: env.SQL_TYPE == 'sqlserver'
-        shell: pwsh
-        run: |
-          $env:SQL_HOST = az sql server list -g $env:AZURE_GROUP_DATABASE --query [0].fullyQualifiedDomainName -o tsv;
-          $env:SQL_PORT = 1433;
-          $env:SQL_SERVER = az sql server list -g $env:AZURE_GROUP_DATABASE --query [0].name -o tsv;
-          $env:SQL_USER = az sql server ad-admin list -g $env:AZURE_GROUP_DATABASE -s $env:SQL_SERVER --query "[0].login" -o tsv;
-          $env:SQL_TOKEN = az account get-access-token --resource "https://database.windows.net/" --query accessToken -o tsv;
-
-          $env:DATA__CONNECTIONSTRING = "Server=$env:SQL_HOST,$env:SQL_PORT;Database=$env:SQL_NAME;User Id=$env:SQL_USER;Password=$env:SQL_TOKEN;Encrypt=True;TrustServerCertificate=True;";
-
-          & "/opt/ef-tools/$env:DOTNET_EF_TOOLS_VERSION/dotnet-ef" database update `
-              --no-build `
-              --configuration Release `
-              --startup-project $env:APP_NAME `
-              -- `
-              --environment $env:ASPNETCORE_ENVIRONMENT;
-
-          if ($LastExitCode -ne 0)
-          { 
-              throw "error";
-          };
-
-          $env:APP_USER_SQL_PATH = Join-Path $env:USERPROFILE "app-database-user.sql";
-
-          $sql = @"
-            IF NOT EXISTS (SELECT 1 FROM sys.database_principals WHERE name = '$env:IDENTITY_NAME')
-            BEGIN
-                CREATE USER [$env:IDENTITY_NAME] FROM EXTERNAL PROVIDER;
-            END
-
-            IF NOT EXISTS (SELECT 1 FROM sys.database_role_members drm
-                JOIN sys.database_principals r ON drm.role_principal_id = r.principal_id
-                JOIN sys.database_principals m ON drm.member_principal_id = m.principal_id
-                WHERE r.name = 'db_datareader' AND m.name = '$env:IDENTITY_NAME')
-            BEGIN
-                ALTER ROLE db_datareader ADD MEMBER [$env:IDENTITY_NAME];
-            END
-
-            IF NOT EXISTS (SELECT 1 FROM sys.database_role_members drm
-                JOIN sys.database_principals r ON drm.role_principal_id = r.principal_id
-                JOIN sys.database_principals m ON drm.member_principal_id = m.principal_id
-                WHERE r.name = 'db_datawriter' AND m.name = '$env:IDENTITY_NAME')
-            BEGIN
-                ALTER ROLE db_datawriter ADD MEMBER [$env:IDENTITY_NAME];
-            END
-          "@;
-
-          $sql | Set-Content $env:APP_USER_SQL_PATH;
-
-          Install-Module -Name SqlServer -Scope CurrentUser;
-
-          Invoke-Sqlcmd `
-              -ServerInstance $env:SQL_HOST `
-              -Database $env:SQL_NAME `
-              -AccessToken $env:SQL_TOKEN `
-              -InputFile $env:APP_USER_SQL_PATH;
-
-          if ($LastExitCode -ne 0)
-          {
-              throw "error";
-          };
-
-          $env:SQL_CONNECTIONSTRING = "Server=$env:SQL_HOST,$env:SQL_PORT;Database=$env:SQL_NAME;User Id=$env:IDENTITY_NAME;Encrypt=True;TrustServerCertificate=True;";
           echo "SQL_CONNECTIONSTRING=$env:SQL_CONNECTIONSTRING" >> $env:GITHUB_ENV;
 
       - name: SQL Server Create Database
@@ -459,6 +392,73 @@ jobs:
                   throw "error";
               };
           };
+
+      - name: SQL Server Database Migration
+        if: env.SQL_TYPE == 'sqlserver'
+        shell: pwsh
+        run: |
+          $env:SQL_HOST = az sql server list -g $env:AZURE_GROUP_DATABASE --query [0].fullyQualifiedDomainName -o tsv;
+          $env:SQL_PORT = 1433;
+          $env:SQL_SERVER = az sql server list -g $env:AZURE_GROUP_DATABASE --query [0].name -o tsv;
+          $env:SQL_USER = az sql server ad-admin list -g $env:AZURE_GROUP_DATABASE -s $env:SQL_SERVER --query "[0].login" -o tsv;
+          $env:SQL_TOKEN = az account get-access-token --resource "https://database.windows.net/" --query accessToken -o tsv;
+
+          $env:DATA__CONNECTIONSTRING = "Server=$env:SQL_HOST,$env:SQL_PORT;Database=$env:SQL_NAME;User Id=$env:SQL_USER;Password=$env:SQL_TOKEN;Encrypt=True;TrustServerCertificate=True;";
+
+          & "/opt/ef-tools/$env:DOTNET_EF_TOOLS_VERSION/dotnet-ef" database update `
+              --no-build `
+              --configuration Release `
+              --startup-project $env:APP_NAME `
+              -- `
+              --environment $env:ASPNETCORE_ENVIRONMENT;
+
+          if ($LastExitCode -ne 0)
+          { 
+              throw "error";
+          };
+
+          $env:APP_USER_SQL_PATH = "app-database-user.sql";
+
+          $sql = @"
+            IF NOT EXISTS (SELECT 1 FROM sys.database_principals WHERE name = '$env:IDENTITY_NAME')
+            BEGIN
+                CREATE USER [$env:IDENTITY_NAME] FROM EXTERNAL PROVIDER;
+            END
+
+            IF NOT EXISTS (SELECT 1 FROM sys.database_role_members drm
+                JOIN sys.database_principals r ON drm.role_principal_id = r.principal_id
+                JOIN sys.database_principals m ON drm.member_principal_id = m.principal_id
+                WHERE r.name = 'db_datareader' AND m.name = '$env:IDENTITY_NAME')
+            BEGIN
+                ALTER ROLE db_datareader ADD MEMBER [$env:IDENTITY_NAME];
+            END
+
+            IF NOT EXISTS (SELECT 1 FROM sys.database_role_members drm
+                JOIN sys.database_principals r ON drm.role_principal_id = r.principal_id
+                JOIN sys.database_principals m ON drm.member_principal_id = m.principal_id
+                WHERE r.name = 'db_datawriter' AND m.name = '$env:IDENTITY_NAME')
+            BEGIN
+                ALTER ROLE db_datawriter ADD MEMBER [$env:IDENTITY_NAME];
+            END
+          "@;
+
+          $sql | Set-Content $env:APP_USER_SQL_PATH;
+
+          Install-Module -Name SqlServer -Scope CurrentUser;
+
+          Invoke-Sqlcmd `
+              -ServerInstance $env:SQL_HOST `
+              -Database $env:SQL_NAME `
+              -AccessToken $env:SQL_TOKEN `
+              -InputFile $env:APP_USER_SQL_PATH;
+
+          if ($LastExitCode -ne 0)
+          {
+              throw "error";
+          };
+
+          $env:SQL_CONNECTIONSTRING = "Server=$env:SQL_HOST,$env:SQL_PORT;Database=$env:SQL_NAME;User Id=$env:IDENTITY_NAME;Encrypt=True;TrustServerCertificate=True;";
+          echo "SQL_CONNECTIONSTRING=$env:SQL_CONNECTIONSTRING" >> $env:GITHUB_ENV;
 
       - name: Kubernetes Deploy
         shell: pwsh
