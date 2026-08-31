@@ -109,7 +109,6 @@ jobs:
 
           az acr build `
               --registry $env:CONTAINER_REGISTRY_HOST `
-              --agent-pool buildpool `
               -t "$($env:IMAGE_NAME):latest" `
               -t "$($env:IMAGE_NAME):$($env:VERSION)" `
               --build-arg DOTNET_SDK_VERSION=$env:DOTNET_SDK_VERSION `
