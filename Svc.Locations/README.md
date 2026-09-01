@@ -37,6 +37,15 @@ The primary Nano features used by this service.
 | Spatial                 | Geospatial data support for place locations                                                                                                                     |
 
 ## Database Migration
+To switch to a different data provider:
+
+* Comment in the corresponding database service in `docker-compose.yml`.
+* Set the correct connection string in `appsettings.Development.json`.
+* Update the provider type in `LocationsDbContext`, `LocationsDbContextFactory`, and the `AddNanoData<TProvider, TContext>()` call in `Program.cs`.
+* Set `SQL_TYPE` to the matching provider in `build-and-deploy.yaml`.
+
+Add a new migration.
+
 ```powershell
 dotnet ef migrations add {name} --project Svc.Locations
 ```
