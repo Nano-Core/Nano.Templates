@@ -44,7 +44,7 @@ To switch to a different data provider:
 
 * Comment in the corresponding database service in `docker-compose.yml`.
 * Set the correct connection string in `appsettings.Development.json`.
-* Update the provider type in `EmailingDbContext`, `EmailingDbContextFactory`, and the `AddNanoData<TProvider, TContext>()` call in `Program.cs`.
+* Update the provider type in `EmailingDbContextFactory`, and the `AddNanoData<TProvider, TContext>()` call in `Program.cs`.
 * Set `SQL_TYPE` to the matching provider in `build-and-deploy.yaml`.
 
 Add a new migration.
