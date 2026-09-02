@@ -24,6 +24,28 @@ services:
       MYSQL_ROOT_HOST: '%'
       MYSQL_ROOT_PASSWORD: myPassword_123
 
+#  database:
+#    image: postgis/postgis:latest
+#    ports:
+#      - 5432:5432
+#    networks:
+#      - network
+#    environment:
+#      POSTGRES_USER: sa
+#      POSTGRES_PASSWORD: myPassword_123
+#      POSTGRES_DB: nanoDb
+
+#  database:
+#    image: mcr.microsoft.com/mssql/server:2022-latest
+#    ports:
+#      - 1433:1433
+#    networks:
+#      - network
+#    environment:
+#      SA_PASSWORD: myPassword_123
+#      ACCEPT_EULA: Y
+#      MSSQL_PID: Developer
+
   eventing: 
     image: rabbitmq:management
     hostname: rabbitmq
