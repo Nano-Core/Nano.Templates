@@ -27,7 +27,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="NanoCore" Version="10.0.6" />
+	  <PackageReference Include="NanoCore" Version="10.0.9" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -36,7 +36,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\Svc.Accounts\Svc.Accounts.Models\Svc.Accounts.Models.csproj" />
-	  <ProjectReference Include="..\..\Svc.Calendar\Svc.Calendar.Models\Svc.Calendar.Models.csproj" />
 	  <ProjectReference Include="..\..\Svc.Emailing\Svc.Emailing.Models\Svc.Emailing.Models.csproj" />
 	  <ProjectReference Include="..\..\Svc.Locations\Svc.Locations.Models\Svc.Locations.Models.csproj" />
 	  <ProjectReference Include="..\..\Svc.Places\Svc.Places.Models\Svc.Places.Models.csproj" />
