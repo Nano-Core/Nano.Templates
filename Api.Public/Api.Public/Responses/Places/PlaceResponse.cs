@@ -1,5 +1,4 @@
 ﻿using NetTopologySuite.Geometries;
-using Svc.Calendar.Models.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
