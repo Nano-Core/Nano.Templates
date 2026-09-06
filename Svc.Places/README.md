@@ -20,7 +20,7 @@ Manages places, user visits, and favorite places.
 The service provides functionality for creating and managing places, tracking user visits, and allowing users to mark places as favorites. The service subscribes to user events and includes 
 a custom event handler for processing `UserLocationChangedEvent`. 
 
-Also, `PlaceVisit` uses a database trigger to automatically update `Place.LatestVisit` whenever a new visit is recorded.
+Also, `PlaceVisit` uses a Nano entity trigger to automatically update `Place.LatestVisit` whenever a new visit is recorded.
 
 Place logo and pictures can be managed using the integrated image processing capabilities. The `SkiaSharp` library has been added, along with the required Linux native dependencies in the 
 `Dockerfile` to support image processing in the container environment.

@@ -9,5 +9,5 @@ spec:
   storageClassName: azurefile-static
   resources:
     requests:
-      storage: %STORAGE_SIZE%
+      storage: %STORAGE_SIZE%Gi
   volumeName: %SERVICE_NAME%-azurefile-pv-%VOLUME_NAME_SUFFIX%

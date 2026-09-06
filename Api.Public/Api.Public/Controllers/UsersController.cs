@@ -83,7 +83,7 @@ public class UsersController(ILogger<UsersController> logger, LocationsApi locat
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-    public virtual async Task<IActionResult> GetPlacesVisitedAsync(CancellationToken cancellationToken = default)
+    public virtual async Task<IActionResult> GetRecentLocationsAsync(CancellationToken cancellationToken = default)
     {
         var jwtUserId = this.HttpContext
             .GetJwtUserId<Guid>();

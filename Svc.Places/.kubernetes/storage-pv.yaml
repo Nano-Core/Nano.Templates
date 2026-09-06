@@ -4,7 +4,7 @@ metadata:
   name: %SERVICE_NAME%-azurefile-pv-%VOLUME_NAME_SUFFIX%
 spec:
   capacity:
-    storage: %STORAGE_SIZE%
+    storage: %STORAGE_SIZE%Gi
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain

@@ -14,7 +14,6 @@ env:
   NUGET_USERNAME: ${{ github.actor }}
   NUGET_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
   NUGET_APIKEY: ${{ secrets.GITHUB_TOKEN }}
-  SENDGRID_APIKEY: ${{ secrets.SENDGRID_APIKEY }}
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest

@@ -15,8 +15,9 @@ spec:
     metadata:
       labels:
         app: %SERVICE_NAME%
+        azure.workload.identity/use: "true"
     spec:
-      automountServiceAccountToken: false
+      serviceAccountName: %SERVICE_NAME%-service-account
       securityContext:
         runAsUser: 1000
         runAsGroup: 2000 
@@ -43,12 +44,12 @@ spec:
             secretKeyRef:
               name: %SERVICE_NAME%-sql-auth-secret
               key: data-connectionstring
-        - name: Eventing__Credentials__Host
+        - name: Eventing__Host
           valueFrom:
             secretKeyRef:
               name: rabbitmq-default-user
               key: host
-        - name: Eventing__Credentials__Port
+        - name: Eventing__Port
           valueFrom:
             secretKeyRef:
               name: rabbitmq-default-user
@@ -71,17 +72,17 @@ spec:
         - name: Emailing__ApiKey
           valueFrom:
             secretKeyRef:
-              name: sendgrid-auth
+              name: resend-auth
               key: apikey
         - name: Emailing__SenderName
           valueFrom:
             secretKeyRef:
-              name: sendgrid-auth
+              name: resend-auth
               key: sender-name
         - name: Emailing__SenderEmailAddress
           valueFrom:
             secretKeyRef:
-              name: sendgrid-auth
+              name: resend-auth
               key: sender-email
         envFrom:
         - configMapRef:
