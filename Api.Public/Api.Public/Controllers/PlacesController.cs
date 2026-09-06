@@ -275,7 +275,7 @@ public class PlacesController(ILogger<PlacesController> logger, PlacesApi places
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-    public virtual async Task<IActionResult> UpdatePlaceAsync([FromRoute][Required] Guid placeId, CancellationToken cancellationToken = default)
+    public virtual async Task<IActionResult> DeletePlaceAsync([FromRoute][Required] Guid placeId, CancellationToken cancellationToken = default)
     {
         await placesApi.Entity
             .DeleteAsync<Place>(placeId, cancellationToken);

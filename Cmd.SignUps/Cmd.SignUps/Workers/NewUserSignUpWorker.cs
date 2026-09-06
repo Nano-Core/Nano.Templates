@@ -25,7 +25,7 @@ public class NewUserSignUpWorker(ILogger<NewUserSignUpWorker> logger, AccountsAp
                 .SendEmailAsync(new Email
                 {
                     UserId = user.Id,
-                    Type = EmailType.Welcome,
+                    Type = EmailType.WelcomeAgain,
                     Data =
                     {
                         { "Name", user.FullName }

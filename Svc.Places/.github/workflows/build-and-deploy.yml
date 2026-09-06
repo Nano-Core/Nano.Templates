@@ -568,7 +568,14 @@ jobs:
           Get-Content .kubernetes/auth-sql-secret.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/auth-sql-secret.tmp.yaml;
           kubectl apply -f .kubernetes/auth-sql-secret.tmp.yaml;
           if ($LastExitCode -ne 0)
-          { 
+          {
+              throw "error";
+          };
+
+          Get-Content .kubernetes/auth-jwt-secret.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/auth-jwt-secret.tmp.yaml;
+          kubectl apply -f .kubernetes/auth-jwt-secret.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          {
               throw "error";
           };
 

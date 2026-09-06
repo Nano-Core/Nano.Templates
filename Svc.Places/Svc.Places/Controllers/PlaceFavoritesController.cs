@@ -71,7 +71,7 @@ public class PlaceFavoritesController(ILogger<PlaceFavoritesController> logger, 
     /// <param name="userId">The user id.</param>
     /// <param name="cancellationToken">The token used when request is cancelled.</param>
     /// <returns>Void.</returns>
-    /// <response code="201">OK.</response>
+    /// <response code="200">OK.</response>
     /// <response code="404">Not Found.</response>
     /// <response code="400">Bad Request.</response>
     /// <response code="401">Unauthorized.</response>

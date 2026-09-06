@@ -6,7 +6,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: %SERVICE_NAME%
+      app: %SERVICE_NAME%
   endpoints:
     - port: http
       path: /metrics
