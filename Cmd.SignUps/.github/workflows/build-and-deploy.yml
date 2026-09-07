@@ -135,12 +135,3 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: false
           prerelease: false
-
-      - name: Slack Notification
-        if: always()
-        uses: act10ns/slack@v2
-        with:
-          webhook-url: ${{ secrets.SLACK_WEBHOOK }}
-          config: .github/config/slack.yml
-          status: ${{ job.status }}
-          channel: ${{ vars.SLACK_CHANNEL }}
