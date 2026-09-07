@@ -131,7 +131,6 @@ jobs:
             Commit: ${{ github.sha }}
             Build run: ${{ github.run_number }}
             Image: ${{ env.CONTAINER_REGISTRY_HOST }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
-          artifacts: "nupkgs/*"
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: false
           prerelease: false
