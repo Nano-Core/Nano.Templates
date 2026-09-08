@@ -572,13 +572,6 @@ jobs:
               throw "error";
           };
 
-          Get-Content .kubernetes/auth-jwt-secret.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/auth-jwt-secret.tmp.yaml;
-          kubectl apply -f .kubernetes/auth-jwt-secret.tmp.yaml;
-          if ($LastExitCode -ne 0)
-          {
-              throw "error";
-          };
-
           Get-Content .kubernetes/storage-pv.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/storage-pv.tmp.yaml;
           kubectl apply -f .kubernetes/storage-pv.tmp.yaml;
           if ($LastExitCode -ne 0) 
