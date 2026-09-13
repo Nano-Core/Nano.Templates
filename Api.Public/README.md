@@ -6,6 +6,8 @@
 
 > ⚠️ Before deploying **Nano.Templates**, replace all project references in the .deps solution folder with their corresponding NuGet packages.
 
+> 💡 Explore API requests for this template in our **[Public Nano Workspace on Postman](https://www.postman.com/nanocore/nano-core/collection/kbu9p04/nano-templates)**.
+
 ***
 
 ## Table of Contents
