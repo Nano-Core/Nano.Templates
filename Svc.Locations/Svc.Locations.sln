@@ -13,8 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".kubernetes", ".kubernetes"
 		.kubernetes\autoscaler.yaml = .kubernetes\autoscaler.yaml
 		.kubernetes\configmap.yaml = .kubernetes\configmap.yaml
 		.kubernetes\deployment.yaml = .kubernetes\deployment.yaml
-		.kubernetes\service.yaml = .kubernetes\service.yaml
+		.kubernetes\service-account.yaml = .kubernetes\service-account.yaml
 		.kubernetes\service-monitor.yaml = .kubernetes\service-monitor.yaml
+		.kubernetes\service.yaml = .kubernetes\service.yaml
 	EndProjectSection
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", ".docker\docker-compose.dcproj", "{557A0C48-DA6A-4D7C-8668-94F08A390F4B}"
