@@ -9,11 +9,20 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.yml" />
+    <None Include="publish-dependencies.ps1" />
   </ItemGroup>
-  <Target Name="PublishDependentServices" BeforeTargets="DockerPrepareForBuild">
-	<Exec Command='dotnet publish ..\..\Svc.Accounts\Svc.Accounts\Svc.Accounts.csproj -c Release -o ..\..\Svc.Accounts\Svc.Accounts\bin\publish' Condition="!Exists('..\..\Svc.Accounts\Svc.Accounts\bin\publish')" />
-	<Exec Command='dotnet publish ..\..\Svc.Locations\Svc.Locations\Svc.Locations.csproj -c Release -o ..\..\Svc.Locations\Svc.Locations\bin\publish' Condition="!Exists('..\..\Svc.Locations\Svc.Locations\bin\publish')" />
-	<Exec Command='dotnet publish ..\..\Svc.Emailing\Svc.Emailing\Svc.Emailing.csproj -c Release -o ..\..\Svc.Emailing\Svc.Emailing\bin\publish' Condition="!Exists('..\..\Svc.Emailing\Svc.Emailing\bin\publish')" />
-	<Exec Command='dotnet publish ..\..\Svc.Places\Svc.Places\Svc.Places.csproj -c Release -o ..\..\Svc.Places\Svc.Places\bin\publish' Condition="!Exists('..\..\Svc.Places\Svc.Places\bin\publish')" />
+
+  <ItemGroup>
+    <DependentServiceSources Include="..\..\Svc.Accounts\Svc.Accounts\**\*.cs;..\..\Svc.Accounts\Svc.Accounts\Svc.Accounts.csproj;..\..\Svc.Accounts\Svc.Accounts.Models\**\*.cs;..\..\Svc.Accounts\Svc.Accounts.Models\Svc.Accounts.Models.csproj" Exclude="..\..\Svc.Accounts\Svc.Accounts\bin\**;..\..\Svc.Accounts\Svc.Accounts\obj\**;..\..\Svc.Accounts\Svc.Accounts.Models\bin\**;..\..\Svc.Accounts\Svc.Accounts.Models\obj\**" />
+    <DependentServiceSources Include="..\..\Svc.Locations\Svc.Locations\**\*.cs;..\..\Svc.Locations\Svc.Locations\Svc.Locations.csproj;..\..\Svc.Locations\Svc.Locations.Models\**\*.cs;..\..\Svc.Locations\Svc.Locations.Models\Svc.Locations.Models.csproj;..\..\Svc.Locations\Svc.Locations.Events\**\*.cs;..\..\Svc.Locations\Svc.Locations.Events\Svc.Locations.Events.csproj" Exclude="..\..\Svc.Locations\Svc.Locations\bin\**;..\..\Svc.Locations\Svc.Locations\obj\**;..\..\Svc.Locations\Svc.Locations.Models\bin\**;..\..\Svc.Locations\Svc.Locations.Models\obj\**;..\..\Svc.Locations\Svc.Locations.Events\bin\**;..\..\Svc.Locations\Svc.Locations.Events\obj\**" />
+    <DependentServiceSources Include="..\..\Svc.Emailing\Svc.Emailing\**\*.cs;..\..\Svc.Emailing\Svc.Emailing\Svc.Emailing.csproj;..\..\Svc.Emailing\Svc.Emailing.Models\**\*.cs;..\..\Svc.Emailing\Svc.Emailing.Models\Svc.Emailing.Models.csproj" Exclude="..\..\Svc.Emailing\Svc.Emailing\bin\**;..\..\Svc.Emailing\Svc.Emailing\obj\**;..\..\Svc.Emailing\Svc.Emailing.Models\bin\**;..\..\Svc.Emailing\Svc.Emailing.Models\obj\**" />
+    <DependentServiceSources Include="..\..\Svc.Places\Svc.Places\**\*.cs;..\..\Svc.Places\Svc.Places\Svc.Places.csproj;..\..\Svc.Places\Svc.Places.Models\**\*.cs;..\..\Svc.Places\Svc.Places.Models\Svc.Places.Models.csproj" Exclude="..\..\Svc.Places\Svc.Places\bin\**;..\..\Svc.Places\Svc.Places\obj\**;..\..\Svc.Places\Svc.Places.Models\bin\**;..\..\Svc.Places\Svc.Places.Models\obj\**" />
+  </ItemGroup>
+
+  <Target Name="PublishDependentServices"
+          BeforeTargets="DockerPrepareForBuild"
+          Inputs="@(DependentServiceSources)"
+          Outputs="$(MSBuildProjectDirectory)\bin\publish-dependencies.stamp">
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\publish-dependencies.ps1&quot; -Configuration $(Configuration)" />
   </Target>
 </Project>

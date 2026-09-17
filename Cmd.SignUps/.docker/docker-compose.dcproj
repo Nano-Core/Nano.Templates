@@ -11,5 +11,18 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.yml" />
+    <None Include="publish-dependencies.ps1" />
   </ItemGroup>
+
+  <ItemGroup>
+    <DependentServiceSources Include="..\..\Svc.Accounts\Svc.Accounts\**\*.cs;..\..\Svc.Accounts\Svc.Accounts\Svc.Accounts.csproj;..\..\Svc.Accounts\Svc.Accounts.Models\**\*.cs;..\..\Svc.Accounts\Svc.Accounts.Models\Svc.Accounts.Models.csproj" Exclude="..\..\Svc.Accounts\Svc.Accounts\bin\**;..\..\Svc.Accounts\Svc.Accounts\obj\**;..\..\Svc.Accounts\Svc.Accounts.Models\bin\**;..\..\Svc.Accounts\Svc.Accounts.Models\obj\**" />
+    <DependentServiceSources Include="..\..\Svc.Emailing\Svc.Emailing\**\*.cs;..\..\Svc.Emailing\Svc.Emailing\Svc.Emailing.csproj;..\..\Svc.Emailing\Svc.Emailing.Models\**\*.cs;..\..\Svc.Emailing\Svc.Emailing.Models\Svc.Emailing.Models.csproj" Exclude="..\..\Svc.Emailing\Svc.Emailing\bin\**;..\..\Svc.Emailing\Svc.Emailing\obj\**;..\..\Svc.Emailing\Svc.Emailing.Models\bin\**;..\..\Svc.Emailing\Svc.Emailing.Models\obj\**" />
+  </ItemGroup>
+
+  <Target Name="PublishDependentServices"
+          BeforeTargets="DockerPrepareForBuild"
+          Inputs="@(DependentServiceSources)"
+          Outputs="$(MSBuildProjectDirectory)\bin\publish-dependencies.stamp">
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\publish-dependencies.ps1&quot; -Configuration $(Configuration)" />
+  </Target>
 </Project>
