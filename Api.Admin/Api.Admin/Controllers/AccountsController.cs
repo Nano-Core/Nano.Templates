@@ -114,7 +114,7 @@ public class AccountsController(ILogger<AccountsController> logger, IAuthTransie
                 .LogInExternalRefreshAsync(BuiltInExternalLogInProviderNames.MICROSOFT, new LogInRefresh
                 {
                     Token = jwtToken,
-                    RefreshToken = request.RefreshToken,
+                    RefreshToken = request.RefreshToken, // BUG: Something is not right about this, shouldn't it be the External provider refresh token?
                     TransientClaims = GetLoginTransientClaims(),
                     TransientRoles = []
                 }, cancellationToken);
