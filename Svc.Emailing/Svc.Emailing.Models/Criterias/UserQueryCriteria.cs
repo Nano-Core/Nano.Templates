@@ -1,4 +1,4 @@
-﻿using Nano.App.Api.Controllers.Criteria;
+﻿using Nano.App.Criteria;
 
 namespace Svc.Emailing.Models.Criterias;
 

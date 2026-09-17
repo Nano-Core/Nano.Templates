@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DynamicExpression;
-using Nano.App.Api.Controllers.Criteria;
+using Nano.App.Criteria;
 using NetTopologySuite.Geometries;
 using Svc.Places.Models.Criterias.Types;
 using Svc.Places.Models.Data;

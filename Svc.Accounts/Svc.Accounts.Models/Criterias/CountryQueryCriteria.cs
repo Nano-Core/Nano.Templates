@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using DynamicExpression;
-using Nano.App.Api.Controllers.Criteria;
+using Nano.App.Criteria;
 using Svc.Accounts.Models.Data;
 
 namespace Svc.Accounts.Models.Criterias;
