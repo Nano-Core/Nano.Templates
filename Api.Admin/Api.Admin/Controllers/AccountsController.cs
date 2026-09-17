@@ -48,17 +48,15 @@ public class AccountsController(ILogger<AccountsController> logger, IAuthTransie
     {
         try
         {
-            var flow = new AuthCodeFlow
-            {
-                Code = request.Code,
-                CodeVerifier = request.CodeVerifier,
-                RedirectUri = request.RedirectUri
-            };
-
             var accessToken = await authTransientRepository
                 .LogInExternalAsync(BuiltInExternalLogInProviderNames.MICROSOFT, new LogInExternal<AuthCodeFlow>
                 {
-                    Flow = flow,
+                    Flow = new AuthCodeFlow
+                    {
+                        Code = request.Code,
+                        CodeVerifier = request.CodeVerifier,
+                        RedirectUri = request.RedirectUri
+                    },
                     TransientClaims = GetLoginTransientClaims(),
                     TransientRoles = []
                 }, cancellationToken);

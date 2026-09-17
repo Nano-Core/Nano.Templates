@@ -39,6 +39,7 @@ env:
   KUBERNETES_CPU_SCALING: 180
   ASPNETCORE_ENVIRONMENT: ${{ github.ref == 'refs/heads/main' && 'Production' || 'Staging' }}
   CORS_ALLOWED_ORIGIN_0: admin.live.nano-ignite.com
+  AUTH_MICROSOFT_REDIRECT_URI: ${{ vars.AUTH_MICROSOFT_REDIRECT_URI }}
 concurrency:
   group: ${{ github.workflow }}-${{ github.repository }}
   cancel-in-progress: true
@@ -110,6 +111,50 @@ jobs:
 
           echo "CONTAINER_REGISTRY_HOST=$env:CONTAINER_REGISTRY_HOST" >> $env:GITHUB_ENV;
 
+      - name: Setup App Registration
+        shell: pwsh
+        run: |
+          $env:APP_DISPLAY_NAME = $env:SERVICE_NAME + "-app";
+          $env:SECRET_DISPLAY_NAME = $env:APP_DISPLAY_NAME + "-secret-" + (Get-Date -Format "yyyyMMddHHmmss");
+          $env:AUTH_MICROSOFT_CLIENT_ID = az ad app list --display-name $env:APP_DISPLAY_NAME --query "[0].appId" -o tsv;
+
+          if (-not $env:AUTH_MICROSOFT_CLIENT_ID)
+          {
+              az ad app create `
+                  --display-name $env:APP_DISPLAY_NAME `
+                  --sign-in-audience AzureADMyOrg `
+                  --web-redirect-uris $env:AUTH_MICROSOFT_REDIRECT_URI;
+
+              $env:AUTH_MICROSOFT_CLIENT_ID = az ad app list --display-name $env:APP_DISPLAY_NAME --query "[0].appId" -o tsv;
+          }
+          else
+          {
+              az ad app update `
+                  --id $env:AUTH_MICROSOFT_CLIENT_ID `
+                  --web-redirect-uris $env:AUTH_MICROSOFT_REDIRECT_URI;
+          }
+
+          $env:AUTH_MICROSOFT_CLIENT_SECRET = az ad app credential reset `
+              --id $env:AUTH_MICROSOFT_CLIENT_ID `
+              --append `
+              --display-name $env:SECRET_DISPLAY_NAME `
+              --years 1 `
+              --query "password" -o tsv;
+
+          echo "::add-mask::$env:AUTH_MICROSOFT_CLIENT_SECRET";
+
+          $staleCredentialIds = az ad app credential list --id $env:AUTH_MICROSOFT_CLIENT_ID --query "sort_by(@, &startDateTime)[:-3].keyId" -o tsv;
+
+          foreach ($keyId in ($staleCredentialIds -split "`n" | Where-Object { $_ }))
+          {
+              az ad app credential delete `
+                  --id $env:AUTH_MICROSOFT_CLIENT_ID `
+                  --key-id $keyId;
+          }
+
+          echo "AUTH_MICROSOFT_CLIENT_ID=$env:AUTH_MICROSOFT_CLIENT_ID" >> $env:GITHUB_ENV;
+          echo "AUTH_MICROSOFT_CLIENT_SECRET=$env:AUTH_MICROSOFT_CLIENT_SECRET" >> $env:GITHUB_ENV;
+
       - name: Kubernetes Deploy
         shell: pwsh
         run: |
@@ -122,6 +167,13 @@ jobs:
           ) -join "`n"
 
           $env:GATEWAY_NAME = kubectl get gateway -n $env:KUBERNETES_NAMESPACE -o jsonpath='{.items[0].metadata.name}'
+
+          Get-Content .kubernetes/auth-microsoft-secret.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/auth-microsoft-secret.tmp.yaml;
+          kubectl apply -f .kubernetes/auth-microsoft-secret.tmp.yaml;
+          if ($LastExitCode -ne 0)
+          {
+              throw "error";
+          }
 
           Get-Content .kubernetes/service.yaml | foreach { [Environment]::ExpandEnvironmentVariables($_) } | Set-Content .kubernetes/service.tmp.yaml;
           kubectl apply -f .kubernetes/service.tmp.yaml;

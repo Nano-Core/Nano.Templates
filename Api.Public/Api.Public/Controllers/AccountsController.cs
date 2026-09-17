@@ -423,9 +423,9 @@ public class AccountsController(ILogger<AccountsController> logger, AccountsApi 
                     ConfirmPassword = request.Password,
                     EmailAddress = request.EmailAddress,
                     User = signUpUser,
-                    Claims =
+                    Claims = new Dictionary<string, string>
                     {
-                        { "TenanId", request.TenantId.ToString() }
+                        { "TenantId", request.TenantId.ToString() }
                     }
                 }
             }, cancellationToken);
