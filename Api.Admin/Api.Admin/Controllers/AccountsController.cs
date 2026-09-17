@@ -1,14 +1,13 @@
-﻿using Api.Admin.Consts;
+using Api.Admin.Consts;
 using Api.Admin.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Nano.App.ApiClient.Requests.Auth;
-using Nano.App.ApiClient.Requests.Auth.Models;
+using Nano.App.Api.Mvc.Authentication.Abstractions;
 using Nano.Common.Consts;
+using Nano.Data.Abstractions.Identity.Authentication.Consts;
 using Nano.Data.Abstractions.Identity.Authentication.Models;
 using Nano.Data.Abstractions.Identity.Extensions;
-using Svc.Accounts.Models.Api;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -19,15 +18,17 @@ using System.Threading.Tasks;
 namespace Api.Admin.Controllers;
 
 /// <inheritdoc />
-public class AccountsController(ILogger<AccountsController> logger, AccountsApi accountsApi) 
+public class AccountsController(ILogger<AccountsController> logger, IAuthTransientRepository authTransientRepository)
     : BaseAdminController(logger)
 {
     /// <summary>
-    /// Logs in a user with Mictosoft external authentication.
+    /// Logs in a user with Microsoft external authentication. Access is controlled entirely by the Entra ID
+    /// app registration's user/group assignment - anyone who completes this flow is treated as an admin, so
+    /// only assigned users/groups may sign in to the app registration itself.
     /// </summary>
     /// <param name="request">The login request.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns>The login response, containing the jwt baerer token.</returns>
+    /// <returns>The login response, containing the jwt bearer token.</returns>
     /// <response code="200">Success.</response>
     /// <response code="400">Bad Request.</response>
     /// <response code="401">Unauthorized.</response>
@@ -47,17 +48,19 @@ public class AccountsController(ILogger<AccountsController> logger, AccountsApi 
     {
         try
         {
-            var transientClaims = GetLoginTransientClaims();
+            var flow = new AuthCodeFlow
+            {
+                Code = request.Code,
+                CodeVerifier = request.CodeVerifier,
+                RedirectUri = request.RedirectUri
+            };
 
-            var accessToken = await accountsApi.Auth
-                .LogInRootAsync(new LogInRootRequest
+            var accessToken = await authTransientRepository
+                .LogInExternalAsync(BuiltInExternalLogInProviderNames.MICROSOFT, new LogInExternal<AuthCodeFlow>
                 {
-                    LogInRoot = new LogInRoot
-                    {
-                        Username = "admin@domain.com",
-                        Password = "abc12|+d34DadD",
-                        TransientClaims = transientClaims
-                    }
+                    Flow = flow,
+                    TransientClaims = GetLoginTransientClaims(),
+                    TransientRoles = []
                 }, cancellationToken);
 
             if (accessToken == null)
@@ -97,7 +100,7 @@ public class AccountsController(ILogger<AccountsController> logger, AccountsApi 
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-    public virtual async Task<IActionResult> LoginRefreshAsync([FromBody][Required]MicrosoftLogInRefreshRequest request, CancellationToken cancellationToken = default)
+    public virtual async Task<IActionResult> LoginRefreshAsync([FromBody][Required] MicrosoftLogInRefreshRequest request, CancellationToken cancellationToken = default)
     {
         var jwtToken = this.HttpContext
             .GetJwtToken();
@@ -107,35 +110,15 @@ public class AccountsController(ILogger<AccountsController> logger, AccountsApi 
             return this.Unauthorized();
         }
 
-        var jwtUserEmail = this.HttpContext
-            .GetJwtUserEmail();
-
-        if (jwtUserEmail == null)
-        {
-            return this.Unauthorized();
-        }
-
         try
         {
-            var user = await accountsApi
-                .GetUserAsync(jwtUserEmail, cancellationToken);
-
-            if (user == null)
-            {
-                return this.NotFound();
-            }
-
-            var transientClaims = GetLoginTransientClaims();
-
-            var accessToken = await accountsApi.Auth
-                .LogInRefreshAsync(new LogInRefreshRequest
+            var accessToken = await authTransientRepository
+                .LogInExternalRefreshAsync(BuiltInExternalLogInProviderNames.MICROSOFT, new LogInRefresh
                 {
-                    LogInRefresh = new LogInRefresh
-                    {
-                        Token = jwtToken,
-                        RefreshToken = request.RefreshToken,
-                        TransientClaims = transientClaims
-                    }
+                    Token = jwtToken,
+                    RefreshToken = request.RefreshToken,
+                    TransientClaims = GetLoginTransientClaims(),
+                    TransientRoles = []
                 }, cancellationToken);
 
             return this.Ok(accessToken);

@@ -7,7 +7,7 @@ on:
     branches:
       - master 
 env:
-  VERSION: 10.0.9
+  VERSION: 10.0.10
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
