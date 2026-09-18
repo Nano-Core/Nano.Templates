@@ -149,8 +149,11 @@ that claim** - nothing here validates or restricts which claims/roles a caller m
 themselves. Refresh does not have this problem: `login/refresh`/the transient external-login
 refresh never accept claims/roles from the caller at all - they're always recovered from a manifest
 claim embedded at login, so a refresh can never grant more than the original login already did (see
-`ClaimTypesExtended.TransientClaims`/`TransientClaimsExtensions`). The risk below is specific to
-login, and to whoever can reach `AuthController` at all.
+`ClaimTypesExtended.TransientClaimsManifest`/the internal `TransientClaimsManifest` class in
+`Nano.Data.Abstractions`). The transient refresh endpoint
+(`/auth/login/external/{providerName}/transient/refresh`) also takes no request body at all - the
+token being refreshed comes from the Authorization header. The risk below is specific to login, and
+to whoever can reach `AuthController` at all.
 
 - **If this app needs to compute its own claims server-side** (an `IsAdmin` flag, an internal
   role, anything not meant to be caller-assignable) **at login, don't add this controller at all.**
@@ -160,14 +163,16 @@ login, and to whoever can reach `AuthController` at all.
   from caller input. This is a real, load-bearing pattern in this codebase, not a hypothetical - see
   `Api.Admin`'s `AccountsController` (deriving its own `BaseAdminController`), which implements
   `login/microsoft`/`login/refresh`/`me` by hand for exactly this reason.
-- Nano additionally auto-maps a built-in transient external-login endpoint
-  (`/auth/login/external/{provider}/transient`) whenever *any* `BaseAuthController`-derived class
-  exists in the app **and** no Identity is configured - see `ServiceScopeExtensions
-  .UseNanoEndpoints`'s `!hasIdentity && hasAuthController` gate, checked by type scan, not by
-  whether this specific controller is the one deriving it. This is an extra exposure specific to
-  transient auth: it means a custom controller alone isn't enough to shield a transient app unless
-  `hasAuthController` also stays `false` (i.e. no `BaseAuthController`-derived class anywhere in the
-  app) - `Api.Admin`'s custom controller works precisely because it doesn't derive `BaseAuthController`.
+- Nano additionally auto-maps built-in transient external-login endpoints
+  (`/auth/login/external/{provider}/transient` and its `/refresh` counterpart) whenever *any*
+  `BaseAuthController`-derived class exists in the app **and** no Identity is configured - see
+  `ServiceScopeExtensions.UseNanoEndpoints`'s `!hasIdentity && hasAuthController` gate, checked by
+  type scan, not by whether this specific controller is the one deriving it. This is an extra
+  exposure specific to transient auth: it means a custom controller alone isn't enough to shield a
+  transient app unless `hasAuthController` also stays `false` (i.e. no `BaseAuthController`-derived
+  class anywhere in the app) - `Api.Admin`'s custom controller works precisely because it doesn't
+  derive `BaseAuthController`. The `/refresh` counterpart is auto-mapped under the same gate, but
+  isn't a caller-trust risk the way login is - see above.
 - **This risk is sharpest on a publicly-exposed app** (anyone on the internet can reach the
   endpoint), but don't treat an internal-only app as automatically safe either - anything that lets
   a caller assign its own JWT claims is worth a deliberate decision, not a default. `AuthController`
