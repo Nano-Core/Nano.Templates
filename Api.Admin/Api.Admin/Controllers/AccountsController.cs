@@ -80,7 +80,6 @@ public class AccountsController(ILogger<AccountsController> logger, IAuthTransie
     /// <summary>
     /// Refresh Login of a user.
     /// </summary>
-    /// <param name="request">The login refresh request.</param>
     /// <param name="cancellationToken">The token used when request is cancelled.</param>
     /// <returns>The access token.</returns>
     /// <response code="200">OK.</response>
@@ -91,14 +90,13 @@ public class AccountsController(ILogger<AccountsController> logger, IAuthTransie
     [HttpPost]
     [AllowAnonymous]
     [Route("login/refresh/microsoft")]
-    [Consumes(HttpContentType.JSON)]
     [Produces(HttpContentType.JSON)]
     [ProducesResponseType(typeof(AccessToken), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-    public virtual async Task<IActionResult> LoginRefreshAsync([FromBody][Required] MicrosoftLogInRefreshRequest request, CancellationToken cancellationToken = default)
+    public virtual async Task<IActionResult> LoginRefreshAsync(CancellationToken cancellationToken = default)
     {
         var jwtToken = this.HttpContext
             .GetJwtToken();
@@ -111,13 +109,7 @@ public class AccountsController(ILogger<AccountsController> logger, IAuthTransie
         try
         {
             var accessToken = await authTransientRepository
-                .LogInExternalRefreshAsync(BuiltInExternalLogInProviderNames.MICROSOFT, new LogInRefresh
-                {
-                    Token = jwtToken,
-                    RefreshToken = request.RefreshToken, // BUG: Something is not right about this, shouldn't it be the External provider refresh token?
-                    TransientClaims = GetLoginTransientClaims(),
-                    TransientRoles = []
-                }, cancellationToken);
+                .LogInExternalRefreshAsync(BuiltInExternalLogInProviderNames.MICROSOFT, jwtToken, cancellationToken);
 
             return this.Ok(accessToken);
         }

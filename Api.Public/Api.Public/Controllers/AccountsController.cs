@@ -204,42 +204,19 @@ public class AccountsController(ILogger<AccountsController> logger, AccountsApi 
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     public virtual async Task<IActionResult> LoginRefreshAsync([FromBody][Required]LoginRefreshRequest request, CancellationToken cancellationToken = default)
     {
-        var jwtToken = this.HttpContext
-            .GetJwtToken();
-
-        if (jwtToken == null)
-        {
-            return this.Unauthorized();
-        }
-
-        var jwtUserEmail = this.HttpContext
-            .GetJwtUserEmail();
-
-        if (jwtUserEmail == null)
+        if (this.HttpContext.GetJwtToken() == null)
         {
             return this.Unauthorized();
         }
 
         try
         {
-            var user = await accountsApi
-                .GetUserAsync(jwtUserEmail, cancellationToken);
-
-            if (user == null)
-            {
-                return this.NotFound();
-            }
-
-            var transientClaims = GetLoginTransientClaims(user);
-
             var accessToken = await accountsApi.Auth
                 .LogInRefreshAsync(new Nano.App.ApiClient.Requests.Auth.LogInRefreshRequest
                 {
                     LogInRefresh = new LogInRefresh
                     {
-                        Token = jwtToken,
-                        RefreshToken = request.RefreshToken,
-                        TransientClaims = transientClaims
+                        RefreshToken = request.RefreshToken
                     }
                 }, cancellationToken);
 
