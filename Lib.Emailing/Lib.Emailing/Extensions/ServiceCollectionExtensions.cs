@@ -1,7 +1,7 @@
 ﻿using System;
 using Lib.Emailing.Interfaces;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Resend;
 using SendGrid;
 
@@ -19,14 +19,21 @@ public static class ServiceCollectionExtensions
     /// <returns>The <see cref="IServiceCollection"/>.</returns>
     public static IServiceCollection AddSendGridEmailing(this IServiceCollection services)
     {
-        if (services == null)
-            throw new ArgumentNullException(nameof(services));
+        ArgumentNullException.ThrowIfNull(services);
 
         services
-            .AddConfigOptions<EmailingOptions>(EmailingOptions.SectionName, out var options);
+            .AddOptions<EmailingOptions>()
+            .BindConfiguration(EmailingOptions.SectionName);
 
         services
-            .AddScoped<ISendGridClient>(_ => new SendGridClient(options.ApiKey));
+            .AddSingleton(x => x.GetRequiredService<IOptions<EmailingOptions>>().Value);
+
+        services
+            .AddScoped<ISendGridClient>(x =>
+            {
+                var options = x.GetRequiredService<IOptions<EmailingOptions>>().Value;
+                return new SendGridClient(options.ApiKey);
+            });
 
         services
             .AddScoped<IEmailingService, SendGridEmailingService>();
@@ -41,44 +48,28 @@ public static class ServiceCollectionExtensions
     /// <returns>The <see cref="IServiceCollection"/>.</returns>
     public static IServiceCollection AddResendEmailing(this IServiceCollection services)
     {
-        if (services == null)
-            throw new ArgumentNullException(nameof(services));
+        ArgumentNullException.ThrowIfNull(services);
 
         services
-            .AddConfigOptions<EmailingOptions>(EmailingOptions.SectionName, out var options);
+            .AddOptions<EmailingOptions>()
+            .BindConfiguration(EmailingOptions.SectionName);
 
         services
-            .AddResend(x =>
+            .AddSingleton(x => x.GetRequiredService<IOptions<EmailingOptions>>().Value);
+
+        services
+            .AddResend(_ => { });
+
+        services
+            .AddOptions<ResendClientOptions>()
+            .Configure<IOptions<EmailingOptions>>((resendOptions, emailingOptions) =>
             {
-                x.ApiToken = options.ApiKey;
-                x.ThrowExceptions = true;
+                resendOptions.ApiToken = emailingOptions.Value.ApiKey;
+                resendOptions.ThrowExceptions = true;
             });
 
         services
             .AddScoped<IEmailingService, ResendEmailingService>();
-
-        return services;
-    }
-
-
-    private static IServiceCollection AddConfigOptions<TOption>(this IServiceCollection services, string name, out TOption options)
-        where TOption : class, new()
-    {
-        if (services == null)
-            throw new ArgumentNullException(nameof(services));
-
-        if (name == null)
-            throw new ArgumentNullException(nameof(name));
-
-        var provider = services.BuildServiceProvider();
-        var configuration = provider.GetRequiredService<IConfiguration>();
-        var section = configuration.GetSection(name);
-
-        options = section.Get<TOption>() ?? new TOption();
-
-        services
-            .AddSingleton(options)
-            .Configure<TOption>(section);
 
         return services;
     }
