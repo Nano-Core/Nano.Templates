@@ -48,6 +48,21 @@ spec:
             secretKeyRef:
               name: auth-jwt-secret
               key: jwt-private-key
+        - name: App__Authentication__Jwt__ExternalLogins__Microsoft__TenantId
+          valueFrom:
+            secretKeyRef:
+              name: auth-microsoft-secret
+              key: tenant-id
+        - name: App__Authentication__Jwt__ExternalLogins__Microsoft__ClientId
+          valueFrom:
+            secretKeyRef:
+              name: auth-microsoft-secret
+              key: client-id
+        - name: App__Authentication__Jwt__ExternalLogins__Microsoft__ClientSecret
+          valueFrom:
+            secretKeyRef:
+              name: auth-microsoft-secret
+              key: client-secret
         envFrom:
         - configMapRef:
             name: %SERVICE_NAME%-config

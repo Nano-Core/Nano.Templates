@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".tests", ".tests", "{7E0D2A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".kubernetes", ".kubernetes", "{0C4D782F-72EF-42B4-BC1B-AF4044CC863A}"
 	ProjectSection(SolutionItems) = preProject
+		.kubernetes\auth-microsoft-secret.yaml = .kubernetes\auth-microsoft-secret.yaml
 		.kubernetes\autoscaler.yaml = .kubernetes\autoscaler.yaml
 		.kubernetes\configmap.yaml = .kubernetes\configmap.yaml
 		.kubernetes\deployment.yaml = .kubernetes\deployment.yaml

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DynamicExpression;
-using Nano.App.Api.Controllers.Criteria;
+using Nano.App.Criteria;
 using Svc.Places.Models.Data;
 
 namespace Svc.Places.Models.Criterias;

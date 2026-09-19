@@ -9,8 +9,17 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.yml" />
+    <None Include="publish-dependencies.ps1" />
   </ItemGroup>
-  <Target Name="PublishDependentServices" BeforeTargets="DockerPrepareForBuild">
-	<Exec Command='dotnet publish ..\..\Svc.Accounts\Svc.Accounts\Svc.Accounts.csproj -c Release -o ..\..\Svc.Accounts\Svc.Accounts\bin\publish' Condition="!Exists('..\..\Svc.Accounts\Svc.Accounts\bin\publish')" />
+
+  <ItemGroup>
+    <DependentServiceSources Include="..\..\Svc.Accounts\Svc.Accounts\**\*.cs;..\..\Svc.Accounts\Svc.Accounts\Svc.Accounts.csproj;..\..\Svc.Accounts\Svc.Accounts.Models\**\*.cs;..\..\Svc.Accounts\Svc.Accounts.Models\Svc.Accounts.Models.csproj" Exclude="..\..\Svc.Accounts\Svc.Accounts\bin\**;..\..\Svc.Accounts\Svc.Accounts\obj\**;..\..\Svc.Accounts\Svc.Accounts.Models\bin\**;..\..\Svc.Accounts\Svc.Accounts.Models\obj\**" />
+  </ItemGroup>
+
+  <Target Name="PublishDependentServices"
+          BeforeTargets="DockerPrepareForBuild"
+          Inputs="@(DependentServiceSources)"
+          Outputs="$(MSBuildProjectDirectory)\bin\publish-dependencies.stamp">
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\publish-dependencies.ps1&quot; -Configuration $(Configuration)" />
   </Target>
 </Project>

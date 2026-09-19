@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using DynamicExpression;
 using DynamicExpression.Enums;
-using Nano.App.Api.Controllers.Criteria;
+using Nano.App.Criteria;
 using Nano.Data.Abstractions.Models.Identity;
 using Svc.Accounts.Models.Data;
 

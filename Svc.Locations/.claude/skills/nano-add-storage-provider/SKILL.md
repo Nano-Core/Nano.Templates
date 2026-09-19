@@ -20,12 +20,18 @@ provisioning step differ.
 
 ## Before making any change, determine
 
-1. **Which provider.** `Local` or `Azure` (see AGENTS.md's provider table for package/type
+1. **Is this app meant to be a Public API?** Per AGENTS.md's [Controllers § Public API vs
+   internal service](#public-api-vs-internal-service), a Public API composes Api Clients into
+   responses and has no `IRepository` of its own — a Storage provider is *allowed* there (not a
+   hard block), but it's a deviation from that lean-façade design, not the default. If this app is
+   a Public API, confirm with the user that file storage genuinely belongs on this app rather than
+   on an internal service reached via Api Client, before proceeding.
+2. **Which provider.** `Local` or `Azure` (see AGENTS.md's provider table for package/type
    names). Ask the user if not already given.
-2. **Is a storage provider already registered?** Check `Program.cs` for an existing
+3. **Is a storage provider already registered?** Check `Program.cs` for an existing
    `.AddNanoStorage<...>()` call — like eventing, there's one `IPathProvider` implementation
    per app, not a multi-provider case. If one exists, treat this as a replace and say so.
-3. **Is a package reference even needed?** Same check as the other add-provider skills: look for
+4. **Is a package reference even needed?** Same check as the other add-provider skills: look for
    `NanoCore`/`Nano.All` (directly, or transitively via a `.Models` project). If found, skip the
    package step. Otherwise add `<PackageReference Include="Nano.Storage.<Provider>" Version="X.Y.Z" />`
    to the **application project**, matching the version of the project's existing Nano
@@ -98,9 +104,14 @@ provider) — there's nothing to run, just a directory.
   isolated from the others — a file written via one replica isn't visible from another. If the
   app instead needs one *shared* volume across replicas, that's what `Azure` storage is for,
   below — its file-share CSI mount supports concurrent multi-pod access.)
-- **`.kubernetes/deployment.yaml`**: change `kind: Deployment` → `kind: StatefulSet`, and add
-  `serviceName: %SERVICE_NAME%-stateful-headless` alongside `replicas`/`selector` (a `StatefulSet` field,
-  required — see the headless service below). Mount the volume, plus the standard `tmp`
+- **Replace `.kubernetes/deployment.yaml` with a new `.kubernetes/stateful-set.yaml`** — per
+  AGENTS.md's Solution Structure table, the two are mutually exclusive, and `stateful-set.yaml`
+  replaces `deployment.yaml` entirely rather than the two coexisting. Delete `deployment.yaml`,
+  create `stateful-set.yaml` with the same content plus `kind: StatefulSet` (not `Deployment`) and
+  `serviceName: %SERVICE_NAME%-stateful-headless` alongside `replicas`/`selector` (a `StatefulSet`
+  field, required — see the headless service below); update the `.sln`'s `.kubernetes`
+  `SolutionItems` block to reference the new filename instead of the old one. Mount the volume,
+  plus the standard `tmp`
   `emptyDir` volume that backs `IPathProvider`'s temporary directory (AGENTS.md: registering a
   provider "also registers `IPathProvider` ... exposing the storage root and a temporary (`tmp`)
   directory") — include `tmp` for **both** providers, it's provider-agnostic:
@@ -154,7 +165,8 @@ provider) — there's nothing to run, just a directory.
   `Gi`) and `STORAGE_SHARE_NAME` env vars, and apply
   `storage-storageclass.yaml` (still needed — referenced by name from `volumeClaimTemplates`)
   and `service-headless.yaml` (same `Get-Content | ExpandEnvironmentVariables | kubectl apply`
-  pattern as every other manifest) in `Kubernetes Deploy`, before `deployment.yaml`. There's no
+  pattern as every other manifest) in `Kubernetes Deploy`, before `stateful-set.yaml` (which
+  replaces the `deployment.yaml` apply line, per the rename above). There's no
   separate PVC file to apply — `volumeClaimTemplates` creates one per pod automatically as the
   `StatefulSet` itself is applied. Also add `.kubernetes\storage-storageclass.yaml =
   .kubernetes\storage-storageclass.yaml` and `.kubernetes\service-headless.yaml =

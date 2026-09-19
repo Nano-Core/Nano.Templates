@@ -1,5 +1,5 @@
 ﻿using DynamicExpression;
-using Nano.App.Api.Controllers.Criteria;
+using Nano.App.Criteria;
 using Svc.Accounts.Models.Data;
 using System.Collections.Generic;
 

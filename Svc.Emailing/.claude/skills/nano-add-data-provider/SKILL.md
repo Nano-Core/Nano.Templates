@@ -14,20 +14,26 @@ without breaking what's already there.
 
 ## Before making any change, determine
 
-1. **Which provider.** One of `MySql`, `PostgreSQL`, `SqlServer`, `SqLite`, `InMemory` (see
+1. **Is this app meant to be a Public API?** Per AGENTS.md's [Controllers § Public API vs
+   internal service](#public-api-vs-internal-service), a Public API composes Api Clients into
+   responses and has no `IRepository` of its own — a Data provider is *allowed* there (not the
+   hard block Identity/Auth are), but it's a deviation from that lean-façade design, not the
+   default. If this app is a Public API, confirm with the user that persistence genuinely belongs
+   on this app rather than on an internal service reached via Api Client, before proceeding.
+2. **Which provider.** One of `MySql`, `PostgreSQL`, `SqlServer`, `SqLite`, `InMemory` (see
    AGENTS.md's provider table for package/type names). Ask the user if not already given.
-2. **Is a data provider already registered?** Check `Program.cs` for an existing
+3. **Is a data provider already registered?** Check `Program.cs` for an existing
    `.AddNanoData<...>()` call. Unlike logging, a second data provider isn't automatically
    wrong (multi-context setups exist), but it's unusual — if one is already registered, confirm
    with the user whether they want to *replace* it (single-context swap) or genuinely add a
    second `DbContext` before proceeding either way.
-3. **Is a package reference even needed?** Same check as the logging skill: look for a
+4. **Is a package reference even needed?** Same check as the logging skill: look for a
    `PackageReference` to `NanoCore` or `Nano.All` (identical, see AGENTS.md) on the application
    project or a `.Models` project it reaches via `ProjectReference`. If found, skip the package
    step. Otherwise add `<PackageReference Include="Nano.Data.<Provider>" Version="X.Y.Z" />` to
    the **application project** (never `.Models`), matching the version of the project's existing
    Nano application-type package. Never add a `ProjectReference` to Nano.Library source.
-4. **Entity identity type.** If entities already exist in the project, match their `TIdentity`
+5. **Entity identity type.** If entities already exist in the project, match their `TIdentity`
    (see the entity-scaffold skill's identity-type step) — the `DbContext`/`AddNanoData<...>`
    generic arguments must agree with it.
 
@@ -265,15 +271,12 @@ Provisioning that server is out of this skill's scope.
    AZURE_GROUP_DATABASE: ${{ vars.AZURE_RESOURCE_GROUP_DATABASE }}
    DOTNET_EF_TOOLS_VERSION: "10.0"
    ```
-   ⚠ No `SQL_TYPE` variable, and no `if:` guard on the migration step below. A `SQL_TYPE`-style
-   runtime switch only earns its keep when an app genuinely needs to pick its provider at deploy
-   time — that's not this skill's job; the app has exactly one data provider, chosen once, here.
-   Add only the one migration step matching that provider, unconditionally. Don't add the other
-   two providers' steps as dormant `if:`-guarded alternatives — unreachable steps (and the
-   `AZURE_GROUP_LOGS` env var the SQL Server one alone needs) are clutter to maintain, not
-   documentation, and a workflow file is not the place to leave every road not taken. If this is
-   *replacing* an existing provider, remove that provider's migration step (and any env vars only
-   it needed) rather than leaving it disabled alongside the new one.
+   ⚠ Add only the one migration step matching the chosen provider, unconditionally — no `SQL_TYPE`
+   variable or `if:` guard needed. Don't add the other two providers' steps as dormant
+   alternatives — unreachable steps (and the `AZURE_GROUP_LOGS` env var the SQL Server one alone
+   needs) are clutter to maintain, not documentation. If this is *replacing* an existing provider,
+   remove that provider's migration step (and any env vars only it needed) rather than leaving it
+   disabled alongside the new one.
 2. **Migration step** — add the one step below matching the chosen provider, placed after
    `Managed Identity` and before `Kubernetes Deploy` in the workflow. It resolves the Azure
    server, runs `dotnet ef database update` using an elevated/admin credential, then grants the
