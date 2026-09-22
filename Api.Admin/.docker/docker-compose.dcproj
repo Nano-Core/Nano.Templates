@@ -10,6 +10,7 @@
   <ItemGroup>
     <None Include="docker-compose.yml" />
     <None Include="publish-dependencies.ps1" />
+    <None Include=".env" />
   </ItemGroup>
 
   <ItemGroup>

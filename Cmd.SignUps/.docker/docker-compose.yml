@@ -5,6 +5,8 @@ services:
     build:
       context: ../Cmd.SignUps
       dockerfile: "Dockerfile.Local"
+    env_file:
+      - .env
     depends_on:
       - svc.accounts
       - svc.emailing
@@ -24,6 +26,8 @@ services:
         WORKDIR /app
         COPY ./bin/publish/. .
         ENTRYPOINT ["dotnet", "Svc.Accounts.dll"]
+    env_file:
+      - ../../Svc.Accounts/.docker/.env
     environment:
       ASPNETCORE_HTTP_PORTS: ""
     depends_on:
@@ -47,6 +51,8 @@ services:
         WORKDIR /app
         COPY ./bin/publish/. .
         ENTRYPOINT ["dotnet", "Svc.Emailing.dll"]
+    env_file:
+      - ../../Svc.Emailing/.docker/.env
     environment:
       ASPNETCORE_HTTP_PORTS: ""
     depends_on:

@@ -9,6 +9,8 @@ services:
     build:
       context: ../Api.Admin
       dockerfile: "Dockerfile.Local"
+    env_file:
+      - .env
     depends_on:
       - clamav
       - svc.accounts
@@ -38,6 +40,8 @@ services:
         WORKDIR /app
         COPY ./bin/publish/. .
         ENTRYPOINT ["dotnet", "Svc.Accounts.dll"]
+    env_file:
+      - ../../Svc.Accounts/.docker/.env
     environment:
       ASPNETCORE_HTTP_PORTS: ""
     depends_on:

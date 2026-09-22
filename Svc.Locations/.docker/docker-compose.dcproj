@@ -9,5 +9,6 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.yml" />
+    <None Include=".env" />
   </ItemGroup>
 </Project>

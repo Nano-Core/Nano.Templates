@@ -8,6 +8,8 @@ services:
     build:
       context: ../Svc.Emailing
       dockerfile: "Dockerfile.Local"
+    env_file:
+      - .env
     depends_on:
       - database
       - eventing
