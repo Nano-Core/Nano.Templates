@@ -116,13 +116,15 @@ jobs:
         run: |
           $env:APP_DISPLAY_NAME = $env:SERVICE_NAME + "-app";
           $env:SECRET_DISPLAY_NAME = $env:APP_DISPLAY_NAME + "-secret-" + (Get-Date -Format "yyyyMMddHHmmss");
+          $env:AUTH_MICROSOFT_SIGNIN_AUDIENCE = "AzureADMyOrg";
+          $env:AUTH_MICROSOFT_TENANT_ID = $env:AZURE_TENANT_ID;
           $env:AUTH_MICROSOFT_CLIENT_ID = az ad app list --display-name $env:APP_DISPLAY_NAME --query "[0].appId" -o tsv;
 
           if (-not $env:AUTH_MICROSOFT_CLIENT_ID)
           {
               az ad app create `
                   --display-name $env:APP_DISPLAY_NAME `
-                  --sign-in-audience AzureADMyOrg `
+                  --sign-in-audience $env:AUTH_MICROSOFT_SIGNIN_AUDIENCE `
                   --web-redirect-uris $env:AUTH_MICROSOFT_REDIRECT_URI;
 
               $env:AUTH_MICROSOFT_CLIENT_ID = az ad app list --display-name $env:APP_DISPLAY_NAME --query "[0].appId" -o tsv;
@@ -131,6 +133,7 @@ jobs:
           {
               az ad app update `
                   --id $env:AUTH_MICROSOFT_CLIENT_ID `
+                  --sign-in-audience $env:AUTH_MICROSOFT_SIGNIN_AUDIENCE `
                   --web-redirect-uris $env:AUTH_MICROSOFT_REDIRECT_URI;
           }
 
@@ -154,6 +157,7 @@ jobs:
 
           echo "AUTH_MICROSOFT_CLIENT_ID=$env:AUTH_MICROSOFT_CLIENT_ID" >> $env:GITHUB_ENV;
           echo "AUTH_MICROSOFT_CLIENT_SECRET=$env:AUTH_MICROSOFT_CLIENT_SECRET" >> $env:GITHUB_ENV;
+          echo "AUTH_MICROSOFT_TENANT_ID=$env:AUTH_MICROSOFT_TENANT_ID" >> $env:GITHUB_ENV;
 
       - name: Kubernetes Deploy
         shell: pwsh
