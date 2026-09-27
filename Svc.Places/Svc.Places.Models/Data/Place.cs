@@ -9,7 +9,6 @@ using Nano.Data.Abstractions.Annotations;
 using Nano.Data.Abstractions.Config.Enums;
 using Nano.Data.Abstractions.Models;
 using NetTopologySuite.Geometries;
-using Z.EntityFramework.Plus;
 
 namespace Svc.Places.Models.Data;
 
@@ -38,7 +37,6 @@ public class Place : BaseEntity
     /// </summary>
     [Required]
     [MaxLength(128)]
-    [AuditExclude]
     public virtual string NameNormalized { get; internal set; } = null!;
 
     /// <summary>

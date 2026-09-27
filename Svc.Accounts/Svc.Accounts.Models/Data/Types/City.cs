@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Z.EntityFramework.Plus;
 
 namespace Svc.Accounts.Models.Data.Types;
 
@@ -28,7 +27,6 @@ public class City
     /// </summary>
     [Required]
     [MaxLength(128)]
-    [AuditExclude]
     public virtual string NameNormalized { get; internal set; } = null!;
 
     /// <summary>
