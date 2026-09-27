@@ -529,7 +529,7 @@ namespace Svc.Locations.Migrations
                     b.Property<Point>("Coordinate")
                         .IsRequired()
                         .HasColumnType("POINT")
-                        .HasAnnotation("Sqlite:Srid", 4326);
+                        .HasAnnotation("MySql:SpatialReferenceSystem", 4326);
 
                     b.Property<double?>("Course")
                         .HasColumnType("double");

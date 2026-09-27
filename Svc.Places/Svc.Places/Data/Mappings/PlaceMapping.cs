@@ -43,7 +43,7 @@ public class PlaceMapping : BaseEntityMapping<Place>
         builder
             .Property(x => x.Area)
             .HasColumnType("POLYGON")
-            .HasSrid(4326)
+            .HasSpatialReferenceSystem(4326)
             .IsRequired();
 
         builder
