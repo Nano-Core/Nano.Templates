@@ -46,7 +46,7 @@ public class PlaceFavoritesController(ILogger<PlaceFavoritesController> logger, 
         if (placeFavorite == null)
         {
             placeFavorite = await this.Repository
-                .AddAndGetAsync<PlaceFavorite, Guid>(new PlaceFavorite
+                .AddAndGetAsync<PlaceFavorite>(new PlaceFavorite
                 {
                     PlaceId = placeId,
                     UserId = userId
