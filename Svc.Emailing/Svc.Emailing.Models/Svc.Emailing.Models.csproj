@@ -53,7 +53,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Nano.App" Version="10.0.15" />
+	  <PackageReference Include="Nano.App" Version="10.0.16" />
 	</ItemGroup>
 
 	<ItemGroup>
