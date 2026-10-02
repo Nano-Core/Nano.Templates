@@ -2248,6 +2248,7 @@ Conventionally placed in a `Controllers/` folder in the application project (not
 Controller `///` comments feed the public Swagger, so keep them short and safe to publish:
 
 - One line `<summary>` that says what the action does (`Gets a list of assets.`, `Deletes a non archived order.`), and short `<param>`/`<returns>`/`<response>` text. Never an essay.
+- The controller class `<summary>` says what the controller is for in 5-8 words (`Manages saved reports and how they are shared.`), not just the entity name (`Reports.`).
 - A brief rule or condition is fine when it helps the caller and is not sensitive.
 - No implementation details or other internals: no other service or application names, method names, or internal rules.
 - Never put `///` on private or internal members.
@@ -2940,13 +2941,15 @@ the matching capability interface from [Data Models](#data-models):
 | Delete             | `DeleteAsync<TEntity,TKey>(id)` (+ shorthand overloads), `DeleteAsync(entity)`, `DeleteManyAsync` (by keys/entities/criteria/predicate), `DeleteManyBulkAsync` (criteria/predicate variants use native `ExecuteDeleteAsync`, no paid package) | `IEntityDeletable` |
 | Aggregate          | `CountAsync`, `SumAsync`/`AverageAsync` (hard-coded `decimal`) | `IEntity` |
 | Raw SQL            | `ExecuteProcedureAsync<T>`, `ExecuteProcedureListAsync<T>`, `ExecuteProcedureScalarAsync<T>` | — |
-| Persistence        | `SaveChangesAsync(ct)` | — |
+| Persistence        | `ExecuteInTransactionAsync(action, ct)`, `SaveChangesAsync(ct)` | — |
 
 #### Transactions and `UseAutoSave`
 
-`Data:Repository:UseAutoSave` (default `true`) governs whether each mutating call commits immediately. To batch
-several repository calls into one transaction, set `UseAutoSave: false` and call `Repository.SaveChangesAsync()`
-once yourself at the end — `IRepository` has no explicit `BeginTransaction`/`Commit` API of its own.
+`Data:Repository:UseAutoSave` (default `true`) governs whether each mutating call commits immediately. To make
+several repository calls atomic, wrap them in `Repository.ExecuteInTransactionAsync(async ct => { ... }, ct)` — every
+call inside commits together or rolls back together, even with `UseAutoSave: true`. It runs through the provider's
+retry strategy, so the action may run more than once and must be safe to repeat. Alternatively, set `UseAutoSave:
+false` and call `Repository.SaveChangesAsync()` once yourself at the end (one save, no explicit transaction).
 
 ⚠ `AddAndGetAsync`/`UpdateAndGetAsync` **always** save regardless of `UseAutoSave` — they need the row persisted
 before they can reload it with `[Include]`d navigations populated.
