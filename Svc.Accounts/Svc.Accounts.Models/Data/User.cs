@@ -7,7 +7,6 @@ using Nano.Data.Abstractions.Eventing.Annotations;
 using Nano.Data.Abstractions.Models;
 using Svc.Accounts.Models.Data.Enums;
 using Svc.Accounts.Models.Extensions;
-using Z.EntityFramework.Plus;
 
 namespace Svc.Accounts.Models.Data;
 
@@ -89,7 +88,6 @@ public class User : BaseEntityUser
     /// </summary>
     [Required]
     [MaxLength(256)]
-    [AuditExclude]
     public virtual string FullNameNormalized { get; internal set; } = null!;
 
     /// <summary>

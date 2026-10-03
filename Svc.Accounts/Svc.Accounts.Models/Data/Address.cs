@@ -3,7 +3,6 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Nano.Data.Abstractions.Annotations;
 using Svc.Accounts.Models.Data.Types;
-using Z.EntityFramework.Plus;
 
 namespace Svc.Accounts.Models.Data;
 
@@ -49,7 +48,6 @@ public class Address : BaseEntity
     /// </summary>
     [Required]
     [MaxLength(512)]
-    [AuditExclude]
     public virtual string StreetNameNormalized { get; internal set; } = null!;
 
     /// <summary>

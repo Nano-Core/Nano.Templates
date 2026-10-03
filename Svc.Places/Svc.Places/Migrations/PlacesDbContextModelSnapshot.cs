@@ -537,7 +537,7 @@ namespace Svc.Places.Migrations
                     b.Property<Polygon>("Area")
                         .IsRequired()
                         .HasColumnType("POLYGON")
-                        .HasAnnotation("Sqlite:Srid", 4326);
+                        .HasAnnotation("MySql:SpatialReferenceSystem", 4326);
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .ValueGeneratedOnAdd()

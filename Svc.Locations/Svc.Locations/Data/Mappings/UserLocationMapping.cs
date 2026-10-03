@@ -26,7 +26,7 @@ public class UserLocationMapping : BaseEntityMapping<UserLocation>
         builder
             .Property(x => x.Coordinate)
             .HasColumnType("POINT")
-            .HasSrid(4326);
+            .HasSpatialReferenceSystem(4326);
 
         builder
             .HasIndex(x => x.Coordinate)

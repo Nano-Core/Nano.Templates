@@ -1,7 +1,6 @@
 ﻿using Nano.Data.Abstractions.Models;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Z.EntityFramework.Plus;
 
 namespace Svc.Accounts.Models.Data;
 
@@ -30,7 +29,6 @@ public class Country : BaseEntity
     /// </summary>
     [Required]
     [MaxLength(128)]
-    [AuditExclude]
     public virtual string NameNormalized { get; internal set; } = null!;
 
     /// <summary>

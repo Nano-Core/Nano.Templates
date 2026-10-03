@@ -99,8 +99,8 @@ public class <Entity> : BaseEntity
   existing convention (see step 5 above).
 - For restricted CRUD (e.g. read-only, or no delete), derive instead from
   `BaseEntityReadOnly`, `BaseEntityCreatable`, `BaseEntityUpdatable`,
-  `BaseEntityCreatableAndUpdatable`, or `BaseEntityDeletable` - ask the user if the request
-  implies one of these rather than full CRUD.
+  `BaseEntityCreatableAndUpdatable`, `BaseEntityCreatableAndDeletable`, or `BaseEntityDeletable` -
+  ask the user if the request implies one of these rather than full CRUD.
 - **`[Subscribe]` entities are restricted CRUD by convention, not a case to ask about.** Per step
   8, a `[Subscribe]` entity is a local replica kept in sync by the built-in
   `EntityEventingHandler` whenever the publishing app's source entity changes - update/delete
@@ -127,6 +127,31 @@ public class <Entity> : BaseEntity
   `false`/first-member-value default) without stating it, since that's exactly the kind of
   intent that's invisible on read until it's a production surprise. File 2's `.HasDefaultValue(...)`
   must match the same value.
+- **A `string` property File 3's query criteria will match with `StartsWith`/`Contains`/`Equal` for
+  human-typed search or lookup gets a computed `XNormalized` twin** - see AGENTS.md's `##### Case-insensitive
+  search (Normalized columns)` for the full pattern and when to skip it (exact technical identifiers, seeded
+  constants). Decide this together with File 3, not in isolation - if the request doesn't say whether the
+  entity needs a search/lookup field at all yet, this only applies once one exists.
+- **Date/time properties are always named `...At`** - `CreatedAt`, `StartsAt`, `EndsAt`, `CancelledAt`,
+  `ShreddedAt`, never `...Date`, `...Timestamp`, or a `...Utc` suffix (a `DateTime` holding UTC is still just
+  `...At`). Name it after the event: past tense for something that happened (`ClosedAt`), a plain "starts/ends"
+  form for a boundary (`StartsAt`, `EndsAt`). This carries through everywhere the property appears: the mapping,
+  query criteria filters, requests, responses and their doc comments.
+- **Derive, don't store, a value that is a pure function of other columns and the clock** (e.g. a lifecycle
+  status computed from `StartsAt`/`EndsAt`). Expose it as a getter-only property marked `[NotMapped]` (and
+  `.Ignore(...)` in the mapping), and have the query criteria translate a filter on it into conditions on the
+  underlying columns. A stored status column for this goes stale, and a database generated column can't
+  reference the current time.
+- **Every reference navigation property (`virtual TOther Nav`) is typed nullable (`TOther? Nav`), even when the
+  relationship is required and the FK scalar itself is non-nullable.** ASP.NET Core's model binding treats a
+  non-nullable reference-type property as implicitly required on an incoming request body, with no `[Required]`
+  attribute needed to trigger it - a non-nullable navigation on an entity that's also a request/response shape
+  turns into an unintended required field, typically surfacing as an unexplained 400 on a request that never
+  meant to supply that navigation at all. The FK scalar (`TOtherId`) is where real requiredness belongs - enforced
+  by the database via File 2's `.IsRequired()`/`.HasForeignKey(...)` - the navigation property itself stays
+  nullable regardless of cardinality. This applies to every reference navigation on every entity, not just ones
+  the request happens to touch today: an entity's shape can end up serialized into a request/response later even
+  if it isn't today, so getting this right at scaffold time avoids a mapping-wide retrofit once it is.
 
 ## File 2 - Data mapping
 
@@ -214,7 +239,20 @@ public class <Entity>Mapping : BaseEntityMapping<<Entity>>
     mapping file to read the relationship's actual shape from. Model it as its own entity (e.g.
     `Product`/`Tag` → a real `ProductTag` entity with `ProductId`/`TagId` FKs) with its own File
     1/File 2 pair - a normal one-to-many-to-one shape from each side, not a special case - even
-    when the join entity currently has no columns beyond the two FKs.
+    when the join entity currently has no columns beyond the two FKs. A join entity with nothing but
+    its foreign keys is only ever added and removed, never edited (editing one would just re-point
+    it), so it derives from `BaseEntityCreatableAndDeletable` in File 1 and gets
+    `BaseEntityCreatableAndDeletableController` in File 4.
+- **Index every property the entity is queried or sorted by** - one `HasIndex(...)` in the mapping for each
+  property File 3's query criteria filters on, and each property an ordering (`Order.By`) or a keyword
+  search reaches, declared at the end of `Configure`, after the properties and relationships. Foreign keys
+  already get an index from EF's conventions, so don't repeat those unless a composite covers them better;
+  don't index a low-selectivity flag (a plain `bool` or status on its own). When a list is always filtered
+  by one property and sorted by another (a foreign key, newest first), use one composite index in that
+  order (`HasIndex(x => new { x.ParentId, x.CreatedAt })`), which replaces a plain single-column index on
+  the same leading property. An index only helps a text search that anchors at the start of the value,
+  which is why File 3 uses `StartsWith`, not `Contains`. If it isn't clear from the request how the entity
+  is listed, searched, and sorted, ask before guessing which indexes it needs.
 - No registration step needed - Nano auto-discovers mappings via
   `ModelBuilderExtensions.MapEntities<TIdentity>` at startup.
 - Add a new EF Core migration after this file exists: `dotnet ef migrations add <Name>`
@@ -241,7 +279,7 @@ public class <Entity>QueryCriteria : BaseQueryCriteria
         if (!string.IsNullOrEmpty(this.Name))
         {
             expression
-                .StartsWith("Name", this.Name);
+                .StartsWith(nameof(<Entity>.NameNormalized), this.Name.ToUpper());
         }
 
         expressions
@@ -255,8 +293,15 @@ public class <Entity>QueryCriteria : BaseQueryCriteria
 - Only add filter properties for fields that make sense to search/filter by - don't
   mechanically add one filter per scalar property on the entity.
 - Every filter property must be `virtual` and nullable.
+- **Text search uses `StartsWith`, never `Contains`** - a `Contains` (leading wildcard) can't use an index
+  and scans the whole table as it grows; `StartsWith` can. Whatever a criteria property filters on gets a
+  matching `HasIndex` in File 2's mapping.
+- **Search/lookup against a `string` property filters on its `XNormalized` twin (see File 1), with the input
+  itself also uppercased** (`this.Name.ToUpper()`) - never match the raw property directly for a
+  `StartsWith`/`Contains`/`Equal` a human might type in any casing. File 2's index goes on the `Normalized`
+  property too, not the raw one.
 - Use the `CriteriaExpression` builder methods appropriate to each property's type
-  (`StartsWith`/`Contains` for strings, `Equal`/`GreaterThan`/etc. for numerics and dates)
+  (`StartsWith` for strings, `Equal`/`GreaterThan`/etc. for numerics and dates)
   - check the project's other query criteria classes for the operations actually available,
   don't guess.
 
@@ -284,16 +329,33 @@ public class <Entity>sController(ILogger<<Entity>sController> logger, IRepositor
 - If the identity type isn't `Guid` (per step 5), the controller generic list needs the
   identity type too: `BaseEntityController<<Entity>, <TIdentity>, <Entity>QueryCriteria>`.
 - **`BaseEntityController<<Entity>, <Entity>QueryCriteria>` (full CRUD) is the default for every
-  entity, with no exceptions other than `[Subscribe]`.** Having custom actions on the same
+  entity, with no exceptions other than `[Subscribe]` and a foreign-keys-only join entity (below).**
+  Having custom actions on the same
   controller - even ones that overlap in intent with a generic CRUD action - is not on its own a
   reason to narrow the tier. A colliding route is a defect to flag (see below), not a signal to
   remove generic capability the entity is otherwise entitled to.
 - **`[Subscribe]` entities use `BaseEntityCreatableController<<Entity>, <Entity>QueryCriteria>`**,
   not `BaseEntityController` - per File 1's note, update/delete happen through the Subscribe
-  mechanism, not this app's HTTP surface, so only Get/Query/Create are exposed here. This is the
-  *only* case that changes the default tier.
+  mechanism, not this app's HTTP surface, so only Get/Query/Create are exposed here.
+- **A join entity with only foreign keys uses
+  `BaseEntityCreatableAndDeletableController<<Entity>, <Entity>QueryCriteria>`** (Get/Query/Create/Delete,
+  no Edit) - see File 2's many-to-many note. Any rule that must hold on add or remove (e.g. the parent is
+  immutable once in use) is then an override of the create/delete actions only, with no edit path left
+  open around it. These two are the only cases that change the default tier.
 - No manual registration needed - Nano's MVC discovery picks up the controller
   automatically from the assembly.
+
+## Postman collection (API/Web only - skip for Console)
+
+If the application already has a Postman collection (`Postman_<AppName>.json` in the application's own
+folder, next to its `README.md`), add the new entity's folder to it, following the
+`nano-add-postman-collection` skill's conventions: only the generic actions the controller's actual base
+class exposes (see File 4), placed in FK-dependency order, with Id/name chaining test scripts. Edit only the
+new folder; don't regenerate or reorder the rest of the file, and remind the user to **Replace**-import it in
+Postman.
+
+**If no collection exists, do nothing Postman-related** - don't create one. The entity is picked up when the
+user later generates the collection with `nano-add-postman-collection`.
 
 ## After generating
 

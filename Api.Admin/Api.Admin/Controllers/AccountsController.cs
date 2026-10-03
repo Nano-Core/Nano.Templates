@@ -58,7 +58,7 @@ public class AccountsController(ILogger<AccountsController> logger, IAuthTransie
                         RedirectUri = request.RedirectUri
                     },
                     TransientClaims = GetLoginTransientClaims(),
-                    TransientRoles = []
+                    TransientRoles = ["administrator"]
                 }, cancellationToken);
 
             if (accessToken == null)

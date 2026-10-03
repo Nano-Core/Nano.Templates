@@ -9,6 +9,8 @@ services:
     build:
       context: ../Api.Public
       dockerfile: "Dockerfile.Local"
+    env_file:
+      - .env
     depends_on:
       - clamav
       - svc.accounts
@@ -47,6 +49,8 @@ services:
         WORKDIR /app
         COPY ./bin/publish/. .
         ENTRYPOINT ["dotnet", "Svc.Accounts.dll"]
+    env_file:
+      - ../../Svc.Accounts/.docker/.env
     environment:
       ASPNETCORE_HTTP_PORTS: ""
     depends_on:
@@ -76,6 +80,8 @@ services:
         WORKDIR /app
         COPY ./bin/publish/. .
         ENTRYPOINT ["dotnet", "Svc.Places.dll"]
+    env_file:
+      - ../../Svc.Places/.docker/.env
     environment:
       ASPNETCORE_HTTP_PORTS: ""
     depends_on:
@@ -99,6 +105,8 @@ services:
         WORKDIR /app
         COPY ./bin/publish/. .
         ENTRYPOINT ["dotnet", "Svc.Locations.dll"]
+    env_file:
+      - ../../Svc.Locations/.docker/.env
     environment:
       ASPNETCORE_HTTP_PORTS: ""
     depends_on:
@@ -120,9 +128,10 @@ services:
         WORKDIR /app
         COPY ./bin/publish/. .
         ENTRYPOINT ["dotnet", "Svc.Emailing.dll"]
+    env_file:
+      - ../../Svc.Emailing/.docker/.env
     environment:
       ASPNETCORE_HTTP_PORTS: ""
-      Emailing__ApiKey: "<<secret>>"
     depends_on:
       - database
       - eventing

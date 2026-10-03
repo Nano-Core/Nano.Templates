@@ -159,9 +159,18 @@ to whoever can reach `AuthController` at all.
   Write a custom controller instead (derive it from this app's own base controller, *not*
   `BaseAuthController`) that calls `IAuthExternalRepositoryAggregator`/`IAuthTransientRepository`/
   `IAuthIdentityRepository` directly and builds the claims/roles itself from trusted data — never
-  from caller input. This is a real, load-bearing pattern in this codebase, not a hypothetical — see
-  `Api.Admin`'s `AccountsController` (deriving its own `BaseAdminController`), which implements
-  `login/microsoft`/`login/refresh`/`me` by hand for exactly this reason.
+  from caller input.
+  ⚠ **A custom controller built this way must still explicitly set `TransientRoles` on the
+  `LogInExternal`/`LogIn` request it builds — an omitted `TransientRoles` silently defaults to an
+  empty array**, not an error. The resulting JWT authenticates fine (login itself returns `200 OK`)
+  but carries no role claims at all, so it satisfies none of Nano's built-in role-based policies
+  (`NanoRead`/`NanoAdd`/etc. — see AGENTS.md's Authorization section) on *any* downstream call that
+  forwards this JWT — including this app's own generic entity controllers, and any internal service
+  reached through an Api Client. This surfaces as a `403 Forbidden` on a later, unrelated-looking
+  request, not at login, which makes it easy to misdiagnose as a routing/CORS/collection problem
+  instead of a missing field on the login endpoint. If the app grants a fixed set of custom claims
+  unconditionally (e.g. `IsAdmin: true` for anyone who authenticates), set the matching
+  `TransientRoles` (e.g. `administrator`) on the same request, not just the custom claims.
 - Nano additionally auto-maps built-in transient external-login endpoints
   (`/auth/login/external/{provider}/transient` and its `/refresh` counterpart) whenever *any*
   `BaseAuthController`-derived class exists in the app **and** no Identity is configured — see
@@ -169,9 +178,9 @@ to whoever can reach `AuthController` at all.
   type scan, not by whether this specific controller is the one deriving it. This is an extra
   exposure specific to transient auth: it means a custom controller alone isn't enough to shield a
   transient app unless `hasAuthController` also stays `false` (i.e. no `BaseAuthController`-derived
-  class anywhere in the app) — `Api.Admin`'s custom controller works precisely because it doesn't
-  derive `BaseAuthController`. The `/refresh` counterpart is auto-mapped under the same gate, but
-  isn't a caller-trust risk the way login is - see above.
+  class anywhere in the app) — a custom controller only actually avoids this exposure because it
+  doesn't derive `BaseAuthController`. The `/refresh` counterpart is auto-mapped under the same
+  gate, but isn't a caller-trust risk the way login is - see above.
 - **This risk is sharpest on a publicly-exposed app** (anyone on the internet can reach the
   endpoint), but don't treat an internal-only app as automatically safe either — anything that lets
   a caller assign its own JWT claims is worth a deliberate decision, not a default. `AuthController`
@@ -228,53 +237,13 @@ value only where it's actually safe to have one.
   refresh support also needs the frontend's authorize request to include `access_type=offline`/
   `prompt=consent`, which has nothing to do with this `Scopes` entry either.
 
-**Custom provider — real code, no config entry.** Per AGENTS.md's `##### Custom external provider`,
-this is auto-discovered by type, not registered via `Jwt.ExternalLogins` config the way built-in
-providers are — there's no appsettings.json entry for it at all.
-
-1. **`TFlow`.** `ImplicitFlow` or `AuthCodeFlow` (both derive `BaseAuthFlow`) — pick whichever
-   matches the provider's actual OAuth flow; ask if unclear rather than guessing. Derive a custom
-   `BaseAuthFlow` subclass instead only if the provider's flow doesn't fit either built-in shape.
-2. **The class**, conventionally `Auth/{Provider}ExternalRepository.cs` in the application
-   project (discovery is by type, so the location isn't enforced):
-   ```csharp
-   public class MyExternalRepository() : BaseAuthExternalRepository<ImplicitFlow>("MyProvider")
-   {
-       public override async Task<ExternalAuthenticationData> AuthenticateAsync(ImplicitFlow flow, CancellationToken cancellationToken = default)
-       {
-           // call the external provider, map its response to ExternalAuthenticationData
-           return new ExternalAuthenticationData
-           {
-               Id = "external-id",
-               Username = "MyUser",
-               EmailAddress = "user@domain.com",
-               Name = "My User",
-               ExternalToken = new ExternalAuthenticationToken { Name = this.ProviderName, Token = "token", RefreshToken = "refresh-token" }
-           };
-       }
-
-       public override async Task<ExternalAuthenticationToken> AuthenticateRefreshAsync(string refreshToken, CancellationToken cancellationToken = default)
-       {
-           // refresh against the external provider
-           return new ExternalAuthenticationToken { Name = this.ProviderName, Token = "token", RefreshToken = "refresh-token" };
-       }
-   }
-   ```
-   The constructor's string argument (`"MyProvider"` above) is `ProviderName` — this is what
-   `AuthExternalRepositoryAggregator` resolves against, and what appears in the
-   `/auth/login/external/{providerName}/...` route, so ask the user what they want it called
-   rather than defaulting to the class name.
-3. **Whatever credentials/endpoint the provider itself needs** (API key, base URL, etc.) — these
-   are this custom repository's own concern, not `Jwt.ExternalLogins`'s. Add them as an options
-   class bound from whatever config section makes sense for this provider (same pattern as any
-   other custom service in this codebase), then inject it into the repository's constructor. Don't
-   try to route them through `Jwt.ExternalLogins` — that section is exclusively for the three
-   built-in providers.
-
-Either way, the actual login endpoint this exposes is
-`/auth/login/external/{providerName}/transient` when Identity isn't configured, or the
-persistent equivalent per AGENTS.md's sub-repository table when it is — this skill doesn't scaffold
-that call site, only the repository/config that backs it.
+**Custom provider — its own skill, `nano-add-authentication-external-custom`.** Per AGENTS.md's
+`##### Custom external provider`, a custom provider is auto-discovered by type, not registered via
+`Jwt.ExternalLogins` config the way built-in providers are — there's no appsettings.json entry for
+it at all, just a `BaseAuthExternalRepository<TFlow>` subclass. That skill covers the `TFlow`
+choice (`AuthCodeFlow` vs. `ImplicitFlow`), the class scaffold itself, and reports which endpoint
+set (transient vs. persistent) the new provider ends up exposing — the same distinction as
+`nano-add-authentication-microsoft` above, use that skill instead of hand-rolling the class here.
 
 ## Kubernetes / GitHub Actions (Staging/Production) — issuer app only
 
