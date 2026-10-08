@@ -122,8 +122,9 @@ namespace Svc.Accounts.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PhonePrefix = table.Column<string>(type: "varchar(5)", maxLength: 5, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsDeleted = table.Column<long>(type: "bigint", nullable: false),
+                    IsDeleted = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
                 },
                 constraints: table =>
                 {
@@ -663,6 +664,16 @@ namespace Svc.Accounts.Migrations
                 name: "IX_Address_StreetNameNormalized",
                 table: "Address",
                 column: "StreetNameNormalized");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Country_CreatedAt",
+                table: "Country",
+                column: "CreatedAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Country_IsDeleted",
+                table: "Country",
+                column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Country_NameNormalized",

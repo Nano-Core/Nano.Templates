@@ -7,9 +7,6 @@ namespace Lib.Emailing;
 /// </summary>
 public class EmailingOptions
 {
-    /// <summary>
-    /// Section Name.
-    /// </summary>
     internal static string SectionName => "Emailing";
 
     /// <summary>

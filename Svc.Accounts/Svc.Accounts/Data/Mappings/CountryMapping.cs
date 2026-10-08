@@ -9,7 +9,7 @@ namespace Svc.Accounts.Data.Mappings;
 public class CountryMapping : BaseEntityMapping<Country>
 {
     /// <inheritdoc />
-    public override void Configure(EntityTypeBuilder<Country> builder)
+    protected override void ConfigureEntity(EntityTypeBuilder<Country> builder)
     {
         if (builder == null)
             throw new ArgumentNullException(nameof(builder));
