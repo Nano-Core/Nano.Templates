@@ -10,12 +10,10 @@ namespace Svc.Places.Data.Mappings;
 public class PlaceFavoriteMapping : BaseEntityMapping<PlaceFavorite>
 {
     /// <inheritdoc />
-    public override void Configure(EntityTypeBuilder<PlaceFavorite> builder)
+    protected override void ConfigureEntity(EntityTypeBuilder<PlaceFavorite> builder)
     {
         if (builder == null)
             throw new ArgumentNullException(nameof(builder));
-
-        base.Configure(builder);
 
         builder
             .HasQueryFilter(x => x.User!.IsActive);

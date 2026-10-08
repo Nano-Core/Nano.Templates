@@ -10,12 +10,10 @@ namespace Svc.Places.Data.Mappings;
 public class PlaceMapping : BaseEntityMapping<Place>
 {
     /// <inheritdoc />
-    public override void Configure(EntityTypeBuilder<Place> builder)
+    protected override void ConfigureEntity(EntityTypeBuilder<Place> builder)
     {
         if (builder == null)
             throw new ArgumentNullException(nameof(builder));
-
-        base.Configure(builder);
 
         builder
             .Property(x => x.Name)

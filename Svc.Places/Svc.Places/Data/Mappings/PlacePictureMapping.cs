@@ -10,12 +10,10 @@ namespace Svc.Places.Data.Mappings;
 public class PlacePictureMapping : BaseEntityMapping<PlacePicture>
 {
     /// <inheritdoc />
-    public override void Configure(EntityTypeBuilder<PlacePicture> builder)
+    protected override void ConfigureEntity(EntityTypeBuilder<PlacePicture> builder)
     {
         if (builder == null)
             throw new ArgumentNullException(nameof(builder));
-
-        base.Configure(builder);
 
         builder
             .HasOne(x => x.Place)

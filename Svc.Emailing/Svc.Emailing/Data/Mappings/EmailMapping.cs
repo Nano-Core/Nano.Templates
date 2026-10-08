@@ -15,12 +15,10 @@ namespace Svc.Emailing.Data.Mappings;
 public class EmailMapping : BaseEntityMapping<Email>
 {
     /// <inheritdoc />
-    public override void Configure(EntityTypeBuilder<Email> builder)
+    protected override void ConfigureEntity(EntityTypeBuilder<Email> builder)
     {
         if (builder == null)
             throw new ArgumentNullException(nameof(builder));
-
-        base.Configure(builder);
 
         builder
             .HasOne(x => x.User)

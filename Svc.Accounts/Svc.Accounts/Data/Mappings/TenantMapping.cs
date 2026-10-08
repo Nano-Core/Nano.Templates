@@ -9,12 +9,10 @@ namespace Svc.Accounts.Data.Mappings;
 public class TenantMapping : BaseEntityMapping<Tenant>
 {
     /// <inheritdoc />
-    public override void Configure(EntityTypeBuilder<Tenant> builder)
+    protected override void ConfigureEntity(EntityTypeBuilder<Tenant> builder)
     {
         if (builder == null)
             throw new ArgumentNullException(nameof(builder));
-
-        base.Configure(builder);
 
         builder
             .Property(x => x.Name)

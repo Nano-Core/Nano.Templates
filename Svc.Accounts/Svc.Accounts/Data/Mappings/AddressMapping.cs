@@ -10,12 +10,10 @@ namespace Svc.Accounts.Data.Mappings;
 public class AddressMapping : BaseEntityMapping<Address>
 {
     /// <inheritdoc />
-    public override void Configure(EntityTypeBuilder<Address> builder)
+    protected override void ConfigureEntity(EntityTypeBuilder<Address> builder)
     {
         if (builder == null)
             throw new ArgumentNullException(nameof(builder));
-
-        base.Configure(builder);
 
         builder
             .HasOne(x => x.Country)

@@ -540,10 +540,15 @@ namespace Svc.Accounts.Migrations
                         .HasColumnType("varchar(5)");
 
                     b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<DateTimeOffset>("CreatedAt"));
+
                     b.Property<long>("IsDeleted")
-                        .HasColumnType("bigint");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasDefaultValue(0L);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -565,6 +570,10 @@ namespace Svc.Accounts.Migrations
                     b.HasIndex("Code")
                         .IsUnique()
                         .HasDatabaseName("UX_Country_Code");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("NameNormalized");
 

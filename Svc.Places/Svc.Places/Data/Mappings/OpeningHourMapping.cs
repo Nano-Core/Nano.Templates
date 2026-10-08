@@ -10,12 +10,10 @@ namespace Svc.Places.Data.Mappings;
 public class OpeningHourMapping : BaseEntityMapping<OpeningHour>
 {
     /// <inheritdoc />
-    public override void Configure(EntityTypeBuilder<OpeningHour> builder)
+    protected override void ConfigureEntity(EntityTypeBuilder<OpeningHour> builder)
     {
         if (builder == null)
             throw new ArgumentNullException(nameof(builder));
-
-        base.Configure(builder);
 
         builder
             .HasOne(x => x.Place)

@@ -13,12 +13,10 @@ namespace Svc.Places.Data.Mappings;
 public class PlaceVisitMapping : BaseEntityMapping<PlaceVisit>
 {
     /// <inheritdoc />
-    public override void Configure(EntityTypeBuilder<PlaceVisit> builder)
+    protected override void ConfigureEntity(EntityTypeBuilder<PlaceVisit> builder)
     {
         if (builder == null)
             throw new ArgumentNullException(nameof(builder));
-
-        base.Configure(builder);
 
         builder
             .HasQueryFilter(x => x.User!.IsActive);

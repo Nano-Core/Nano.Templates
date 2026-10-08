@@ -10,12 +10,10 @@ namespace Svc.Locations.Data.Mappings;
 public class UserMapping : BaseEntityMapping<User>
 {
     /// <inheritdoc />
-    public override void Configure(EntityTypeBuilder<User> builder)
+    protected override void ConfigureEntity(EntityTypeBuilder<User> builder)
     {
         if (builder == null)
             throw new ArgumentNullException(nameof(builder));
-
-        base.Configure(builder);
 
         builder
             .Property(x => x.FullName)
