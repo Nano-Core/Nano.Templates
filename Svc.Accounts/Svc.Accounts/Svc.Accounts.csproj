@@ -27,11 +27,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Nano.App.Api" Version="10.0.20" />
-	  <PackageReference Include="Nano.Logging.Serilog" Version="10.0.20" />
-	  <PackageReference Include="Nano.Data.MySql" Version="10.0.20" />
-	  <PackageReference Include="Nano.Eventing.RabbitMq" Version="10.0.20" />
-	  <PackageReference Include="Nano.Storage.Azure" Version="10.0.20" />
+	  <PackageReference Include="Nano.App.Api" Version="10.0.21" />
+	  <PackageReference Include="Nano.Logging.Serilog" Version="10.0.21" />
+	  <PackageReference Include="Nano.Data.MySql" Version="10.0.21" />
+	  <PackageReference Include="Nano.Eventing.RabbitMq" Version="10.0.21" />
+	  <PackageReference Include="Nano.Storage.Azure" Version="10.0.21" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
 	</ItemGroup>
 
