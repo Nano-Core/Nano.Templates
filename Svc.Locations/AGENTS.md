@@ -1415,6 +1415,10 @@ Enables the Swagger UI at `/docs`.
 }
 ```
 
+The OpenAPI file describes the API exactly as the code is, so a client (such as one generated with `orval`) is generated straight from it and the file is **never edited by hand or patched**. If the file is wrong, the code is fixed:
+- `nullable` is set only for a property that is nullable in the code, a nullable enum included (`allOf` the enum, with `nullable: true`).
+- A property is `required` when it is not nullable, a value type (number, bool, enum) included, or when it is marked `[Required]` or `required`. This is the same in a response and in a request body.
+
 ⚠ When using a strict CSP, add style hash `sha256-RL3ie0nH+Lzz2YNqQN83mnU0J1ot4QL7b99vMdIX99w=` — otherwise
 Swagger UI's icons/images fail to render.
 
@@ -2854,7 +2858,7 @@ IEntitySoftDeletable         : IEntityDeletable, redeclares IsDeleted   (opt-in)
 | `BaseEntityDeletable` / `<TIdentity>`              | `IEntityDeletable` only                | |
 | `BaseEntityCreatableAndUpdatable` / `<TIdentity>`   | Create + update, no delete             | |
 | `BaseEntityCreatableAndDeletable` / `<TIdentity>`   | Create + delete, no update             | For entities only ever added and removed, such as a join row between two entities. |
-| `BaseEntityUser` / `<TIdentity>`                   | Update + delete (`IEntityUser<TIdentity>`) | Adds `IdentityUser` (`IdentityUserEx<TIdentity>`), tagged `[Include]` + `[ValidateNever]` + `[SwaggerRequestIgnore]` — always eager-loaded, never validated as input, never shown in Swagger request bodies. See [Identity](#identity). |
+| `BaseEntityUser` / `<TIdentity>`                   | Update + delete (`IEntityUser<TIdentity>`) | Adds `IdentityUser` (`IdentityUserEx<TIdentity>`), tagged `[Include]` + `[ValidateNever]` — always eager-loaded and never validated as input. Swagger documents a user request body as a separate `{Name}Request` schema without `IdentityUser`, so a client can not send it. See [Identity](#identity). |
 | `BaseEntityView`                                   | None — bare `IEntity`, no `Id`/`IsDeleted`/`CreatedAt` at all | Non-generic only. For entities mapped to a SQL view — you define every property yourself, including any identifier. |
 | `BaseEntityIdentity` / `<TIdentity>`                | `Id` only, nothing else                | For advanced cases that don't want the built-in `IsDeleted`/`CreatedAt` — implement whichever capability interface (`IEntityCreatable`, `IEntityWritable`, etc.) yourself to restore the operations you need. |
 
