@@ -44,7 +44,7 @@ public class UserQueryCriteria : BaseQueryCriteria
     {
         var expressions = base.GetExpressions();
 
-        var expression = expressions.FirstOrDefault() ?? new CriteriaExpression();
+        var expression = expressions.First();
 
         if (!string.IsNullOrEmpty(this.FullName))
         {
@@ -83,9 +83,6 @@ public class UserQueryCriteria : BaseQueryCriteria
             expressions
                 .Add(keywordExpression);
         }
-
-        expressions
-            .Add(expression);
 
         return expressions;
     }

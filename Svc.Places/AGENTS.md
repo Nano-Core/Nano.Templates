@@ -26,7 +26,7 @@ step.
 ## Solution Structure
 
 Every Nano application — Api, Web, or Console — follows the same predictable solution layout. `{name}` is the
-application's own name (e.g. `Svc.Accounts`); `{name}.Models` is a **separate, sibling project**, not nested
+application's own name (e.g. `MyService`); `{name}.Models` is a **separate, sibling project**, not nested
 inside `{name}/`.
 
 | Directory / File                                       | API | WEB | CON | Description                                                                                                          |
@@ -258,7 +258,7 @@ public class MyUserController(ILogger<MyUserController> logger, MyApi myApi, MyO
 | Attribute   | Purpose                                                                                                       |
 | ------------- | ------------------------------------------------------------------------------------------------------------------ |
 | `[Route(Order = n)]`  | Positional route-template substitution (`{n}` placeholders in the action's route string, filled in `Order` sequence). |
-| `[Query]`             | Querystring parameter (scalar types); optional `Name` override.                                                       |
+| `[Query]`             | Querystring parameter: a scalar, a list of scalars, or an object (sent as `Name.Property=value`, such as `Paging.Number=2`); optional `Name` override. |
 | `[Body]`              | The JSON request body (one complex object).                                                                           |
 | `[Form]`              | A `multipart/form-data` field — scalar, or `IFormFile`/`FileInfo`/`FileStream`/`Stream`/`NamedStream`; complex objects need `[FromFormBody]` server-side. Mutually exclusive with `[Body]`. |
 | `[Header(Name=..., ValuePrefix=...)]` | An HTTP header key/value.                                                                              |
@@ -296,6 +296,8 @@ public class SetMyFileRequest : BaseRequest
 
 3. Add a method to the client, calling `InvokeAsync<TRequest>` (no response) or `InvokeAsync<TRequest, TResponse>`
    (typed response — use `NamedStream` or `Stream` for file downloads).
+
+**Paging a custom request**: give it one `[Query] public virtual Pagination? Paging { get; set; }` and have the client method set `Paging = paging`. It is sent as `Paging.Number`, `Paging.Count` and `Paging.Skip`, and the action binds it with `[FromQuery] Pagination? paging`, so `Skip` is kept. Never copy `Number` and `Count` into two scalar properties, that drops `Skip`.
 
 **Controller resolution**: if a request doesn't set `this.Controller` explicitly in its constructor, it's
 inferred as the pluralized `TResponse` type name (e.g. `IEnumerable<MyEntity>` → `MyEntities`). Set it explicitly
@@ -390,7 +392,7 @@ own `.docker/docker-compose.yml` — not just the config.
 
 **Applies equally to Console applications.** This isn't a Public/Admin-API-only concern — a Console app (a
 run-to-completion job or worker) consuming an Api Client needs its target runnable locally exactly the same way
-(e.g. a sign-up job calling `Svc.Accounts`/`Svc.Emailing`). The only difference is a Console app's own compose
+(e.g. a sign-up job calling an accounts service and an emailing service). The only difference is a Console app's own compose
 service has no `ports` of its own to collide with (no HTTP surface — see [Authentication forwarding](#authentication-forwarding)'s
 note that Console workers typically call only anonymous endpoints, or need `LogInRoot`); the nested dependency
 services still need their own unique host ports, same as for an API/Web consumer.
@@ -1415,6 +1417,10 @@ Enables the Swagger UI at `/docs`.
 }
 ```
 
+The OpenAPI file describes the API exactly as the code is, so a client (such as one generated with `orval`) is generated straight from it and the file is **never edited by hand or patched**. If the file is wrong, the code is fixed:
+- `nullable` is set only for a property that is nullable in the code, a nullable enum included (`allOf` the enum, with `nullable: true`).
+- A property is `required` when it is not nullable, a value type (number, bool, enum) included, or when it is marked `[Required]` or `required`. This is the same in a response and in a request body.
+
 ⚠ When using a strict CSP, add style hash `sha256-RL3ie0nH+Lzz2YNqQN83mnU0J1ot4QL7b99vMdIX99w=` — otherwise
 Swagger UI's icons/images fail to render.
 
@@ -1950,8 +1956,8 @@ Two genuinely different roles a controller plays in a layered Nano solution — 
 (both are ordinary `BaseController`/`BaseEntityController<...>` subclasses), but a naming/design one worth being
 explicit about, since it changes what an action's body actually does:
 
-- **Public API controller** — the customer/end-user-facing application (e.g. `Api.Platform`/`Api.Admin` in this
-  solution). Its actions compose one or more injected [Api Clients](#api-clients) into a response; it has no
+- **Public API controller** — the customer/end-user-facing application (the application that exposes the
+  solution's services to its users). Its actions compose one or more injected [Api Clients](#api-clients) into a response; it has no
   `IRepository` of its own. This is the intended shape, not an absolute rule enforced anywhere — a Data,
   Storage, or Eventing provider *can* be added directly to a Public API if genuinely needed (`nano-add-data-provider`/
   `nano-add-storage-provider`/`nano-add-eventing-provider` all allow it), but doing so pulls the app away from
@@ -1999,8 +2005,7 @@ is actively dangerous, not just architecturally unusual:
 A Public API that needs to offer login/signup/password-management to end users does so by **composing calls to
 the internal service that actually owns Identity**, through that service's Api Client (its `.Identity`/`.Auth`
 method groups — see [Api Clients § Built-in method groups](#built-in-method-groups)), or by implementing its
-own transient auth with server-computed claims (see `Api.Admin`'s `AccountsController` in this codebase for a
-working example) — never by hosting `BaseEntityUserController`/persistent `BaseAuthController` on the
+own transient auth with server-computed claims — never by hosting `BaseEntityUserController`/persistent `BaseAuthController` on the
 Public API itself.
 
 #### Entity controller hierarchy
@@ -2048,16 +2053,12 @@ shapes. **Default to assign / remove** and use a collection only when one of the
   the link doesn't already exist) are made by the Public API before the generic create or delete.
 - **Collection (exception).** The request carries the whole set and an explicit server action replaces it in one
   transaction (diff the existing rows against the requested ones, then delete and add). Use it only when:
-  - the set is edited as a reviewed batch with an explicit Save (for example a role's permissions, where every
-    live toggle would change access immediately and one Save is one audit entry), or
-  - a rule can only be checked against the final set, or
-  - the parent is meaningless without its first children and is created with them.
+  - the set is edited as a reviewed batch with an explicit Save, where every live change would take effect
+    immediately and one Save is one audit entry, or
+  - a rule can only be checked against the final set.
 
   A collection update must be an explicit action: the generic edit routes can't change a collection (see [Include
   Annotation](#include-annotation)). An empty set is valid unless a rule says otherwise.
-
-Pick one shape per relationship and keep both its create and update on it. Don't offer a collection on create and
-assign / remove for later edits of the same relationship unless create genuinely needs its first children.
 
 #### Query criteria
 
@@ -2073,18 +2074,21 @@ public class MyEntityQueryCriteria : BaseQueryCriteria
     public override IList<CriteriaExpression> GetExpressions()
     {
         var expressions = base.GetExpressions();
-        var expression = expressions.FirstOrDefault() ?? new CriteriaExpression();
+        var expression = expressions.First();
 
         if (!string.IsNullOrEmpty(this.Name))
         {
             expression.StartsWith(nameof(MyEntity.Name), this.Name);
         }
 
-        expressions.Add(expression);
         return expressions;
     }
 }
 ```
+
+`base.GetExpressions()` already returns a list holding one `CriteriaExpression`, so the conditions go on that first
+expression and the list is returned as it is. Never `Add` that same expression again: the list is AND-ed, so it would
+be combined with itself. Only `Add` a new `CriteriaExpression` for a separate group (see [Combining criteria](#combining-criteria--sequential-not-grouped)).
 
 Built on the [DynamicExpression](https://github.com/vivet/DynamicExpression) library — criteria properties are
 compiled into LINQ expressions against the entity, not hand-written `Where` clauses.
@@ -2211,6 +2215,14 @@ filter by a property on a **collection navigation**, wrap the nested property in
 
 ```csharp
 expression.GreaterThan("Orders[Total]", 100m);   // x.Orders.Any(o => o.Total > 100)
+```
+
+A negated operation (`NotEqual`, `NotIn`, `NotContains`) on a collection path means **no element matches**, it compiles to
+`!x.Orders.Any(...)` with the positive operation inside. Use it to leave out rows that have a related row, such as the
+users who are not in an organization:
+
+```csharp
+expression.NotEqual("OrganizationScopes[OrganizationId]", organizationId);   // !x.OrganizationScopes.Any(s => s.OrganizationId == organizationId)
 ```
 
 ##### Ordering and pagination
@@ -2859,7 +2871,7 @@ IEntitySoftDeletable         : IEntityDeletable, redeclares IsDeleted   (opt-in)
 | `BaseEntityDeletable` / `<TIdentity>`              | `IEntityDeletable` only                | |
 | `BaseEntityCreatableAndUpdatable` / `<TIdentity>`   | Create + update, no delete             | |
 | `BaseEntityCreatableAndDeletable` / `<TIdentity>`   | Create + delete, no update             | For entities only ever added and removed, such as a join row between two entities. |
-| `BaseEntityUser` / `<TIdentity>`                   | Update + delete (`IEntityUser<TIdentity>`) | Adds `IdentityUser` (`IdentityUserEx<TIdentity>`), tagged `[Include]` + `[ValidateNever]` + `[SwaggerRequestIgnore]` — always eager-loaded, never validated as input, never shown in Swagger request bodies. See [Identity](#identity). |
+| `BaseEntityUser` / `<TIdentity>`                   | Update + delete (`IEntityUser<TIdentity>`) | Adds `IdentityUser` (`IdentityUserEx<TIdentity>`), tagged `[Include]` + `[ValidateNever]` — always eager-loaded and never validated as input. Swagger documents a user request body as a separate `{Name}Request` schema without `IdentityUser`, so a client can not send it. See [Identity](#identity). |
 | `BaseEntityView`                                   | None — bare `IEntity`, no `Id`/`IsDeleted`/`CreatedAt` at all | Non-generic only. For entities mapped to a SQL view — you define every property yourself, including any identifier. |
 | `BaseEntityIdentity` / `<TIdentity>`                | `Id` only, nothing else                | For advanced cases that don't want the built-in `IsDeleted`/`CreatedAt` — implement whichever capability interface (`IEntityCreatable`, `IEntityWritable`, etc.) yourself to restore the operations you need. |
 
