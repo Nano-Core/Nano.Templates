@@ -5,15 +5,14 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using NetTopologySuite.Geometries;
-using Svc.Places.Data;
+using Svc.Emailing.Data;
 
 #nullable disable
 
-namespace Svc.Places.Migrations
+namespace Svc.Emailing.Migrations
 {
-    [DbContext(typeof(PlacesDbContext))]
-    [Migration("20260805074919_Initial")]
+    [DbContext(typeof(EmailingDbContext))]
+    [Migration("20261127122535_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -21,7 +20,7 @@ namespace Svc.Places.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.10")
+                .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
@@ -213,6 +212,9 @@ namespace Svc.Places.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
 
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedBy");
@@ -257,6 +259,9 @@ namespace Svc.Places.Migrations
                     b.Property<string>("RelationName")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
@@ -446,7 +451,8 @@ namespace Svc.Places.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.HasIndex("PhoneNumber");
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique();
 
                     b.ToTable("__EFIdentityUser", (string)null);
                 });
@@ -484,118 +490,7 @@ namespace Svc.Places.Migrations
                     b.ToTable("__EFIdentityUserRefreshToken", (string)null);
                 });
 
-            modelBuilder.Entity("Svc.Places.Models.Data.OpeningHour", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<TimeSpan>("ClosesAt")
-                        .HasColumnType("time(6)");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<DateTimeOffset>("CreatedAt"));
-
-                    b.Property<int>("DayOfWeek")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
-
-                    b.Property<long>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValue(0L);
-
-                    b.Property<TimeSpan>("OpensAt")
-                        .HasColumnType("time(6)");
-
-                    b.Property<Guid>("PlaceId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedAt");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.HasIndex("PlaceId");
-
-                    b.ToTable("OpeningHour");
-                });
-
-            modelBuilder.Entity("Svc.Places.Models.Data.Place", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("varchar(512)");
-
-                    b.Property<Polygon>("Area")
-                        .IsRequired()
-                        .HasColumnType("POLYGON")
-                        .HasAnnotation("Sqlite:Srid", 4326);
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<DateTimeOffset>("CreatedAt"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(8192)
-                        .HasColumnType("varchar(8192)");
-
-                    b.Property<int>("FavoriteCount")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
-
-                    b.Property<long>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValue(0L);
-
-                    b.Property<DateTimeOffset?>("LatestVisit")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
-
-                    b.Property<string>("NameNormalized")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("varchar(128)");
-
-                    b.Property<int>("VisitsCount")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Area")
-                        .HasAnnotation("MySql:SpatialIndex", true);
-
-                    b.HasIndex("CreatedAt");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.HasIndex("NameNormalized");
-
-                    b.ToTable("Place");
-                });
-
-            modelBuilder.Entity("Svc.Places.Models.Data.PlaceFavorite", b =>
+            modelBuilder.Entity("Svc.Emailing.Models.Data.Email", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -607,13 +502,25 @@ namespace Svc.Places.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<DateTimeOffset>("CreatedAt"));
 
+                    b.Property<string>("Data")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<long>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasDefaultValue(0L);
 
-                    b.Property<Guid>("PlaceId")
-                        .HasColumnType("char(36)");
+                    b.Property<int>("Type")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<DateTimeOffset>("UpdatedAt"));
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
@@ -624,14 +531,14 @@ namespace Svc.Places.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.HasIndex("PlaceId");
+                    b.HasIndex("Type");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PlaceFavorite");
+                    b.ToTable("Email");
                 });
 
-            modelBuilder.Entity("Svc.Places.Models.Data.PlacePicture", b =>
+            modelBuilder.Entity("Svc.Emailing.Models.Data.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -643,85 +550,10 @@ namespace Svc.Places.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<DateTimeOffset>("CreatedAt"));
 
-                    b.Property<long>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValue(0L);
-
-                    b.Property<int>("OrderIndex")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
-
-                    b.Property<Guid>("PlaceId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedAt");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.HasIndex("PlaceId", "OrderIndex")
-                        .IsUnique()
-                        .HasDatabaseName("UX_PlacePicture_PlaceId_OrderIndex");
-
-                    b.ToTable("PlacePicture");
-                });
-
-            modelBuilder.Entity("Svc.Places.Models.Data.PlaceVisit", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<DateTimeOffset>("CreatedAt"));
-
-                    b.Property<DateTimeOffset>("EnteredAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<long>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValue(0L);
-
-                    b.Property<DateTimeOffset?>("LeftAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<Guid>("PlaceId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedAt");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.HasIndex("PlaceId");
-
-                    b.HasIndex("UserId", "PlaceId", "LeftAt");
-
-                    b.ToTable("PlaceVisit");
-                });
-
-            modelBuilder.Entity("Svc.Places.Models.Data.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<DateTimeOffset>("CreatedAt"));
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("varchar(512)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
@@ -737,6 +569,12 @@ namespace Svc.Places.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasDefaultValue(0L);
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<DateTimeOffset>("UpdatedAt"));
 
                     b.HasKey("Id");
 
@@ -874,62 +712,13 @@ namespace Svc.Places.Migrations
                     b.Navigation("IdentityUser");
                 });
 
-            modelBuilder.Entity("Svc.Places.Models.Data.OpeningHour", b =>
+            modelBuilder.Entity("Svc.Emailing.Models.Data.Email", b =>
                 {
-                    b.HasOne("Svc.Places.Models.Data.Place", "Place")
-                        .WithMany("OpeningHours")
-                        .HasForeignKey("PlaceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Place");
-                });
-
-            modelBuilder.Entity("Svc.Places.Models.Data.PlaceFavorite", b =>
-                {
-                    b.HasOne("Svc.Places.Models.Data.Place", "Place")
-                        .WithMany("Favorites")
-                        .HasForeignKey("PlaceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Svc.Places.Models.Data.User", "User")
-                        .WithMany("PlaceFavorites")
+                    b.HasOne("Svc.Emailing.Models.Data.User", "User")
+                        .WithMany("Emails")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Place");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Svc.Places.Models.Data.PlacePicture", b =>
-                {
-                    b.HasOne("Svc.Places.Models.Data.Place", "Place")
-                        .WithMany("Pictures")
-                        .HasForeignKey("PlaceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Place");
-                });
-
-            modelBuilder.Entity("Svc.Places.Models.Data.PlaceVisit", b =>
-                {
-                    b.HasOne("Svc.Places.Models.Data.Place", "Place")
-                        .WithMany("Visits")
-                        .HasForeignKey("PlaceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Svc.Places.Models.Data.User", "User")
-                        .WithMany("PlaceVisits")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Place");
 
                     b.Navigation("User");
                 });
@@ -939,22 +728,9 @@ namespace Svc.Places.Migrations
                     b.Navigation("Properties");
                 });
 
-            modelBuilder.Entity("Svc.Places.Models.Data.Place", b =>
+            modelBuilder.Entity("Svc.Emailing.Models.Data.User", b =>
                 {
-                    b.Navigation("Favorites");
-
-                    b.Navigation("OpeningHours");
-
-                    b.Navigation("Pictures");
-
-                    b.Navigation("Visits");
-                });
-
-            modelBuilder.Entity("Svc.Places.Models.Data.User", b =>
-                {
-                    b.Navigation("PlaceFavorites");
-
-                    b.Navigation("PlaceVisits");
+                    b.Navigation("Emails");
                 });
 #pragma warning restore 612, 618
         }

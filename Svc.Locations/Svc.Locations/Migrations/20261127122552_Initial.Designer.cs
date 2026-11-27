@@ -5,14 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Svc.Emailing.Data;
+using NetTopologySuite.Geometries;
+using Svc.Locations.Data;
 
 #nullable disable
 
-namespace Svc.Emailing.Migrations
+namespace Svc.Locations.Migrations
 {
-    [DbContext(typeof(EmailingDbContext))]
-    [Migration("20260731091734_Initial")]
+    [DbContext(typeof(LocationsDbContext))]
+    [Migration("20261127122552_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -20,7 +21,7 @@ namespace Svc.Emailing.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.10")
+                .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
@@ -212,6 +213,9 @@ namespace Svc.Emailing.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
 
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedBy");
@@ -256,6 +260,9 @@ namespace Svc.Emailing.Migrations
                     b.Property<string>("RelationName")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
@@ -484,7 +491,7 @@ namespace Svc.Emailing.Migrations
                     b.ToTable("__EFIdentityUserRefreshToken", (string)null);
                 });
 
-            modelBuilder.Entity("Svc.Emailing.Models.Data.Email", b =>
+            modelBuilder.Entity("Svc.Locations.Models.Data.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -495,53 +502,6 @@ namespace Svc.Emailing.Migrations
                         .HasColumnType("datetime(6)");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<DateTimeOffset>("CreatedAt"));
-
-                    b.Property<string>("Data")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<long>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValue(0L);
-
-                    b.Property<int>("Type")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedAt");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.HasIndex("Type");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Email");
-                });
-
-            modelBuilder.Entity("Svc.Emailing.Models.Data.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<DateTimeOffset>("CreatedAt"));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("varchar(512)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
@@ -558,6 +518,12 @@ namespace Svc.Emailing.Migrations
                         .HasColumnType("bigint")
                         .HasDefaultValue(0L);
 
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<DateTimeOffset>("UpdatedAt"));
+
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedAt");
@@ -567,6 +533,67 @@ namespace Svc.Emailing.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("Svc.Locations.Models.Data.UserLocation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Point>("Coordinate")
+                        .IsRequired()
+                        .HasColumnType("POINT")
+                        .HasAnnotation("MySql:SpatialReferenceSystemId", 4326);
+
+                    b.Property<double?>("Course")
+                        .HasColumnType("double");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<DateTimeOffset>("CreatedAt"));
+
+                    b.Property<double>("HorizontalAccuracy")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("double")
+                        .HasDefaultValue(0.0);
+
+                    b.Property<long>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasDefaultValue(0L);
+
+                    b.Property<double?>("Speed")
+                        .HasColumnType("double");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<DateTimeOffset>("UpdatedAt"));
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<double?>("VerticalAccuracy")
+                        .HasColumnType("double");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Coordinate")
+                        .HasAnnotation("MySql:SpatialIndex", true);
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("HorizontalAccuracy");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserLocation");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -694,10 +721,10 @@ namespace Svc.Emailing.Migrations
                     b.Navigation("IdentityUser");
                 });
 
-            modelBuilder.Entity("Svc.Emailing.Models.Data.Email", b =>
+            modelBuilder.Entity("Svc.Locations.Models.Data.UserLocation", b =>
                 {
-                    b.HasOne("Svc.Emailing.Models.Data.User", "User")
-                        .WithMany("Emails")
+                    b.HasOne("Svc.Locations.Models.Data.User", "User")
+                        .WithMany("Locations")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -710,9 +737,9 @@ namespace Svc.Emailing.Migrations
                     b.Navigation("Properties");
                 });
 
-            modelBuilder.Entity("Svc.Emailing.Models.Data.User", b =>
+            modelBuilder.Entity("Svc.Locations.Models.Data.User", b =>
                 {
-                    b.Navigation("Emails");
+                    b.Navigation("Locations");
                 });
 #pragma warning restore 612, 618
         }
