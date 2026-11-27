@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Svc.Emailing.Migrations
+namespace Svc.Accounts.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -31,7 +31,8 @@ namespace Svc.Emailing.Migrations
                     RequestId = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IsDeleted = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -110,22 +111,48 @@ namespace Svc.Emailing.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Country",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    FullName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
+                    Name = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
+                    NameNormalized = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: true),
+                    Code = table.Column<string>(type: "varchar(5)", maxLength: 5, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PhonePrefix = table.Column<string>(type: "varchar(5)", maxLength: 5, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     IsDeleted = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_Country", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Tenant",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Name = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NameNormalized = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsDeleted = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tenant", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -144,7 +171,8 @@ namespace Svc.Emailing.Migrations
                     OldValue = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IsDeleted = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -352,25 +380,36 @@ namespace Svc.Emailing.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Email",
+                name: "Address",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    Type = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    Data = table.Column<string>(type: "longtext", nullable: false)
+                    CountryId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    City_Name = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    City_NameNormalized = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    City_ZipCode = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    StreetName = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    StreetNameNormalized = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    HouseNumber = table.Column<string>(type: "varchar(16)", maxLength: 16, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IsDeleted = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Email", x => x.Id);
+                    table.PrimaryKey("PK_Address", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Email_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
+                        name: "FK_Address_Country_CountryId",
+                        column: x => x.CountryId,
+                        principalTable: "Country",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -420,6 +459,55 @@ namespace Svc.Emailing.Migrations
                         name: "FK___EFIdentityApiKeyRole___EFIdentityRole_RoleId",
                         column: x => x.RoleId,
                         principalTable: "__EFIdentityRole",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    TenantId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    FirstName = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    LastName = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FullName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FullNameNormalized = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AddressId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
+                    Gender = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    Language = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    UserPictureExtension = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsDeleted = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_User_Address_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Address",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_User_Tenant_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenant",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_User___EFIdentityUser_Id",
+                        column: x => x.Id,
+                        principalTable: "__EFIdentityUser",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -517,8 +605,7 @@ namespace Svc.Emailing.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX___EFIdentityUser_PhoneNumber",
                 table: "__EFIdentityUser",
-                column: "PhoneNumber",
-                unique: true);
+                column: "PhoneNumber");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -559,24 +646,76 @@ namespace Svc.Emailing.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Email_CreatedAt",
-                table: "Email",
+                name: "IX_Address_City_NameNormalized",
+                table: "Address",
+                column: "City_NameNormalized");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Address_City_ZipCode",
+                table: "Address",
+                column: "City_ZipCode");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Address_CountryId",
+                table: "Address",
+                column: "CountryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Address_CreatedAt",
+                table: "Address",
                 column: "CreatedAt");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Email_IsDeleted",
-                table: "Email",
+                name: "IX_Address_IsDeleted",
+                table: "Address",
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Email_Type",
-                table: "Email",
-                column: "Type");
+                name: "IX_Address_StreetNameNormalized",
+                table: "Address",
+                column: "StreetNameNormalized");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Email_UserId",
-                table: "Email",
-                column: "UserId");
+                name: "IX_Country_CreatedAt",
+                table: "Country",
+                column: "CreatedAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Country_IsDeleted",
+                table: "Country",
+                column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Country_NameNormalized",
+                table: "Country",
+                column: "NameNormalized");
+
+            migrationBuilder.CreateIndex(
+                name: "UX_Country_Code",
+                table: "Country",
+                column: "Code",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "UX_Country_PhonePrefix",
+                table: "Country",
+                column: "PhonePrefix",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tenant_CreatedAt",
+                table: "Tenant",
+                column: "CreatedAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tenant_IsDeleted",
+                table: "Tenant",
+                column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tenant_NameNormalized",
+                table: "Tenant",
+                column: "NameNormalized");
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_CreatedAt",
@@ -584,14 +723,40 @@ namespace Svc.Emailing.Migrations
                 column: "CreatedAt");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_IsActive",
+                name: "IX_User_DateOfBirth",
                 table: "User",
-                column: "IsActive");
+                column: "DateOfBirth");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_FullNameNormalized",
+                table: "User",
+                column: "FullNameNormalized");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_Gender",
+                table: "User",
+                column: "Gender");
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_IsDeleted",
                 table: "User",
                 column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_Language",
+                table: "User",
+                column: "Language");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_TenantId",
+                table: "User",
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
+                name: "UX_User_AddressId",
+                table: "User",
+                column: "AddressId",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -631,7 +796,7 @@ namespace Svc.Emailing.Migrations
                 name: "__EFIdentityUserToken");
 
             migrationBuilder.DropTable(
-                name: "Email");
+                name: "User");
 
             migrationBuilder.DropTable(
                 name: "__EFAudit");
@@ -643,10 +808,16 @@ namespace Svc.Emailing.Migrations
                 name: "__EFIdentityRole");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Address");
+
+            migrationBuilder.DropTable(
+                name: "Tenant");
 
             migrationBuilder.DropTable(
                 name: "__EFIdentityUser");
+
+            migrationBuilder.DropTable(
+                name: "Country");
         }
     }
 }

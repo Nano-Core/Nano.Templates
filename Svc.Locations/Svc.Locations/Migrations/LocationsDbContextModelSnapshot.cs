@@ -18,7 +18,7 @@ namespace Svc.Locations.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.10")
+                .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
@@ -210,6 +210,9 @@ namespace Svc.Locations.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
 
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedBy");
@@ -254,6 +257,9 @@ namespace Svc.Locations.Migrations
                     b.Property<string>("RelationName")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
@@ -509,6 +515,12 @@ namespace Svc.Locations.Migrations
                         .HasColumnType("bigint")
                         .HasDefaultValue(0L);
 
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<DateTimeOffset>("UpdatedAt"));
+
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedAt");
@@ -529,7 +541,7 @@ namespace Svc.Locations.Migrations
                     b.Property<Point>("Coordinate")
                         .IsRequired()
                         .HasColumnType("POINT")
-                        .HasAnnotation("MySql:SpatialReferenceSystem", 4326);
+                        .HasAnnotation("MySql:SpatialReferenceSystemId", 4326);
 
                     b.Property<double?>("Course")
                         .HasColumnType("double");
@@ -552,6 +564,12 @@ namespace Svc.Locations.Migrations
 
                     b.Property<double?>("Speed")
                         .HasColumnType("double");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<DateTimeOffset>("UpdatedAt"));
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");

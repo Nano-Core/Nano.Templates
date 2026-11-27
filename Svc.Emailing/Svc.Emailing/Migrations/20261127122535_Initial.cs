@@ -1,11 +1,10 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using NetTopologySuite.Geometries;
 
 #nullable disable
 
-namespace Svc.Places.Migrations
+namespace Svc.Emailing.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -32,7 +31,8 @@ namespace Svc.Places.Migrations
                     RequestId = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IsDeleted = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -111,42 +111,19 @@ namespace Svc.Places.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Place",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    Name = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    NameNormalized = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "varchar(8192)", maxLength: 8192, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Address = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Area = table.Column<Polygon>(type: "polygon", nullable: false),
-                    FavoriteCount = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    VisitsCount = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    LatestVisit = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
-                    IsDeleted = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Place", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     FullName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Email = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: true),
                     IsDeleted = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
                 },
                 constraints: table =>
@@ -170,7 +147,8 @@ namespace Svc.Places.Migrations
                     OldValue = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IsDeleted = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -378,106 +356,25 @@ namespace Svc.Places.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "OpeningHour",
+                name: "Email",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    PlaceId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    DayOfWeek = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    OpensAt = table.Column<TimeSpan>(type: "time(6)", nullable: false),
-                    ClosesAt = table.Column<TimeSpan>(type: "time(6)", nullable: false),
-                    IsDeleted = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OpeningHour", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_OpeningHour_Place_PlaceId",
-                        column: x => x.PlaceId,
-                        principalTable: "Place",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "PlacePicture",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    PlaceId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    OrderIndex = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    IsDeleted = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PlacePicture", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PlacePicture_Place_PlaceId",
-                        column: x => x.PlaceId,
-                        principalTable: "Place",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "PlaceFavorite",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    PlaceId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Type = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    Data = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     IsDeleted = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlaceFavorite", x => x.Id);
+                    table.PrimaryKey("PK_Email", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PlaceFavorite_Place_PlaceId",
-                        column: x => x.PlaceId,
-                        principalTable: "Place",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PlaceFavorite_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "PlaceVisit",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    PlaceId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    EnteredAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
-                    LeftAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
-                    IsDeleted = table.Column<long>(type: "bigint", nullable: false, defaultValue: 0L),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PlaceVisit", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PlaceVisit_Place_PlaceId",
-                        column: x => x.PlaceId,
-                        principalTable: "Place",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PlaceVisit_User_UserId",
+                        name: "FK_Email_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
@@ -626,7 +523,8 @@ namespace Svc.Places.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX___EFIdentityUser_PhoneNumber",
                 table: "__EFIdentityUser",
-                column: "PhoneNumber");
+                column: "PhoneNumber",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -667,96 +565,24 @@ namespace Svc.Places.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OpeningHour_CreatedAt",
-                table: "OpeningHour",
+                name: "IX_Email_CreatedAt",
+                table: "Email",
                 column: "CreatedAt");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OpeningHour_IsDeleted",
-                table: "OpeningHour",
+                name: "IX_Email_IsDeleted",
+                table: "Email",
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OpeningHour_PlaceId",
-                table: "OpeningHour",
-                column: "PlaceId");
+                name: "IX_Email_Type",
+                table: "Email",
+                column: "Type");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Place_Area",
-                table: "Place",
-                column: "Area")
-                .Annotation("MySql:SpatialIndex", true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Place_CreatedAt",
-                table: "Place",
-                column: "CreatedAt");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Place_IsDeleted",
-                table: "Place",
-                column: "IsDeleted");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Place_NameNormalized",
-                table: "Place",
-                column: "NameNormalized");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PlaceFavorite_CreatedAt",
-                table: "PlaceFavorite",
-                column: "CreatedAt");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PlaceFavorite_IsDeleted",
-                table: "PlaceFavorite",
-                column: "IsDeleted");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PlaceFavorite_PlaceId",
-                table: "PlaceFavorite",
-                column: "PlaceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PlaceFavorite_UserId",
-                table: "PlaceFavorite",
+                name: "IX_Email_UserId",
+                table: "Email",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PlacePicture_CreatedAt",
-                table: "PlacePicture",
-                column: "CreatedAt");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PlacePicture_IsDeleted",
-                table: "PlacePicture",
-                column: "IsDeleted");
-
-            migrationBuilder.CreateIndex(
-                name: "UX_PlacePicture_PlaceId_OrderIndex",
-                table: "PlacePicture",
-                columns: new[] { "PlaceId", "OrderIndex" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PlaceVisit_CreatedAt",
-                table: "PlaceVisit",
-                column: "CreatedAt");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PlaceVisit_IsDeleted",
-                table: "PlaceVisit",
-                column: "IsDeleted");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PlaceVisit_PlaceId",
-                table: "PlaceVisit",
-                column: "PlaceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PlaceVisit_UserId_PlaceId_LeftAt",
-                table: "PlaceVisit",
-                columns: new[] { "UserId", "PlaceId", "LeftAt" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_CreatedAt",
@@ -811,16 +637,7 @@ namespace Svc.Places.Migrations
                 name: "__EFIdentityUserToken");
 
             migrationBuilder.DropTable(
-                name: "OpeningHour");
-
-            migrationBuilder.DropTable(
-                name: "PlaceFavorite");
-
-            migrationBuilder.DropTable(
-                name: "PlacePicture");
-
-            migrationBuilder.DropTable(
-                name: "PlaceVisit");
+                name: "Email");
 
             migrationBuilder.DropTable(
                 name: "__EFAudit");
@@ -830,9 +647,6 @@ namespace Svc.Places.Migrations
 
             migrationBuilder.DropTable(
                 name: "__EFIdentityRole");
-
-            migrationBuilder.DropTable(
-                name: "Place");
 
             migrationBuilder.DropTable(
                 name: "User");
